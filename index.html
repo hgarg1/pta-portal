@@ -727,6 +727,8 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.25s ease;
+      overflow-y: auto;
+      min-height: 100vh;
     }
     .family-action-drawer.active {
       opacity: 1;
@@ -748,6 +750,9 @@
       padding: 1.6rem;
       display: grid;
       gap: 1.1rem;
+      max-height: calc(100vh - 3rem);
+      overflow-y: auto;
+      scrollbar-gutter: stable;
     }
     .family-action-header {
       display: flex;
@@ -1199,6 +1204,8 @@
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.28s ease;
+      overflow-y: auto;
+      min-height: 100vh;
     }
     .principal-access-modal.active {
       opacity: 1;
@@ -1222,6 +1229,9 @@
       color: #e5e7eb;
       display: grid;
       gap: 1.2rem;
+      max-height: calc(100vh - 3rem);
+      overflow-y: auto;
+      scrollbar-gutter: stable;
     }
     .principal-access-header {
       display: flex;
@@ -1734,10 +1744,12 @@
       inset: 0;
       background: rgba(2, 6, 23, 0.7);
       display: none;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
-      padding: 6vh 1.2rem;
+      padding: 1.5rem 1.2rem;
       z-index: 70;
+      overflow-y: auto;
+      min-height: 100vh;
     }
     .principal-filter-overlay.active {
       display: flex;
@@ -1750,10 +1762,20 @@
       width: min(480px, 100%);
       color: #e5e7eb;
       box-shadow: 0 32px 60px rgba(15, 23, 42, 0.6);
+      max-height: calc(100vh - 3rem);
+      overflow-y: auto;
+      margin: auto;
+      display: grid;
+      gap: 1rem;
+      scrollbar-gutter: stable;
     }
     .principal-filter-panel h2 {
       font-size: 1rem;
       margin-bottom: 0.6rem;
+    }
+    #principal-filter-form {
+      display: grid;
+      gap: 0.9rem;
     }
     .principal-filter-header {
       display: flex;
