@@ -42,6 +42,25 @@
       color: var(--text-primary);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    body.theme-family,
+    body.theme-board {
+      background: radial-gradient(circle at 20% 20%, rgba(96, 165, 250, 0.25), transparent 55%),
+        radial-gradient(circle at 80% 0%, rgba(251, 191, 36, 0.2), transparent 50%),
+        #020617;
+      color: var(--text-primary);
+    }
+
+    body.theme-principal {
+      background: #020617;
+      color: var(--text-primary);
+    }
+
+    body.theme-student {
+      background: radial-gradient(circle at top, #e0f2fe 0, #f9fafb 38%, #fef3c7 100%);
+      color: #111827;
     }
 
     a {
@@ -257,7 +276,7 @@
       gap: 3rem;
     }
 
-    .view[data-view-hidden="true"] {
+    .view {
       display: none;
     }
 
@@ -2365,7 +2384,7 @@
     }
 </style>
 </head>
-<body>
+<body class="theme-family">
   <div class="portal-app">
     <div class="portal-layout">
       <aside class="portal-rail" aria-label="Portal navigation">
@@ -2381,16 +2400,16 @@
         </p>
         <div class="portal-view-switcher">
           <span class="portal-toggle-label">View as:</span>
-          <button class="view-toggle-btn active" data-view-target="family-view">
+          <button type="button" class="view-toggle-btn active" data-view-target="family-view" aria-pressed="true" aria-controls="family-view">
             <span>🌼</span> PTA Family
           </button>
-          <button class="view-toggle-btn" data-view-target="principal-view">
+          <button type="button" class="view-toggle-btn" data-view-target="principal-view" aria-pressed="false" aria-controls="principal-view">
             <span>🎓</span> Principal
           </button>
-          <button class="view-toggle-btn" data-view-target="pta-board-view">
+          <button type="button" class="view-toggle-btn" data-view-target="pta-board-view" aria-pressed="false" aria-controls="pta-board-view">
             <span>📝</span> PTA Board
           </button>
-          <button class="view-toggle-btn" data-view-target="student-view">
+          <button type="button" class="view-toggle-btn" data-view-target="student-view" aria-pressed="false" aria-controls="student-view">
             <span>🎒</span> Students
           </button>
         </div>
@@ -2400,7 +2419,7 @@
       </aside>
       <main class="portal-main">
         <div class="view-stage">
-      <section id="family-view" class="view active family-root">
+      <section id="family-view" class="view active family-root" aria-hidden="false">
         <div class="family-shell">
           <div class="family-nav">
             <div class="family-nav-left">
@@ -2913,7 +2932,7 @@
       </section>
 
       <!-- ================= PRINCIPAL VIEW ================= -->
-      <section id="principal-view" class="view principal-root">
+      <section id="principal-view" class="view principal-root" hidden aria-hidden="true">
         <div class="principal-page">
           <aside class="principal-sidebar">
             <div class="principal-logo">RB</div>
@@ -3739,7 +3758,7 @@
       </section>
 
       <!-- ================= PTA BOARD VIEW ================= -->
-      <section id="pta-board-view" class="view board-root">
+      <section id="pta-board-view" class="view board-root" hidden aria-hidden="true">
         <div class="board-shell">
           <header class="board-header">
             <div class="board-title-block">
@@ -4006,7 +4025,7 @@
       </section>
 
       <!-- ================= STUDENT VIEW ================= -->
-      <section id="student-view" class="view student-root">
+      <section id="student-view" class="view student-root" hidden aria-hidden="true">
         <div class="student-shell">
           <header class="student-header">
             <div class="student-kicker">For Students</div>
@@ -4304,6 +4323,14 @@
     const principalResetNewPassText = document.getElementById("principal-reset-newpass-text");
     const principalResetNewPassCopy = document.getElementById("principal-reset-newpass-copy");
 
+    const BODY_THEME_CLASSES = ["theme-family", "theme-principal", "theme-board", "theme-student"];
+    const VIEW_THEMES = {
+      "family-view": "theme-family",
+      "principal-view": "theme-principal",
+      "pta-board-view": "theme-board",
+      "student-view": "theme-student"
+    };
+
     const PRINCIPAL_PASSWORD_KEY = "ptaPrincipalPasswordHash";
     const PRINCIPAL_RESET_KEY = "ptaPrincipalResetKit";
     const PRINCIPAL_UNLOCK_KEY = "ptaPrincipalUnlockedUntil";
@@ -4395,17 +4422,9 @@
     }
 
     function applyViewTheme(targetId) {
-      if (targetId === "principal-view") {
-        bodyElement.style.background = "#020617";
-        bodyElement.style.color = "#e5e7eb";
-      } else if (targetId === "student-view") {
-        bodyElement.style.background =
-          "radial-gradient(circle at top, #e0f2fe 0, #f9fafb 38%, #fef3c7 100%)";
-        bodyElement.style.color = "#111827";
-      } else {
-        bodyElement.style.background = "#f3f4f6";
-        bodyElement.style.color = "#111827";
-      }
+      const themeClass = VIEW_THEMES[targetId] || VIEW_THEMES["family-view"];
+      BODY_THEME_CLASSES.forEach(theme => bodyElement.classList.remove(theme));
+      bodyElement.classList.add(themeClass);
     }
 
     function switchView(targetId) {
@@ -4416,7 +4435,15 @@
         button.setAttribute("aria-pressed", String(matches));
       });
       views.forEach(view => {
-        view.classList.toggle("active", view.id === targetId);
+        const isTarget = view.id === targetId;
+        view.classList.toggle("active", isTarget);
+        if (!isTarget) {
+          view.setAttribute("aria-hidden", "true");
+          view.setAttribute("hidden", "");
+        } else {
+          view.setAttribute("aria-hidden", "false");
+          view.removeAttribute("hidden");
+        }
       });
       activeViewId = targetId;
       applyViewTheme(targetId);
