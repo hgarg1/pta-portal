@@ -4309,8 +4309,8 @@
     }
 
     function escapeIcsText(text) {
-      return String(text)
-        .replace(/\/g, "\\")
+      const withBackslashes = String(text).split("\\").join("\\\\");
+      return withBackslashes
         .replace(/;/g, "\;")
         .replace(/,/g, "\,")
         .replace(/\n/g, "\n");
