@@ -5054,11 +5054,12 @@
     }
 
     function escapeIcsText(text) {
-      return String(text)
-        .replace(/\/g, "\\")
-        .replace(/;/g, "\;")
-        .replace(/,/g, "\,")
-        .replace(/\n/g, "\n");
+      const stringValue = String(text);
+      return stringValue
+        .split("\\").join("\\\\")
+        .split(";").join("\;")
+        .split(",").join("\,")
+        .split("\n").join("\n");
     }
 
     function buildIcsContent(events) {
