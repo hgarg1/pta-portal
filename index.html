@@ -16,6 +16,7 @@
     }
     html {
       scroll-behavior: smooth;
+      font-size: clamp(15px, 1.9vw, 16px);
     }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -143,13 +144,26 @@
       flex-wrap: wrap;
     }
     @media (max-width: 560px) {
+      .portal-header {
+        padding: 0.7rem 1rem;
+      }
       .portal-header-inner {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+        gap: 0.75rem;
+      }
+      .portal-brand {
+        width: 100%;
+        justify-content: center;
+      }
+      .portal-brand-text-main,
+      .portal-brand-text-sub {
+        text-align: center;
       }
       .portal-toggle-group {
         width: 100%;
-        justify-content: space-between;
+        justify-content: center;
+        row-gap: 0.35rem;
       }
     }
     .portal-brand {
@@ -317,6 +331,33 @@
       .family-nav-links {
         width: 100%;
         justify-content: space-between;
+      }
+    }
+    @media (max-width: 520px) {
+      .family-shell {
+        padding: 1.25rem 1rem 2.25rem;
+      }
+      .family-nav {
+        gap: 0.75rem;
+        align-items: stretch;
+      }
+      .family-nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+      }
+      .family-nav-links a,
+      .family-nav-pill {
+        width: 100%;
+        text-align: center;
+      }
+      .family-hero-meta {
+        justify-content: center;
+        text-align: center;
+      }
+      .family-hero-actions {
+        width: 100%;
+        justify-content: center;
       }
     }
 
@@ -1383,6 +1424,11 @@
       padding: 0;
       margin: 0;
     }
+    @media (max-width: 560px) {
+      .principal-reset-steps {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
     .principal-reset-steps li {
       text-align: center;
       font-size: 0.68rem;
@@ -1433,6 +1479,12 @@
       gap: 0.5rem;
       font-size: 0.78rem;
       color: #bfdbfe;
+    }
+    @media (max-width: 560px) {
+      .principal-reset-meta {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
     .principal-reset-tip {
       font-size: 0.72rem;
@@ -1567,6 +1619,16 @@
       grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 0.55rem;
       margin-top: 0.4rem;
+    }
+    @media (max-width: 640px) {
+      .principal-week-load {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 420px) {
+      .principal-week-load {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
     .principal-day-col {
       display: grid;

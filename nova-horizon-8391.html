@@ -38,7 +38,7 @@
     }
 
     html {
-      font-size: 16px;
+      font-size: clamp(15px, 1.9vw, 16px);
       background: var(--bg-page);
     }
 
@@ -1692,8 +1692,39 @@
     }
 
     @media (max-width: 540px) {
+      .portal-header-inner {
+        gap: 1rem;
+        text-align: center;
+      }
+      .portal-brand {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        row-gap: 0.4rem;
+      }
+      .portal-toggle-group {
+        justify-self: stretch;
+        justify-content: center;
+        width: 100%;
+        row-gap: 0.4rem;
+      }
+      .portal-toggle-label {
+        width: 100%;
+        text-align: center;
+      }
       .portal-main {
-        padding: 1.25rem;
+        padding: 1.1rem;
+      }
+      .family-nav {
+        padding: 1.1rem 1.2rem;
+      }
+      .family-nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.55rem;
+      }
+      .family-nav-links a {
+        width: 100%;
+        text-align: center;
       }
       .family-section,
       .principal-panel,

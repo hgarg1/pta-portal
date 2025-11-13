@@ -48,7 +48,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: clamp(15px, 1.9vw, 16px);
   scroll-behavior: smooth;
 }
 
@@ -1443,10 +1443,34 @@ kbd {
   }
 }
 
+@media (max-width: 600px) {
+  .constellation-sidebar {
+    padding: var(--space-lg) 1rem var(--space-md);
+  }
+  .constellation-brand {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+  .constellation-toggle-stack {
+    grid-template-columns: 1fr;
+  }
+  .view-toggle-btn {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.6rem;
+  }
+  .constellation-main-inner {
+    padding: var(--space-lg) 1rem var(--space-xl);
+  }
+  .constellation-view {
+    padding: var(--space-lg) 1rem;
+  }
+}
+
 @media (max-width: 540px) {
   .view-toggle-btn {
     flex-direction: row;
-    justify-content: flex-start;
   }
   .principal-controls {
     flex-direction: column;
