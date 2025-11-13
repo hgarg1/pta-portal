@@ -11,6 +11,9 @@
       margin: 0;
       padding: 0;
     }
+    html {
+      scroll-behavior: smooth;
+    }
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       line-height: 1.6;
@@ -21,10 +24,91 @@
     a {
       text-decoration: none;
       color: inherit;
+      transition: color 0.2s ease;
+    }
+    .portal-inline-link {
+      color: #2563eb;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+    }
+    .portal-inline-link:hover {
+      color: #1d4ed8;
+    }
+    a:focus-visible,
+    button:focus-visible {
+      outline: 3px solid rgba(59, 130, 246, 0.65);
+      outline-offset: 2px;
     }
     button {
       font: inherit;
       cursor: pointer;
+    }
+
+    /* ---------- ANIMATION HELPERS ---------- */
+    @keyframes fade-up {
+      from {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .fade-seq > * {
+      opacity: 0;
+      animation: fade-up 0.6s ease forwards;
+    }
+    .fade-seq > *:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+    .fade-seq > *:nth-child(2) {
+      animation-delay: 0.12s;
+    }
+    .fade-seq > *:nth-child(3) {
+      animation-delay: 0.19s;
+    }
+    .fade-seq > *:nth-child(4) {
+      animation-delay: 0.26s;
+    }
+    .fade-seq > *:nth-child(5) {
+      animation-delay: 0.33s;
+    }
+    .fade-seq > *:nth-child(6) {
+      animation-delay: 0.4s;
+    }
+    .fade-seq > *:nth-child(7) {
+      animation-delay: 0.47s;
+    }
+    .fade-seq > *:nth-child(8) {
+      animation-delay: 0.54s;
+    }
+    .fade-seq > *:nth-child(9) {
+      animation-delay: 0.61s;
+    }
+    .fade-seq > *:nth-child(10) {
+      animation-delay: 0.68s;
+    }
+    .card-hover {
+      transition: transform 0.24s ease, box-shadow 0.24s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+      .fade-seq > * {
+        opacity: 1 !important;
+      }
     }
 
     /* ---------- PORTAL SHELL ---------- */
@@ -51,6 +135,16 @@
       justify-content: space-between;
       gap: 1rem;
       flex-wrap: wrap;
+    }
+    @media (max-width: 560px) {
+      .portal-header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .portal-toggle-group {
+        width: 100%;
+        justify-content: space-between;
+      }
     }
     .portal-brand {
       display: flex;
@@ -230,6 +324,19 @@
     @media (max-width: 860px) {
       .family-hero {
         grid-template-columns: minmax(0, 1fr);
+        text-align: center;
+      }
+      .family-hero-meta {
+        justify-content: center;
+      }
+      .family-hero-actions {
+        justify-content: center;
+      }
+    }
+    @media (max-width: 520px) {
+      .family-hero-meta {
+        flex-direction: column;
+        align-items: center;
       }
     }
     .family-hero-tag {
@@ -442,8 +549,8 @@
 
     .family-events-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.1rem;
     }
     .family-event-card {
       background: #ffffff;
@@ -507,13 +614,8 @@
 
     .family-vol-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-      gap: 2rem;
-    }
-    @media (max-width: 860px) {
-      .family-vol-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.4rem;
     }
     .family-vol-card {
       background: #ffffff;
@@ -554,8 +656,75 @@
     .family-info-row {
       margin-top: 0.6rem;
       display: grid;
-      gap: 0.4rem;
+      gap: 0.6rem;
       font-size: 0.84rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .family-info-row > div {
+      padding: 0.6rem 0.7rem;
+      border-radius: 0.75rem;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px dashed rgba(37, 99, 235, 0.25);
+      display: grid;
+      gap: 0.25rem;
+    }
+    .family-info-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.9rem;
+    }
+    .family-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.55rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid #2563eb;
+      background: #ffffff;
+      color: #1d4ed8;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .family-link-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px rgba(37, 99, 235, 0.16);
+    }
+    .family-resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.1rem;
+      margin-top: 1.1rem;
+    }
+    .family-resource-card {
+      background: #ffffff;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      padding: 1rem;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      display: grid;
+      gap: 0.5rem;
+      font-size: 0.84rem;
+    }
+    .family-resource-card strong {
+      font-size: 0.9rem;
+      color: #111827;
+    }
+    .family-resource-card ul {
+      list-style: none;
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+    .family-resource-card ul li::before {
+      content: "•";
+      color: #2563eb;
+      margin-right: 0.35rem;
+    }
+    .filtered-out {
+      display: none !important;
     }
 
     .family-footer {
@@ -914,6 +1083,36 @@
       min-width: 80px;
     }
 
+    .principal-checklist {
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+    }
+    .principal-checklist li {
+      padding-left: 1.4rem;
+      position: relative;
+    }
+    .principal-checklist li::before {
+      content: "▹";
+      position: absolute;
+      left: 0;
+      color: #38bdf8;
+    }
+    .principal-card-link {
+      color: #38bdf8;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+    }
+    .principal-card-link:hover {
+      color: #22d3ee;
+    }
+    .principal-micro-note {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-top: 0.45rem;
+    }
+
     .principal-grid-3 {
       display: grid;
       grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
@@ -1174,6 +1373,9 @@
       text-decoration: underline;
       text-decoration-thickness: 1px;
     }
+    .board-doc-link:hover {
+      color: #1d4ed8;
+    }
     .board-doc-pill {
       display: inline-flex;
       align-items: center;
@@ -1210,6 +1412,60 @@
       left: -0.7rem;
       top: 0;
       color: #4f46e5;
+    }
+    .board-doc-detail {
+      background: #ffffff;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      padding: 1rem;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.05);
+      display: grid;
+      gap: 0.55rem;
+      font-size: 0.84rem;
+      color: #374151;
+    }
+    .board-doc-detail h3 {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .board-doc-detail ul {
+      list-style: none;
+      padding-left: 1.1rem;
+      display: grid;
+      gap: 0.35rem;
+    }
+    .board-doc-detail ul li {
+      position: relative;
+    }
+    .board-doc-detail ul li::before {
+      content: "–";
+      position: absolute;
+      left: -0.7rem;
+      color: #4b5563;
+    }
+    .board-resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1.1rem;
+    }
+    .board-resource-card {
+      background: #eef2ff;
+      border-radius: 1rem;
+      padding: 0.95rem;
+      border: 1px solid #c7d2fe;
+      font-size: 0.82rem;
+      color: #1e293b;
+      display: grid;
+      gap: 0.45rem;
+    }
+    .board-resource-card a {
+      color: #4f46e5;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+    }
+    .board-resource-card a:hover {
+      color: #312e81;
     }
 
     /* =========================================================
@@ -1251,14 +1507,9 @@
 
     .student-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
       gap: 1.2rem;
       margin-bottom: 1.5rem;
-    }
-    @media (max-width: 860px) {
-      .student-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
     }
 
     .student-card {
@@ -1304,6 +1555,27 @@
       color: #166534;
     }
 
+    .student-checklist {
+      list-style: none;
+      display: grid;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+      font-size: 0.85rem;
+      color: #374151;
+    }
+    .student-checklist li {
+      padding-left: 1.3rem;
+      position: relative;
+    }
+    .student-checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0.02rem;
+      color: #16a34a;
+      font-size: 0.9rem;
+    }
+
     .student-tips {
       background: #fef9c3;
       border-radius: 1rem;
@@ -1332,6 +1604,32 @@
       left: -0.95rem;
       top: 0;
       font-size: 0.7rem;
+    }
+
+    .student-link-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-top: 1.1rem;
+    }
+    .student-link-card {
+      background: rgba(37, 99, 235, 0.08);
+      border-radius: 1rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      font-size: 0.84rem;
+      color: #1e3a8a;
+      display: grid;
+      gap: 0.4rem;
+    }
+    .student-link-card a {
+      color: #1d4ed8;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      font-weight: 600;
+    }
+    .student-link-card a:hover {
+      color: #1e40af;
     }
 
     .student-footer-note {
@@ -1388,6 +1686,7 @@
               <a href="#family-this-week">This Week</a>
               <a href="#family-upcoming">Upcoming</a>
               <a href="#family-volunteer">Volunteer</a>
+              <a href="#family-resources">Resources</a>
               <a href="#family-info" class="family-nav-pill">Stay Informed</a>
             </nav>
           </div>
@@ -1422,7 +1721,7 @@
               </div>
             </div>
 
-            <aside class="family-today-card" aria-label="Today's overview">
+            <aside class="family-today-card card-hover" aria-label="Today's overview">
               <div class="family-today-header">
                 <div>
                   <div class="family-today-title">Today at a Glance</div>
@@ -1446,10 +1745,16 @@
                     7:00 – 8:00 PM · Media Center &amp; Zoom
                   </div>
                 </li>
+                <li>
+                  <div class="family-today-item-title">Walk &amp; Roll to School Day meetup</div>
+                  <div class="family-today-item-meta">
+                    7:10 – 7:45 AM · Front parking lot check-in tent
+                  </div>
+                </li>
               </ul>
               <div class="family-today-note">
-                Can’t stay the whole time? It’s okay to pop in late or leave early —
-                we’re grateful for any time you can give.
+                Running late? Text the PTA hotline at <a class="portal-inline-link" href="sms:+15551234567">(555)
+                  123-4567</a> and a volunteer will save you a seat or check in your student badge.
               </div>
             </aside>
           </section>
@@ -1466,15 +1771,23 @@
               </p>
             </div>
 
-            <div class="family-filters">
-              <button class="family-filter-pill active" type="button">All this week</button>
-              <button class="family-filter-pill" type="button">Evening events</button>
-              <button class="family-filter-pill" type="button">For students</button>
-              <button class="family-filter-pill" type="button">For grown-ups</button>
+            <div class="family-filters" role="toolbar" aria-label="Filter this week's events">
+              <button class="family-filter-pill active" type="button" data-filter="all" aria-pressed="true">
+                All this week
+              </button>
+              <button class="family-filter-pill" type="button" data-filter="evening" aria-pressed="false">
+                Evening events
+              </button>
+              <button class="family-filter-pill" type="button" data-filter="students" aria-pressed="false">
+                For students
+              </button>
+              <button class="family-filter-pill" type="button" data-filter="grownups" aria-pressed="false">
+                For grown-ups
+              </button>
             </div>
 
-            <div class="family-events-grid">
-              <article class="family-event-card">
+            <div class="family-events-grid fade-seq">
+              <article class="family-event-card card-hover" data-categories="evening,families">
                 <div class="family-event-badges">
                   <span class="family-event-badge family-event-badge--today">Today</span>
                   <span class="family-event-badge">This week</span>
@@ -1485,7 +1798,8 @@
                   <span>📍 School Library</span>
                 </div>
                 <p class="family-event-note">
-                  Families are welcome to shop together. Teacher wish-lists will be posted at the entrance.
+                  Teacher wish-lists are posted by grade level. Cash, card, and e-wallet accepted. PTA readers are
+                  available for younger students.
                 </p>
                 <div class="family-event-tags">
                   <span class="family-event-tag-pill">Family event</span>
@@ -1493,7 +1807,7 @@
                 </div>
               </article>
 
-              <article class="family-event-card">
+              <article class="family-event-card card-hover" data-categories="students,morning">
                 <div class="family-event-badges">
                   <span class="family-event-badge">This week</span>
                 </div>
@@ -1503,7 +1817,8 @@
                   <span>📍 Front parking lot</span>
                 </div>
                 <p class="family-event-note">
-                  Meet PTA volunteers at the front lot and walk in together. Siblings and strollers welcome.
+                  Meet at the blue PTA tent for stickers and hot cocoa. Volunteers will lead walking groups down Park
+                  Avenue and River Trail.
                 </p>
                 <div class="family-event-tags">
                   <span class="family-event-tag-pill">Health &amp; wellness</span>
@@ -1511,22 +1826,79 @@
                 </div>
               </article>
 
-              <article class="family-event-card">
+              <article class="family-event-card card-hover" data-categories="grownups,daytime">
                 <div class="family-event-badges">
                   <span class="family-event-badge">This week</span>
                 </div>
                 <h3 class="family-event-title">Teacher Appreciation Snack Cart</h3>
                 <div class="family-event-meta">
-                  <span>📅 Thursday, during school day</span>
+                  <span>📅 Thursday, 8:30 – 11:30 AM</span>
                   <span>📍 Staff lounge</span>
                 </div>
                 <p class="family-event-note">
-                  PTA is stocking a rolling snack cart for teachers and staff. Donations are welcome
-                  (see Volunteer section for sign-ups).
+                  Drop donations at morning car line or sign up for a restock shift in the <a class="portal-inline-link"
+                    href="#family-volunteer">volunteer hub</a>. Gluten-free and caffeine-free options welcome.
                 </p>
                 <div class="family-event-tags">
                   <span class="family-event-tag-pill">Staff support</span>
                   <span class="family-event-tag-pill">Donations</span>
+                </div>
+              </article>
+
+              <article class="family-event-card card-hover" data-categories="evening,grownups">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">This week</span>
+                </div>
+                <h3 class="family-event-title">PTA Meeting &amp; Budget Q&amp;A</h3>
+                <div class="family-event-meta">
+                  <span>📅 Tuesday, 7:00 – 8:00 PM</span>
+                  <span>📍 Media Center &amp; Zoom</span>
+                </div>
+                <p class="family-event-note">
+                  Quick updates on fall fundraisers followed by an open Q&amp;A with the treasurer. Zoom link emailed at
+                  noon; recordings posted within 24 hours.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Grown-up focus</span>
+                  <span class="family-event-tag-pill">Finance</span>
+                </div>
+              </article>
+
+              <article class="family-event-card card-hover" data-categories="students,after-school">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">This week</span>
+                </div>
+                <h3 class="family-event-title">Chess Club Tournament Practice</h3>
+                <div class="family-event-meta">
+                  <span>📅 Thursday, 3:00 – 4:15 PM</span>
+                  <span>📍 Innovation Lab</span>
+                </div>
+                <p class="family-event-note">
+                  Open to 3rd–5th graders. Boards provided; bring a water bottle. Parents pick up at the car-rider loop at
+                  4:20 PM.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Students</span>
+                  <span class="family-event-tag-pill">Clubs</span>
+                </div>
+              </article>
+
+              <article class="family-event-card card-hover" data-categories="grownups,daytime">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">This week</span>
+                </div>
+                <h3 class="family-event-title">Lunchroom Buddy Express Shift</h3>
+                <div class="family-event-meta">
+                  <span>📅 Friday, 11:15 AM – 12:45 PM</span>
+                  <span>📍 Cafeteria</span>
+                </div>
+                <p class="family-event-note">
+                  Spend one lunch period helping younger grades open containers and clean up. Background check on file
+                  required — complete it online if you haven’t yet.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Volunteer shift</span>
+                  <span class="family-event-tag-pill">Grown-ups</span>
                 </div>
               </article>
             </div>
@@ -1543,8 +1915,8 @@
               </p>
             </div>
 
-            <div class="family-events-grid">
-              <article class="family-event-card">
+            <div class="family-events-grid fade-seq">
+              <article class="family-event-card card-hover">
                 <div class="family-event-badges">
                   <span class="family-event-badge">Next week</span>
                 </div>
@@ -1563,7 +1935,7 @@
                 </div>
               </article>
 
-              <article class="family-event-card">
+              <article class="family-event-card card-hover">
                 <div class="family-event-badges">
                   <span class="family-event-badge">Later this month</span>
                 </div>
@@ -1582,7 +1954,7 @@
                 </div>
               </article>
 
-              <article class="family-event-card">
+              <article class="family-event-card card-hover">
                 <div class="family-event-badges">
                   <span class="family-event-badge">Next month</span>
                 </div>
@@ -1600,6 +1972,44 @@
                   <span class="family-event-tag-pill">Families welcome</span>
                 </div>
               </article>
+
+              <article class="family-event-card card-hover">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">Early November</span>
+                </div>
+                <h3 class="family-event-title">Holiday Giving Tree Kickoff</h3>
+                <div class="family-event-meta">
+                  <span>📅 Monday, Nov 4 – Friday, Nov 15</span>
+                  <span>📍 Front office lobby</span>
+                </div>
+                <p class="family-event-note">
+                  Pick an ornament with a requested item for a Riverbend family. Gifts are returned unwrapped by Nov 15 so
+                  counselors can distribute them before break.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Community care</span>
+                  <span class="family-event-tag-pill">Donations</span>
+                </div>
+              </article>
+
+              <article class="family-event-card card-hover">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">Next month</span>
+                </div>
+                <h3 class="family-event-title">Community Garden Clean-Up Day</h3>
+                <div class="family-event-meta">
+                  <span>📅 Saturday, Nov 9 · 9:00 – 11:30 AM</span>
+                  <span>📍 School garden (behind cafeteria)</span>
+                </div>
+                <p class="family-event-note">
+                  Bring garden gloves and water bottles. PTA provides tools and snacks. Great for families who like hands-on
+                  projects.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Outdoor</span>
+                  <span class="family-event-tag-pill">All ages</span>
+                </div>
+              </article>
             </div>
           </section>
 
@@ -1615,8 +2025,8 @@
               </p>
             </div>
 
-            <div class="family-vol-grid">
-              <div class="family-vol-card">
+            <div class="family-vol-grid fade-seq">
+              <div class="family-vol-card card-hover">
                 <strong>This week’s needs</strong>
                 <ul class="family-vol-list">
                   <li>Book Fair: 30-minute check-out helpers (evening slots).</li>
@@ -1633,7 +2043,7 @@
                 </button>
               </div>
 
-              <div class="family-vol-card">
+              <div class="family-vol-card card-hover">
                 <strong>Low-pressure ways to support</strong>
                 <ul class="family-vol-list">
                   <li>Share PTA events in your classroom chats or carpool groups.</li>
@@ -1643,6 +2053,29 @@
                 </ul>
                 <p style="margin-top:0.7rem; font-size:0.8rem; color:#6b7280;">
                   There is no minimum time commitment. Your presence at events already counts as support.
+                </p>
+              </div>
+
+              <div class="family-vol-card card-hover">
+                <strong>Recurring opportunities</strong>
+                <ul class="family-vol-list">
+                  <li>
+                    <a class="portal-inline-link" href="https://riverbendpta.example.org/signup/lunchroom" target="_blank"
+                      rel="noopener">Lunchroom Buddy rotation</a> · 45-minute shifts assisting grades K–2.
+                  </li>
+                  <li>
+                    <a class="portal-inline-link" href="https://riverbendpta.example.org/signup/library" target="_blank"
+                      rel="noopener">Library shelving crew</a> · help Mrs. Owens re-shelve books on Fridays.
+                  </li>
+                  <li>
+                    <a class="portal-inline-link" href="https://riverbendpta.example.org/signup/garden" target="_blank"
+                      rel="noopener">Garden keepers</a> · adopt a planter box for monthly watering and weeding.
+                  </li>
+                </ul>
+                <p style="margin-top:0.7rem; font-size:0.8rem;">
+                  Need to update your background check? Complete the district form at
+                  <a class="portal-inline-link" href="https://riverbendpta.example.org/background-check" target="_blank"
+                    rel="noopener">riverbendpta.example.org/background-check</a> before your first shift.
                 </p>
               </div>
             </div>
@@ -1656,19 +2089,82 @@
               </div>
             </div>
 
-            <div class="family-info-card">
+            <div class="family-info-card card-hover" id="family-info-card">
               <strong>Choose at least one way to stay updated:</strong>
               <div class="family-info-row">
-                <div>📧 <strong>Weekly PTA e-mail:</strong> Sent on Sunday evenings with events for the coming week.</div>
-                <div>📱 <strong>Text alerts:</strong> Short reminders for same-day events (for example, “Movie Night tonight at 6:30 PM”).</div>
-                <div>📆 <strong>Shared calendar:</strong> Add the PTA calendar to your phone once and it will stay updated automatically.</div>
+                <div>
+                  <strong>📧 Weekly PTA e-mail</strong>
+                  <p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+                    Sent on Sunday evenings with highlights for the coming week, direct links to sign-ups, and any forms due soon.
+                  </p>
+                </div>
+                <div>
+                  <strong>📱 Text alerts</strong>
+                  <p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+                    Same-day nudges such as “Movie Night tonight at 6:30 PM.” Opt out anytime by replying STOP.
+                  </p>
+                </div>
+                <div>
+                  <strong>📆 Shared calendar</strong>
+                  <p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+                    Subscribe once and every PTA event appears on your phone and computer calendars automatically.
+                  </p>
+                </div>
               </div>
-              <p style="margin-top:0.7rem; font-size:0.8rem;">
-                To be added to any of these, e-mail
-                <strong>pta@riverbendelementary.org</strong> with your name, child’s teacher, and which
-                options you prefer. You can change your preferences at any time.
+              <div class="family-info-actions">
+                <a class="family-link-btn" href="mailto:subscribe@riverbendpta.example.org?subject=Add%20me%20to%20PTA%20updates">
+                  Request weekly e-mails
+                </a>
+                <a class="family-link-btn" href="https://riverbendpta.example.org/text-alerts" target="_blank" rel="noopener">
+                  Join text alerts
+                </a>
+                <a class="family-link-btn" href="https://riverbendpta.example.org/calendar.ics" target="_blank" rel="noopener">
+                  Download calendar (.ics)
+                </a>
+              </div>
+              <p style="margin-top:0.8rem; font-size:0.78rem; color:#4b5563;">
+                Questions? Reply to any update or e-mail <a class="portal-inline-link" href="mailto:pta@riverbendelementary.org">pta@riverbendelementary.org</a>.
+                We can add grandparents or caregivers too.
               </p>
             </div>
+
+            <section id="family-resources" class="family-section" aria-label="Family resources and downloads">
+              <div class="family-section-header">
+                <div>
+                  <div class="family-section-kicker">Quick resources</div>
+                  <h2 class="family-section-title">Helpful guides, forms, and how-tos.</h2>
+                </div>
+                <p class="family-section-sub">
+                  Save or share these cheat sheets whenever a new event pops up. They’re updated as details change.
+                </p>
+              </div>
+
+              <div class="family-resource-grid fade-seq">
+                <article class="family-resource-card card-hover" id="family-checklist">
+                  <strong>Family event checklist</strong>
+                  <ul>
+                    <li><a class="portal-inline-link" href="https://riverbendpta.example.org/checklists/family-night.pdf" target="_blank" rel="noopener">Family Night printable checklist (PDF)</a></li>
+                    <li>Includes suggested arrival times, what to bring, and student pick-up notes.</li>
+                  </ul>
+                </article>
+
+                <article class="family-resource-card card-hover" id="family-calendar">
+                  <strong>Master calendar &amp; reminders</strong>
+                  <ul>
+                    <li><a class="portal-inline-link" href="https://riverbendpta.example.org/calendar" target="_blank" rel="noopener">View the interactive PTA calendar</a></li>
+                    <li>Syncs automatically with Google, Apple, and Outlook once added.</li>
+                  </ul>
+                </article>
+
+                <article class="family-resource-card card-hover" id="family-forms">
+                  <strong>Forms &amp; contacts</strong>
+                  <ul>
+                    <li><a class="portal-inline-link" href="https://riverbendpta.example.org/forms/reimbursement.pdf" target="_blank" rel="noopener">Reimbursement request (PDF)</a></li>
+                    <li><a class="portal-inline-link" href="mailto:roomparents@riverbendpta.example.org">Room parent coordinator</a> · share classroom-specific questions.</li>
+                  </ul>
+                </article>
+              </div>
+            </section>
           </section>
         </div>
 
@@ -1679,6 +2175,7 @@
               <a href="#family-this-week">This week</a>
               <a href="#family-upcoming">Upcoming</a>
               <a href="#family-volunteer">Volunteer</a>
+              <a href="#family-resources">Resources</a>
             </div>
           </div>
         </footer>
@@ -1754,28 +2251,28 @@
             </header>
 
             <section class="principal-summary-grid" aria-label="Summary metrics for this week">
-              <article class="principal-summary-card" style="--fill:70%;">
+              <article class="principal-summary-card card-hover" style="--fill:70%;">
                 <div class="principal-summary-label">Total events (Sun–Sat)</div>
                 <div class="principal-summary-value">5</div>
                 <div class="principal-summary-chip">2 student-facing · 3 family/teacher</div>
                 <div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
               </article>
 
-              <article class="principal-summary-card" style="--fill:60%;">
+              <article class="principal-summary-card card-hover" style="--fill:60%;">
                 <div class="principal-summary-label">Evening events</div>
                 <div class="principal-summary-value">3</div>
                 <div class="principal-summary-chip">Within typical range</div>
                 <div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
               </article>
 
-              <article class="principal-summary-card" style="--fill:45%;">
+              <article class="principal-summary-card card-hover" style="--fill:45%;">
                 <div class="principal-summary-label">Volunteer coverage</div>
                 <div class="principal-summary-value">~65%</div>
                 <div class="principal-summary-chip">2 events under 50% staffed</div>
                 <div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
               </article>
 
-              <article class="principal-summary-card" style="--fill:55%;">
+              <article class="principal-summary-card card-hover" style="--fill:55%;">
                 <div class="principal-summary-label">Building load</div>
                 <div class="principal-summary-value">Moderate</div>
                 <div class="principal-summary-chip">No back-to-back late nights</div>
@@ -1784,7 +2281,7 @@
             </section>
 
             <section class="principal-grid-2">
-              <article class="principal-card" aria-label="Event load by weekday">
+              <article class="principal-card card-hover" aria-label="Event load by weekday">
                 <header class="principal-card-header">
                   <div>
                     <div class="principal-card-title">Event load by weekday</div>
@@ -1839,7 +2336,7 @@
                 </p>
               </article>
 
-              <article class="principal-card" aria-label="Volunteer coverage by event">
+              <article class="principal-card card-hover" aria-label="Volunteer coverage by event">
                 <header class="principal-card-header">
                   <div>
                     <div class="principal-card-title">Volunteer coverage</div>
@@ -1888,7 +2385,7 @@
             </section>
 
             <section class="principal-grid-3" aria-label="Parent interest and scheduling risks">
-              <article class="principal-card">
+              <article class="principal-card card-hover">
                 <header class="principal-card-header">
                   <div>
                     <div class="principal-card-title">Parent interest (informal signals)</div>
@@ -1936,7 +2433,7 @@
                 </p>
               </article>
 
-              <article class="principal-card">
+              <article class="principal-card card-hover">
                 <header class="principal-card-header">
                   <div>
                     <div class="principal-card-title">Scheduling &amp; fatigue watchlist</div>
@@ -1984,6 +2481,66 @@
                 </p>
               </article>
             </section>
+
+            <section class="principal-grid-2" aria-label="Action items and communication notes">
+              <article class="principal-card card-hover">
+                <header class="principal-card-header">
+                  <div>
+                    <div class="principal-card-title">Action items for the principal</div>
+                    <div class="principal-card-sub">Quick wins that keep the week smooth.</div>
+                  </div>
+                </header>
+
+                <ul class="principal-checklist">
+                  <li>
+                    Confirm building coverage for <strong>Friday Movie Night</strong> by looping in the evening custodian
+                    team (reply-all to <a class="principal-card-link" href="mailto:operations@riverbendpta.example.org">operations@riverbendpta.example.org</a>).
+                  </li>
+                  <li>
+                    Approve PTA table placement in the front lobby so families can check in for <strong>Walk &amp; Roll</strong>
+                    and pick up reflective stickers.
+                  </li>
+                  <li>
+                    Record a 30-second <strong>morning announcement shout-out</strong> to staff for the snack cart; PTA will
+                    drop the script in your inbox by noon Tuesday.
+                  </li>
+                </ul>
+
+                <p class="principal-micro-note">
+                  Knock these out and volunteers can handle the rest. Each one removes a frequent “Can we get approval?”
+                  e-mail.
+                </p>
+              </article>
+
+              <article class="principal-card card-hover">
+                <header class="principal-card-header">
+                  <div>
+                    <div class="principal-card-title">Communications &amp; facilities notes</div>
+                    <div class="principal-card-sub">What the office team should know for newsletters and setups.</div>
+                  </div>
+                </header>
+
+                <ul class="principal-checklist">
+                  <li>
+                    Add the <strong>Giving Tree kickoff</strong> to next week’s family newsletter with drop-off instructions and
+                    counselor contact info.
+                  </li>
+                  <li>
+                    Ensure <strong>gym floor covering</strong> is scheduled for Movie Night (submit request via
+                    <a class="principal-card-link" href="https://district.example.org/facilities" target="_blank" rel="noopener">district facilities portal</a>).
+                  </li>
+                  <li>
+                    Share <strong>bus loop reminder</strong> with staff: Walk &amp; Roll groups will use the main sidewalk so buses
+                    should unload 5 minutes early on Wednesday.
+                  </li>
+                </ul>
+
+                <p class="principal-micro-note">
+                  PTA comms lead <a class="principal-card-link" href="mailto:vp.riverbendpta@example.org">vp.riverbendpta@example.org</a>
+                  is ready to plug these into templates once you give the thumbs up.
+                </p>
+              </article>
+            </section>
           </main>
         </div>
       </section>
@@ -2016,8 +2573,8 @@
                 or ideas — they’re here to represent families and support the school.
               </p>
 
-              <div class="board-officers-grid">
-                <article class="board-card">
+              <div class="board-officers-grid fade-seq">
+                <article class="board-card card-hover">
                   <div class="board-role">President</div>
                   <div class="board-name">Alex Johnson</div>
                   <div class="board-contact">📧 president.riverbendpta@example.org</div>
@@ -2027,7 +2584,7 @@
                   </div>
                 </article>
 
-                <article class="board-card">
+                <article class="board-card card-hover">
                   <div class="board-role">Vice President</div>
                   <div class="board-name">Maria Lopez</div>
                   <div class="board-contact">📧 vp.riverbendpta@example.org</div>
@@ -2037,7 +2594,7 @@
                   </div>
                 </article>
 
-                <article class="board-card">
+                <article class="board-card card-hover">
                   <div class="board-role">Treasurer</div>
                   <div class="board-name">Jordan Kim</div>
                   <div class="board-contact">📧 treasurer.riverbendpta@example.org</div>
@@ -2047,7 +2604,7 @@
                   </div>
                 </article>
 
-                <article class="board-card">
+                <article class="board-card card-hover">
                   <div class="board-role">Secretary</div>
                   <div class="board-name">Priya Patel</div>
                   <div class="board-contact">📧 secretary.riverbendpta@example.org</div>
@@ -2057,7 +2614,7 @@
                   </div>
                 </article>
 
-                <article class="board-card">
+                <article class="board-card card-hover">
                   <div class="board-role">Volunteer Chair</div>
                   <div class="board-name">Taylor Brooks</div>
                   <div class="board-contact">📧 volunteers.riverbendpta@example.org</div>
@@ -2066,10 +2623,30 @@
                     <span class="board-tag-pill">Room parents</span>
                   </div>
                 </article>
+
+                <article class="board-card card-hover">
+                  <div class="board-role">Teacher Liaison</div>
+                  <div class="board-name">Ms. Lacey Reed</div>
+                  <div class="board-contact">📧 lacey.reed@riverbendpta.example.org</div>
+                  <div class="board-focus-tags">
+                    <span class="board-tag-pill">Staff voice</span>
+                    <span class="board-tag-pill">Classroom needs</span>
+                  </div>
+                </article>
+
+                <article class="board-card card-hover">
+                  <div class="board-role">Fundraising Chair</div>
+                  <div class="board-name">Chris Alvarez</div>
+                  <div class="board-contact">📧 fundraising.riverbendpta@example.org</div>
+                  <div class="board-focus-tags">
+                    <span class="board-tag-pill">Community partners</span>
+                    <span class="board-tag-pill">Grants</span>
+                  </div>
+                </article>
               </div>
             </div>
 
-            <aside class="board-meeting-card">
+            <aside class="board-meeting-card card-hover">
               <h2 class="board-section-title">Board meetings</h2>
               <div class="board-meeting-row">
                 <strong>Schedule:</strong> 1st Tuesday of each month, 6:30–8:00 PM
@@ -2104,30 +2681,94 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td><a href="#" class="board-doc-link">PTA Bylaws (current)</a></td>
+                    <td><a href="#doc-bylaws" class="board-doc-link">PTA Bylaws (current)</a></td>
                     <td>August 2024</td>
                     <td><span class="board-doc-pill">Bylaws</span></td>
                   </tr>
                   <tr>
-                    <td><a href="#" class="board-doc-link">2024–2025 Budget Overview</a></td>
+                    <td><a href="#doc-budget" class="board-doc-link">2024–2025 Budget Overview</a></td>
                     <td>September 2024</td>
                     <td><span class="board-doc-pill">Finance</span></td>
                   </tr>
                   <tr>
-                    <td><a href="#" class="board-doc-link">September Meeting Minutes</a></td>
+                    <td><a href="#doc-minutes-sept" class="board-doc-link">September Meeting Minutes</a></td>
                     <td>September 10, 2024</td>
                     <td><span class="board-doc-pill">Minutes</span></td>
                   </tr>
                   <tr>
-                    <td><a href="#" class="board-doc-link">October Meeting Minutes</a></td>
+                    <td><a href="#doc-minutes-oct" class="board-doc-link">October Meeting Minutes</a></td>
                     <td>October 8, 2024</td>
                     <td><span class="board-doc-pill">Minutes</span></td>
                   </tr>
+                  <tr>
+                    <td><a href="#doc-audit" class="board-doc-link">Annual Financial Review Summary</a></td>
+                    <td>July 2024</td>
+                    <td><span class="board-doc-pill">Finance</span></td>
+                  </tr>
+                  <tr>
+                    <td><a href="#doc-volunteer-handbook" class="board-doc-link">Volunteer Handbook</a></td>
+                    <td>October 2024</td>
+                    <td><span class="board-doc-pill">Reference</span></td>
+                  </tr>
                 </tbody>
               </table>
+
+              <div class="board-doc-detail card-hover" id="doc-bylaws">
+                <h3>PTA Bylaws (current)</h3>
+                <p>Defines officer roles, meeting procedures, and how funds are approved.</p>
+                <ul>
+                  <li>Download: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/bylaws.pdf" target="_blank" rel="noopener">bylaws.pdf</a></li>
+                  <li>Summary one-pager for quick reference: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/bylaws-cheatsheet.pdf" target="_blank" rel="noopener">cheatsheet</a></li>
+                </ul>
+              </div>
+
+              <div class="board-doc-detail card-hover" id="doc-budget">
+                <h3>2024–2025 Budget Overview</h3>
+                <p>Shows projected income and expenses by category along with year-to-date actuals.</p>
+                <ul>
+                  <li>View spreadsheet: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/budget.xlsx" target="_blank" rel="noopener">budget.xlsx</a></li>
+                  <li>Questions? E-mail <a class="portal-inline-link" href="mailto:treasurer.riverbendpta@example.org">treasurer.riverbendpta@example.org</a></li>
+                </ul>
+              </div>
+
+              <div class="board-doc-detail card-hover" id="doc-minutes-sept">
+                <h3>September Meeting Minutes</h3>
+                <p>Approved during the October board meeting.</p>
+                <ul>
+                  <li>Download minutes: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/minutes-sept.pdf" target="_blank" rel="noopener">minutes-sept.pdf</a></li>
+                  <li>Key votes: Movie Night budget increase, STEM Night co-lead approval.</li>
+                </ul>
+              </div>
+
+              <div class="board-doc-detail card-hover" id="doc-minutes-oct">
+                <h3>October Meeting Minutes</h3>
+                <p>Draft shared for transparency; official approval happens at the November meeting.</p>
+                <ul>
+                  <li>Draft minutes: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/minutes-oct-draft.pdf" target="_blank" rel="noopener">minutes-oct-draft.pdf</a></li>
+                  <li>Includes volunteer recognition list and fundraising progress chart.</li>
+                </ul>
+              </div>
+
+              <div class="board-doc-detail card-hover" id="doc-audit">
+                <h3>Annual Financial Review Summary</h3>
+                <p>Independent audit verifying that income and expenses matched bank statements for 2023–2024.</p>
+                <ul>
+                  <li>Summary PDF: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/financial-review.pdf" target="_blank" rel="noopener">financial-review.pdf</a></li>
+                  <li>Contact the audit committee at <a class="portal-inline-link" href="mailto:audit@riverbendpta.example.org">audit@riverbendpta.example.org</a></li>
+                </ul>
+              </div>
+
+              <div class="board-doc-detail card-hover" id="doc-volunteer-handbook">
+                <h3>Volunteer Handbook</h3>
+                <p>A quick guide for new volunteers covering sign-in procedures, background checks, and event expectations.</p>
+                <ul>
+                  <li>Handbook PDF: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/volunteer-handbook.pdf" target="_blank" rel="noopener">volunteer-handbook.pdf</a></li>
+                  <li>Printed copies available in the front office near the PTA mailbox.</li>
+                </ul>
+              </div>
             </div>
 
-            <aside class="board-quick-card">
+            <aside class="board-quick-card card-hover">
               <h2 class="board-section-title">How families can get involved in decisions</h2>
               <ul class="board-quick-list">
                 <li>Attend at least one board or general meeting this year to see how things work.</li>
@@ -2140,6 +2781,33 @@
                 never like they’re happening “behind closed doors.”
               </p>
             </aside>
+          </section>
+
+          <section class="board-section" aria-label="PTA resource library" style="margin-top:2rem;">
+            <h2 class="board-section-title">Resource library for board &amp; committee leads</h2>
+            <p class="board-section-sub">
+              These quick links keep everyone on the same page — share them with committee co-leads and room parents.
+            </p>
+
+            <div class="board-resource-grid fade-seq">
+              <article class="board-resource-card card-hover">
+                <strong>Grants &amp; sponsorship tracker</strong>
+                <p>Live spreadsheet of pending business partnerships, district grants, and deadlines.</p>
+                <a href="https://riverbendpta.example.org/resources/grants-tracker" target="_blank" rel="noopener">Open tracker</a>
+              </article>
+
+              <article class="board-resource-card card-hover">
+                <strong>Communications toolkit</strong>
+                <p>Templates for flyers, social posts, and morning announcements. Includes brand colors and logos.</p>
+                <a href="https://riverbendpta.example.org/resources/comms-kit.zip" target="_blank" rel="noopener">Download toolkit</a>
+              </article>
+
+              <article class="board-resource-card card-hover">
+                <strong>Room parent starter pack</strong>
+                <p>Sample e-mails, budget request form, and timeline for fall and spring classroom events.</p>
+                <a href="https://riverbendpta.example.org/resources/room-parent-pack.pdf" target="_blank" rel="noopener">View starter pack</a>
+              </article>
+            </div>
           </section>
         </div>
       </section>
@@ -2157,8 +2825,8 @@
             </p>
           </header>
 
-          <section class="student-grid">
-            <article class="student-card">
+          <section class="student-grid fade-seq">
+            <article class="student-card card-hover">
               <div class="student-card-title">
                 <span class="student-emoji">📅</span>
                 This week’s fun things
@@ -2184,10 +2852,22 @@
                   The PTA is surprising teachers with snacks.
                   If you see the cart, you can say “Thanks for teaching us!” 🧃
                 </li>
+                <li>
+                  <strong>Chess Club Practice</strong>
+                  <span class="student-badge">After school</span>
+                  <br />
+                  Meet in the Innovation Lab on Thursday. Bring a water bottle and practice matches your best moves.
+                </li>
+                <li>
+                  <strong>Spirit Wear Friday</strong>
+                  <span class="student-badge">All day</span>
+                  <br />
+                  Wear your Riverbend colors or favorite school shirt to earn house points for your class.
+                </li>
               </ul>
             </article>
 
-            <article class="student-card">
+            <article class="student-card card-hover">
               <div class="student-card-title">
                 <span class="student-emoji">👀</span>
                 Coming up soon
@@ -2211,19 +2891,67 @@
                   Sing, play instruments, or show your artwork on the walls.
                   Dates will be announced in class and here.
                 </li>
+                <li>
+                  <strong>Holiday Giving Tree</strong>
+                  <br />
+                  Choose an ornament with a wish list item to help a Riverbend family. Bring gifts back by November 15.
+                </li>
+                <li>
+                  <strong>Garden Clean-Up Day</strong>
+                  <br />
+                  Help plant bulbs and pull weeds with your family on Saturday, November 9. Gloves provided!
+                </li>
               </ul>
+            </article>
+
+            <article class="student-card card-hover">
+              <div class="student-card-title">
+                <span class="student-emoji">✅</span>
+                Before you go
+              </div>
+              <ul class="student-checklist">
+                <li>Ask a grown-up who is picking you up after the event and where to meet them.</li>
+                <li>Pack a labeled water bottle and jacket in case the gym or playground feels chilly.</li>
+                <li>Charge your Chromebook if you need it for STEM Night stations or homework afterward.</li>
+              </ul>
+              <p style="margin-top:0.6rem; font-size:0.82rem; color:#4b5563;">
+                Need help? Use the <a class="portal-inline-link" href="https://riverbendpta.example.org/students/help" target="_blank" rel="noopener">student help form</a>
+                and a counselor or PTA volunteer will follow up.
+              </p>
             </article>
           </section>
 
-          <section class="student-tips">
+          <section class="student-tips card-hover">
             <strong>How to be ready for events ⭐</strong>
             <ul class="student-tips-list">
               <li>Ask your grown-up which events you might go to this week.</li>
               <li>Check what you should wear (comfy clothes, school spirit shirt, etc.).</li>
               <li>If you’re nervous, bring a friend or ask a teacher where to go.</li>
               <li>Say “thank you” to the helpers — most of them are parents volunteering their time.</li>
+              <li>Pack a small snack or water bottle if the event happens right after school.</li>
+              <li>Look at the weather so you know if you need a jacket or umbrella.</li>
             </ul>
           </section>
+
+          <div class="student-link-grid fade-seq">
+            <article class="student-link-card card-hover">
+              <strong>Morning announcements replay</strong>
+              <p>Catch up if you missed the news crew. New episodes post by 4:00 PM each day.</p>
+              <a href="https://riverbendpta.example.org/students/announcements" target="_blank" rel="noopener">Listen online</a>
+            </article>
+
+            <article class="student-link-card card-hover">
+              <strong>Clubs &amp; activities schedule</strong>
+              <p>See which clubs meet on which days plus pick-up locations for families.</p>
+              <a href="https://riverbendpta.example.org/students/clubs" target="_blank" rel="noopener">View schedule</a>
+            </article>
+
+            <article class="student-link-card card-hover">
+              <strong>Spirit wear shop</strong>
+              <p>Order school shirts and hoodies so you’re ready for Spirit Fridays.</p>
+              <a href="https://riverbendpta.example.org/shop" target="_blank" rel="noopener">Visit the shop</a>
+            </article>
+          </div>
 
           <p class="student-footer-note">
             If you’re not sure about any event, just ask your teacher or grown-up and they can
@@ -2290,6 +3018,27 @@
       });
       weekLabel.textContent = "Week of " + formatter.format(monday);
     }
+
+    // --- Family event filters ---
+    const filterButtons = document.querySelectorAll('.family-filter-pill');
+    const eventCards = document.querySelectorAll('#family-this-week [data-categories]');
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+        filterButtons.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('active');
+        btn.setAttribute('aria-pressed', 'true');
+
+        eventCards.forEach(card => {
+          const categories = card.dataset.categories.split(',').map(c => c.trim());
+          const show = filter === 'all' || categories.includes(filter);
+          card.classList.toggle('filtered-out', !show);
+        });
+      });
+    });
   </script>
 </body>
 </html>
