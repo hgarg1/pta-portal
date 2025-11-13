@@ -1141,7 +1141,6 @@
         padding: 1.75rem 1.25rem 3rem;
       }
     }
-  </style>
     /* Interaction + utility adjustments */
     .card-hover {
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -5091,11 +5090,13 @@
     }
 
     function escapeIcsText(text) {
-      return String(text)
-        .replace(/\/g, "\\")
-        .replace(/;/g, "\;")
-        .replace(/,/g, "\,")
-        .replace(/\n/g, "\n");
+      let safe = String(text);
+      safe = safe.split("\\").join("\\\\");
+      safe = safe.split(";").join("\\;");
+      safe = safe.split(",").join("\\,");
+      safe = safe.split("\r").join("");
+      safe = safe.split("\n").join("\\n");
+      return safe;
     }
 
     function buildIcsContent(events) {
