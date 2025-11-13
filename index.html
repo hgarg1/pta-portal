@@ -1,0 +1,2295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Riverbend PTA Portal – Family · Principal · Board · Students</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* ---------- GLOBAL RESET ---------- */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      background: #f3f4f6;
+      color: #111827;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    /* ---------- PORTAL SHELL ---------- */
+    .portal-shell {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .portal-header {
+      background: #0f172a;
+      color: #e5e7eb;
+      border-bottom: 1px solid #1e293b;
+      padding: 0.75rem 1.25rem;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .portal-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .portal-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .portal-mark {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 20%, #22c55e, #22d3ee 50%, #4f46e5 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #f9fafb;
+      box-shadow: 0 12px 22px rgba(37, 99, 235, 0.5);
+    }
+    .portal-brand-text-main {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .portal-brand-text-sub {
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    .portal-toggle-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+    }
+    .portal-toggle-label {
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+    .view-toggle-btn {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid #4b5563;
+      background: #020617;
+      color: #d1d5db;
+      font-size: 0.82rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      opacity: 0.75;
+      transition: opacity 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+    }
+    .view-toggle-btn span {
+      font-size: 0.9rem;
+    }
+    .view-toggle-btn.active {
+      opacity: 1;
+      border-color: #22c55e;
+      background: linear-gradient(120deg, #22c55e, #22d3ee, #4f46e5);
+      color: #020617;
+    }
+
+    .portal-main {
+      flex: 1;
+    }
+
+    /* ---------- VIEW SWITCHING ---------- */
+    .view {
+      display: none;
+    }
+    .view.active {
+      display: block;
+    }
+
+    /* =========================================================
+       FAMILY / PTA MOMS VIEW
+       ========================================================= */
+    .family-root {
+      background: #f3f4f6;
+      color: #111827;
+    }
+    .family-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 2.5rem;
+    }
+
+    .family-nav {
+      background: #ffffff;
+      border-radius: 0.9rem;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+    }
+    .family-nav-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .family-school-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #22c55e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #f9fafb;
+    }
+    .family-school-main {
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .family-school-sub {
+      font-size: 0.78rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .family-nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      font-size: 0.82rem;
+      color: #374151;
+    }
+    .family-nav-links a {
+      position: relative;
+      padding-bottom: 0.12rem;
+    }
+    .family-nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: #2563eb;
+      transition: width 0.18s ease;
+    }
+    .family-nav-links a:hover::after {
+      width: 100%;
+    }
+    .family-nav-pill {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid #2563eb;
+      color: #2563eb;
+      background: #eff6ff;
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+    @media (max-width: 720px) {
+      .family-nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .family-nav-links {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    .family-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 2.3rem;
+      align-items: center;
+      margin-top: 1.6rem;
+    }
+    @media (max-width: 860px) {
+      .family-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .family-hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.2rem 0.8rem 0.2rem 0.25rem;
+      border-radius: 999px;
+      background: #e0f2fe;
+      color: #0f172a;
+      font-size: 0.75rem;
+      margin-bottom: 0.7rem;
+    }
+    .family-hero-tag-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+    }
+    .family-hero-title {
+      font-size: clamp(1.9rem, 3.1vw, 2.35rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.6rem;
+    }
+    .family-hero-title span {
+      color: #2563eb;
+    }
+    .family-hero-sub {
+      font-size: 0.98rem;
+      color: #4b5563;
+      max-width: 32rem;
+      margin-bottom: 1rem;
+    }
+    .family-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 1.2rem;
+    }
+    .family-hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: #e5e7eb;
+    }
+    .family-hero-meta strong {
+      color: #111827;
+    }
+    .family-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .family-btn-primary {
+      padding: 0.7rem 1.25rem;
+      border-radius: 999px;
+      border: none;
+      background: #2563eb;
+      color: #f9fafb;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      box-shadow: 0 14px 25px rgba(37, 99, 235, 0.4);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+    .family-btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 18px 30px rgba(37, 99, 235, 0.5);
+    }
+    .family-btn-ghost {
+      padding: 0.7rem 1.1rem;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #111827;
+      font-weight: 500;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+    .family-btn-ghost:hover {
+      background: #f9fafb;
+      border-color: #9ca3af;
+    }
+
+    .family-today-card {
+      background: #ffffff;
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.2rem 1.1rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 18px 35px rgba(15, 23, 42, 0.08);
+      font-size: 0.85rem;
+      color: #374151;
+    }
+    .family-today-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.8rem;
+    }
+    .family-today-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .family-today-date {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+    .family-today-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #166534;
+      font-size: 0.72rem;
+      margin-bottom: 0.6rem;
+    }
+    .family-today-pill-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #16a34a;
+    }
+    .family-today-list {
+      list-style: none;
+      display: grid;
+      gap: 0.55rem;
+    }
+    .family-today-item-title {
+      font-weight: 600;
+      font-size: 0.86rem;
+    }
+    .family-today-item-meta {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+    .family-today-note {
+      font-size: 0.78rem;
+      color: #6b7280;
+      padding-top: 0.6rem;
+      margin-top: 0.7rem;
+      border-top: 1px dashed #e5e7eb;
+    }
+
+    .family-section {
+      margin-top: 2.3rem;
+    }
+    .family-section-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: baseline;
+      margin-bottom: 1.2rem;
+    }
+    @media (max-width: 720px) {
+      .family-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    .family-section-kicker {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #6b7280;
+      margin-bottom: 0.15rem;
+    }
+    .family-section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    .family-section-sub {
+      font-size: 0.84rem;
+      color: #6b7280;
+      max-width: 28rem;
+    }
+
+    .family-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+    }
+    .family-filter-pill {
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #374151;
+    }
+    .family-filter-pill.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #f9fafb;
+    }
+
+    .family-events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .family-event-card {
+      background: #ffffff;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      padding: 1rem;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+      display: grid;
+      gap: 0.4rem;
+      font-size: 0.82rem;
+    }
+    .family-event-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #6b7280;
+      margin-bottom: 0.1rem;
+    }
+    .family-event-badge {
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .family-event-badge--today {
+      background: #ecfdf3;
+      color: #166534;
+    }
+    .family-event-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+    .family-event-meta {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+    .family-event-meta span {
+      display: inline-block;
+      margin-right: 0.7rem;
+    }
+    .family-event-note {
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+    .family-event-tags {
+      margin-top: 0.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+    .family-event-tag-pill {
+      padding: 0.16rem 0.5rem;
+      border-radius: 999px;
+      background: #f3f4f6;
+    }
+
+    .family-vol-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 2rem;
+    }
+    @media (max-width: 860px) {
+      .family-vol-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .family-vol-card {
+      background: #ffffff;
+      border-radius: 1rem;
+      border: 1px solid #e5e7eb;
+      padding: 1.1rem;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+      font-size: 0.85rem;
+      color: #374151;
+    }
+    .family-vol-list {
+      list-style: none;
+      display: grid;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+      font-size: 0.84rem;
+    }
+    .family-vol-list li {
+      padding-left: 1.1rem;
+      position: relative;
+    }
+    .family-vol-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0.3rem;
+      top: 0.02rem;
+      color: #2563eb;
+    }
+
+    .family-info-card {
+      background: #eef2ff;
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px solid #c7d2fe;
+      font-size: 0.85rem;
+      color: #1e293b;
+    }
+    .family-info-row {
+      margin-top: 0.6rem;
+      display: grid;
+      gap: 0.4rem;
+      font-size: 0.84rem;
+    }
+
+    .family-footer {
+      border-top: 1px solid #e5e7eb;
+      background: #ffffff;
+      padding: 1rem 1.25rem 1.6rem;
+      margin-top: 2.5rem;
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+    .family-footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .family-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    /* =========================================================
+       PRINCIPAL / DASHBOARD VIEW
+       ========================================================= */
+    .principal-root {
+      background: #020617;
+      color: #e5e7eb;
+    }
+    .principal-page {
+      min-height: 100%;
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+    }
+    @media (max-width: 900px) {
+      .principal-page {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto 1fr;
+      }
+    }
+
+    .principal-sidebar {
+      background: radial-gradient(circle at 0% 0%, #1d4ed8 0, #020617 55%);
+      border-right: 1px solid rgba(30, 64, 175, 0.7);
+      padding: 1.4rem 1.1rem;
+    }
+    @media (max-width: 900px) {
+      .principal-sidebar {
+        border-right: none;
+        border-bottom: 1px solid rgba(30, 64, 175, 0.7);
+      }
+    }
+    .principal-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 30% 20%, #22c55e, #22d3ee 50%, #4f46e5 80%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: #f9fafb;
+      box-shadow: 0 18px 30px rgba(37, 99, 235, 0.6);
+      margin-bottom: 0.8rem;
+    }
+    .principal-school-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .principal-role {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-bottom: 1.4rem;
+    }
+    .principal-sidebar-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #64748b;
+      margin: 1.25rem 0 0.5rem;
+    }
+    .principal-nav-list {
+      list-style: none;
+      display: grid;
+      gap: 0.3rem;
+      font-size: 0.85rem;
+    }
+    .principal-nav-link {
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: default;
+      color: #cbd5f5;
+    }
+    .principal-nav-link span:last-child {
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .principal-nav-link.active {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(129, 140, 248, 0.9);
+      color: #e5e7eb;
+    }
+    .principal-sidebar-note {
+      margin-top: 1.4rem;
+      padding: 0.8rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(129, 140, 248, 0.8);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 0.8rem;
+      color: #c7d2fe;
+    }
+
+    .principal-main {
+      padding: 1.4rem 1.6rem 1.8rem;
+    }
+    @media (max-width: 600px) {
+      .principal-main {
+        padding: 1.1rem 1.1rem 1.6rem;
+      }
+    }
+
+    .principal-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.2rem;
+    }
+    @media (max-width: 700px) {
+      .principal-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    .principal-title-block {
+      display: grid;
+      gap: 0.25rem;
+    }
+    .principal-kicker {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #64748b;
+    }
+    .principal-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+    .principal-sub {
+      font-size: 0.86rem;
+      color: #9ca3af;
+      max-width: 30rem;
+    }
+    .principal-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      font-size: 0.82rem;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .principal-date-pill {
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+    .principal-btn-outline {
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      background: transparent;
+      color: #e5e7eb;
+    }
+    .principal-btn-solid {
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(120deg, #22c55e, #22d3ee, #4f46e5);
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 16px 30px rgba(37, 99, 235, 0.6);
+    }
+
+    .principal-small {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .principal-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.3rem;
+    }
+    @media (max-width: 1024px) {
+      .principal-summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 620px) {
+      .principal-summary-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .principal-summary-card {
+      border-radius: 0.9rem;
+      padding: 0.8rem 0.85rem;
+      background: radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.15), transparent 60%),
+                  rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.8);
+      font-size: 0.8rem;
+      display: grid;
+      gap: 0.15rem;
+    }
+    .principal-summary-label {
+      color: #9ca3af;
+      font-size: 0.78rem;
+    }
+    .principal-summary-value {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .principal-summary-chip {
+      font-size: 0.72rem;
+      color: #a5b4fc;
+    }
+    .principal-summary-bar {
+      margin-top: 0.35rem;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(30, 64, 175, 0.8);
+      overflow: hidden;
+    }
+    .principal-summary-bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #22c55e, #22d3ee, #4f46e5);
+      width: var(--fill, 50%);
+    }
+
+    .principal-grid-2 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.3rem;
+    }
+    @media (max-width: 960px) {
+      .principal-grid-2 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .principal-card {
+      border-radius: 1rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(30, 64, 175, 0.9);
+      padding: 0.9rem 0.95rem 1rem;
+      font-size: 0.82rem;
+    }
+    .principal-card-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.6rem;
+      align-items: baseline;
+      margin-bottom: 0.6rem;
+    }
+    .principal-card-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .principal-card-sub {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .principal-week-load {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 0.55rem;
+      margin-top: 0.4rem;
+    }
+    .principal-day-col {
+      display: grid;
+      gap: 0.25rem;
+      justify-items: center;
+      font-size: 0.72rem;
+      color: #9ca3af;
+    }
+    .principal-day-bar-wrapper {
+      width: 100%;
+      height: 80px;
+      border-radius: 0.7rem;
+      background: rgba(15, 23, 42, 1);
+      border: 1px solid rgba(30, 64, 175, 0.8);
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .principal-day-bar {
+      width: 100%;
+      background: linear-gradient(180deg, #22c55e, #4f46e5);
+      border-radius: inherit;
+      height: var(--height, 30%);
+    }
+    .principal-day-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .principal-day-count {
+      font-size: 0.72rem;
+    }
+
+    .principal-coverage-list {
+      list-style: none;
+      display: grid;
+      gap: 0.45rem;
+      margin-top: 0.3rem;
+    }
+    .principal-coverage-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+    }
+    .principal-coverage-label {
+      color: #cbd5f5;
+    }
+    .principal-coverage-meter {
+      position: relative;
+      width: 38%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 1);
+      overflow: hidden;
+      border: 1px solid rgba(30, 64, 175, 0.9);
+    }
+    .principal-coverage-fill {
+      height: 100%;
+      width: var(--fill, 50%);
+      background: linear-gradient(90deg, #ef4444, #f97316, #22c55e);
+    }
+    .principal-coverage-status {
+      font-size: 0.76rem;
+      color: #9ca3af;
+      text-align: right;
+      min-width: 80px;
+    }
+
+    .principal-grid-3 {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 1rem;
+    }
+    @media (max-width: 900px) {
+      .principal-grid-3 {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .principal-interest-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      margin-top: 0.4rem;
+    }
+    .principal-interest-table th,
+    .principal-interest-table td {
+      text-align: left;
+      padding: 0.35rem 0.25rem;
+      border-bottom: 1px solid rgba(30, 64, 175, 0.7);
+    }
+    .principal-interest-table th {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .principal-interest-badge {
+      font-size: 0.72rem;
+      padding: 0.18rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid rgba(94, 234, 212, 0.8);
+      color: #a5f3fc;
+    }
+
+    .principal-risk-list {
+      list-style: none;
+      display: grid;
+      gap: 0.45rem;
+      margin-top: 0.35rem;
+      font-size: 0.8rem;
+    }
+    .principal-risk-item {
+      padding: 0.5rem 0.55rem;
+      border-radius: 0.7rem;
+      background: rgba(15, 23, 42, 1);
+      border: 1px solid rgba(30, 64, 175, 0.9);
+      display: grid;
+      gap: 0.1rem;
+    }
+    .principal-risk-tag-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+    .principal-risk-level {
+      font-size: 0.72rem;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid;
+    }
+    .principal-risk-low {
+      border-color: #22c55e;
+      color: #bbf7d0;
+    }
+    .principal-risk-med {
+      border-color: #f97316;
+      color: #fed7aa;
+    }
+    .principal-risk-high {
+      border-color: #ef4444;
+      color: #fecaca;
+    }
+    .principal-risk-text {
+      font-size: 0.78rem;
+      color: #e5e7eb;
+    }
+
+    /* =========================================================
+       PTA BOARD VIEW
+       ========================================================= */
+    .board-root {
+      background: #f9fafb;
+      color: #111827;
+    }
+    .board-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.6rem 1.25rem 2.3rem;
+    }
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      align-items: flex-start;
+      margin-bottom: 1.7rem;
+    }
+    @media (max-width: 768px) {
+      .board-header {
+        flex-direction: column;
+      }
+    }
+    .board-title-block {
+      display: grid;
+      gap: 0.35rem;
+    }
+    .board-kicker {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #6b7280;
+    }
+    .board-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .board-sub {
+      font-size: 0.88rem;
+      color: #4b5563;
+      max-width: 32rem;
+    }
+    .board-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.75rem;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-size: 0.78rem;
+      border: 1px solid #c7d2fe;
+    }
+    .board-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.8rem;
+    }
+    @media (max-width: 900px) {
+      .board-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .board-section-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+    .board-section-sub {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-bottom: 0.9rem;
+    }
+    .board-officers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.85rem;
+    }
+    .board-card {
+      background: #ffffff;
+      border-radius: 0.9rem;
+      padding: 0.9rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+      font-size: 0.82rem;
+      display: grid;
+      gap: 0.25rem;
+    }
+    .board-role {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #6b7280;
+    }
+    .board-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    .board-contact {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+    .board-focus-tags {
+      margin-top: 0.3rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+    }
+    .board-tag-pill {
+      padding: 0.16rem 0.5rem;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .board-meeting-card {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+      font-size: 0.84rem;
+      color: #374151;
+      display: grid;
+      gap: 0.55rem;
+      align-self: flex-start;
+    }
+    .board-meeting-row {
+      font-size: 0.82rem;
+    }
+    .board-meeting-row strong {
+      color: #111827;
+    }
+    .board-meeting-note {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .board-docs-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+    @media (max-width: 900px) {
+      .board-docs-layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+    .board-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+      background: #ffffff;
+      border-radius: 0.9rem;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 20px rgba(15, 23, 42, 0.04);
+    }
+    .board-table th,
+    .board-table td {
+      padding: 0.55rem 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .board-table th {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #6b7280;
+      background: #f9fafb;
+    }
+    .board-doc-link {
+      color: #2563eb;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+    }
+    .board-doc-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.16rem 0.5rem;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #166534;
+      font-size: 0.72rem;
+    }
+    .board-quick-card {
+      background: #eef2ff;
+      border-radius: 1rem;
+      padding: 0.95rem;
+      border: 1px solid #c7d2fe;
+      font-size: 0.84rem;
+      color: #1e293b;
+      display: grid;
+      gap: 0.5rem;
+    }
+    .board-quick-list {
+      list-style: none;
+      padding-left: 1rem;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+    .board-quick-list li {
+      margin-bottom: 0.25rem;
+      position: relative;
+    }
+    .board-quick-list li::before {
+      content: "•";
+      position: absolute;
+      left: -0.7rem;
+      top: 0;
+      color: #4f46e5;
+    }
+
+    /* =========================================================
+       STUDENT VIEW
+       ========================================================= */
+    .student-root {
+      background: radial-gradient(circle at top, #e0f2fe 0, #f9fafb 38%, #fef3c7 100%);
+      color: #111827;
+    }
+    .student-shell {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 1.5rem 1.25rem 2.3rem;
+    }
+    .student-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .student-kicker {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #6b7280;
+    }
+    .student-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-top: 0.2rem;
+    }
+    .student-title span {
+      color: #2563eb;
+    }
+    .student-sub {
+      font-size: 0.9rem;
+      color: #4b5563;
+      margin-top: 0.4rem;
+    }
+
+    .student-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (max-width: 860px) {
+      .student-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .student-card {
+      background: #ffffff;
+      border-radius: 1rem;
+      padding: 0.9rem 1rem;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+      font-size: 0.88rem;
+    }
+    .student-card-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .student-emoji {
+      font-size: 1.2rem;
+    }
+    .student-list {
+      list-style: none;
+      margin-top: 0.35rem;
+      display: grid;
+      gap: 0.4rem;
+      font-size: 0.86rem;
+      color: #374151;
+    }
+    .student-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      background: #eff6ff;
+      color: #1d4ed8;
+      margin-left: 0.3rem;
+    }
+    .student-badge.green {
+      background: #ecfdf3;
+      color: #166534;
+    }
+
+    .student-tips {
+      background: #fef9c3;
+      border-radius: 1rem;
+      padding: 0.9rem 1rem;
+      border: 1px solid #facc15;
+      font-size: 0.86rem;
+      color: #854d0e;
+      margin-bottom: 1.4rem;
+    }
+    .student-tips strong {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .student-tips-list {
+      list-style: none;
+      margin-top: 0.35rem;
+      padding-left: 1rem;
+    }
+    .student-tips-list li {
+      margin-bottom: 0.25rem;
+      position: relative;
+    }
+    .student-tips-list li::before {
+      content: "★";
+      position: absolute;
+      left: -0.95rem;
+      top: 0;
+      font-size: 0.7rem;
+    }
+
+    .student-footer-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="portal-shell">
+    <!-- GLOBAL HEADER -->
+    <header class="portal-header">
+      <div class="portal-header-inner">
+        <div class="portal-brand">
+          <div class="portal-mark">RB</div>
+          <div>
+            <div class="portal-brand-text-main">Riverbend Elementary PTA Portal</div>
+            <div class="portal-brand-text-sub">Family · Principal · Board · Students</div>
+          </div>
+        </div>
+        <div class="portal-toggle-group">
+          <span class="portal-toggle-label">View as:</span>
+          <button class="view-toggle-btn active" data-view-target="family-view">
+            <span>🌼</span> PTA Family
+          </button>
+          <button class="view-toggle-btn" data-view-target="principal-view">
+            <span>🎓</span> Principal
+          </button>
+          <button class="view-toggle-btn" data-view-target="pta-board-view">
+            <span>📝</span> PTA Board
+          </button>
+          <button class="view-toggle-btn" data-view-target="student-view">
+            <span>🎒</span> Students
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="portal-main">
+      <!-- ================= FAMILY VIEW ================= -->
+      <section id="family-view" class="view active family-root">
+        <div class="family-shell">
+          <div class="family-nav">
+            <div class="family-nav-left">
+              <div class="family-school-mark">PTA</div>
+              <div>
+                <div class="family-school-main">Riverbend Elementary</div>
+                <div class="family-school-sub">Parent–Teacher Association</div>
+              </div>
+            </div>
+            <nav class="family-nav-links">
+              <a href="#family-this-week">This Week</a>
+              <a href="#family-upcoming">Upcoming</a>
+              <a href="#family-volunteer">Volunteer</a>
+              <a href="#family-info" class="family-nav-pill">Stay Informed</a>
+            </nav>
+          </div>
+
+          <section class="family-hero">
+            <div>
+              <div class="family-hero-tag">
+                <div class="family-hero-tag-dot"></div>
+                <span>Made for busy families</span>
+              </div>
+              <h1 class="family-hero-title">
+                One place for every <span>school event</span>.
+              </h1>
+              <p class="family-hero-sub">
+                See what’s happening this week, what’s coming up, and where you can jump in to help —
+                all in a simple, parent-friendly view.
+              </p>
+              <div class="family-hero-meta">
+                <span><strong>Today:</strong> Quick snapshot of events</span>
+                <span><strong>Green labels:</strong> Happening this week</span>
+                <span><strong>Blue labels:</strong> Plan-ahead dates</span>
+              </div>
+              <div class="family-hero-actions">
+                <button class="family-btn-primary"
+                  onclick="document.getElementById('family-this-week').scrollIntoView({behavior:'smooth'})">
+                  View this week’s events →
+                </button>
+                <button class="family-btn-ghost"
+                  onclick="document.getElementById('family-upcoming').scrollIntoView({behavior:'smooth'})">
+                  Jump to upcoming months
+                </button>
+              </div>
+            </div>
+
+            <aside class="family-today-card" aria-label="Today's overview">
+              <div class="family-today-header">
+                <div>
+                  <div class="family-today-title">Today at a Glance</div>
+                  <div class="family-today-date" id="family-today-date">Today’s date</div>
+                </div>
+              </div>
+              <div class="family-today-pill">
+                <div class="family-today-pill-dot"></div>
+                <span>Happening today</span>
+              </div>
+              <ul class="family-today-list">
+                <li>
+                  <div class="family-today-item-title">Book Fair – Family Shopping Night</div>
+                  <div class="family-today-item-meta">
+                    5:00 – 7:30 PM · School Library
+                  </div>
+                </li>
+                <li>
+                  <div class="family-today-item-title">PTA General Meeting (Hybrid)</div>
+                  <div class="family-today-item-meta">
+                    7:00 – 8:00 PM · Media Center &amp; Zoom
+                  </div>
+                </li>
+              </ul>
+              <div class="family-today-note">
+                Can’t stay the whole time? It’s okay to pop in late or leave early —
+                we’re grateful for any time you can give.
+              </div>
+            </aside>
+          </section>
+
+          <section id="family-this-week" class="family-section">
+            <div class="family-section-header">
+              <div>
+                <div class="family-section-kicker">This Week</div>
+                <h2 class="family-section-title">Events happening now.</h2>
+              </div>
+              <p class="family-section-sub">
+                Green “This week” labels mean these are current events. If you only have a few minutes,
+                this is the section to scan.
+              </p>
+            </div>
+
+            <div class="family-filters">
+              <button class="family-filter-pill active" type="button">All this week</button>
+              <button class="family-filter-pill" type="button">Evening events</button>
+              <button class="family-filter-pill" type="button">For students</button>
+              <button class="family-filter-pill" type="button">For grown-ups</button>
+            </div>
+
+            <div class="family-events-grid">
+              <article class="family-event-card">
+                <div class="family-event-badges">
+                  <span class="family-event-badge family-event-badge--today">Today</span>
+                  <span class="family-event-badge">This week</span>
+                </div>
+                <h3 class="family-event-title">Book Fair – Family Shopping Night</h3>
+                <div class="family-event-meta">
+                  <span>📅 Tuesday, 5:00 – 7:30 PM</span>
+                  <span>📍 School Library</span>
+                </div>
+                <p class="family-event-note">
+                  Families are welcome to shop together. Teacher wish-lists will be posted at the entrance.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Family event</span>
+                  <span class="family-event-tag-pill">Fundraiser</span>
+                </div>
+              </article>
+
+              <article class="family-event-card">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">This week</span>
+                </div>
+                <h3 class="family-event-title">Walk &amp; Roll to School Day</h3>
+                <div class="family-event-meta">
+                  <span>📅 Wednesday, 7:10 – 7:45 AM</span>
+                  <span>📍 Front parking lot</span>
+                </div>
+                <p class="family-event-note">
+                  Meet PTA volunteers at the front lot and walk in together. Siblings and strollers welcome.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Health &amp; wellness</span>
+                  <span class="family-event-tag-pill">Students</span>
+                </div>
+              </article>
+
+              <article class="family-event-card">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">This week</span>
+                </div>
+                <h3 class="family-event-title">Teacher Appreciation Snack Cart</h3>
+                <div class="family-event-meta">
+                  <span>📅 Thursday, during school day</span>
+                  <span>📍 Staff lounge</span>
+                </div>
+                <p class="family-event-note">
+                  PTA is stocking a rolling snack cart for teachers and staff. Donations are welcome
+                  (see Volunteer section for sign-ups).
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Staff support</span>
+                  <span class="family-event-tag-pill">Donations</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section id="family-upcoming" class="family-section">
+            <div class="family-section-header">
+              <div>
+                <div class="family-section-kicker">Upcoming</div>
+                <h2 class="family-section-title">Events to plan ahead for.</h2>
+              </div>
+              <p class="family-section-sub">
+                These dates are a little further out. Add them to your calendar now so nothing sneaks up on you.
+              </p>
+            </div>
+
+            <div class="family-events-grid">
+              <article class="family-event-card">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">Next week</span>
+                </div>
+                <h3 class="family-event-title">Fall Family Movie Night</h3>
+                <div class="family-event-meta">
+                  <span>📅 Friday, 6:30 – 8:30 PM</span>
+                  <span>📍 Gymnasium</span>
+                </div>
+                <p class="family-event-note">
+                  Bring blankets and lawn chairs. Concessions will be available (cash and card).
+                  Children must be accompanied by an adult.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Family event</span>
+                  <span class="family-event-tag-pill">PTA fundraiser</span>
+                </div>
+              </article>
+
+              <article class="family-event-card">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">Later this month</span>
+                </div>
+                <h3 class="family-event-title">STEM Night &amp; Classroom Showcase</h3>
+                <div class="family-event-meta">
+                  <span>📅 Thursday, 6:00 – 7:30 PM</span>
+                  <span>📍 Classrooms &amp; Cafeteria</span>
+                </div>
+                <p class="family-event-note">
+                  Hands-on science and technology stations around the building. Great opportunity
+                  to see classroom projects and meet other families.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Academics</span>
+                  <span class="family-event-tag-pill">Hands-on</span>
+                </div>
+              </article>
+
+              <article class="family-event-card">
+                <div class="family-event-badges">
+                  <span class="family-event-badge">Next month</span>
+                </div>
+                <h3 class="family-event-title">Winter Concert &amp; Art Walk</h3>
+                <div class="family-event-meta">
+                  <span>📅 Date TBA (evening)</span>
+                  <span>📍 Auditorium &amp; Hallways</span>
+                </div>
+                <p class="family-event-note">
+                  Student performances followed by an art walk featuring work from all grade levels.
+                  Exact date will be shared once confirmed.
+                </p>
+                <div class="family-event-tags">
+                  <span class="family-event-tag-pill">Fine arts</span>
+                  <span class="family-event-tag-pill">Families welcome</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section id="family-volunteer" class="family-section">
+            <div class="family-section-header">
+              <div>
+                <div class="family-section-kicker">Volunteer &amp; Sign-ups</div>
+                <h2 class="family-section-title">Ways to help (big and small).</h2>
+              </div>
+              <p class="family-section-sub">
+                You do not have to be “on the board” to help. A single hour makes a real difference.
+                Choose what fits your week.
+              </p>
+            </div>
+
+            <div class="family-vol-grid">
+              <div class="family-vol-card">
+                <strong>This week’s needs</strong>
+                <ul class="family-vol-list">
+                  <li>Book Fair: 30-minute check-out helpers (evening slots).</li>
+                  <li>Walk &amp; Roll Day: 3 adults to help at crosswalks from 7:10–7:40 AM.</li>
+                  <li>Snack Cart: bottled water, granola bars, single-serve tea/coffee pods.</li>
+                </ul>
+                <p style="margin-top:0.7rem;">
+                  To sign up, please use the PTA e-mail below or the sign-up links shared in the
+                  weekly newsletter. It’s always okay to bring younger siblings with you.
+                </p>
+                <button class="family-btn-primary" style="margin-top:0.8rem;"
+                  onclick="alert('In a live site, this would open the sign-up form link.')">
+                  Open volunteer sign-up form
+                </button>
+              </div>
+
+              <div class="family-vol-card">
+                <strong>Low-pressure ways to support</strong>
+                <ul class="family-vol-list">
+                  <li>Share PTA events in your classroom chats or carpool groups.</li>
+                  <li>Ask your workplace about matching gifts for school fundraisers.</li>
+                  <li>Drop a thank-you note in the office for a favorite staff member.</li>
+                  <li>Attend one PTA meeting this semester to stay in the loop.</li>
+                </ul>
+                <p style="margin-top:0.7rem; font-size:0.8rem; color:#6b7280;">
+                  There is no minimum time commitment. Your presence at events already counts as support.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section id="family-info" class="family-section">
+            <div class="family-section-header">
+              <div>
+                <div class="family-section-kicker">Stay Informed</div>
+                <h2 class="family-section-title">Never miss an event reminder.</h2>
+              </div>
+            </div>
+
+            <div class="family-info-card">
+              <strong>Choose at least one way to stay updated:</strong>
+              <div class="family-info-row">
+                <div>📧 <strong>Weekly PTA e-mail:</strong> Sent on Sunday evenings with events for the coming week.</div>
+                <div>📱 <strong>Text alerts:</strong> Short reminders for same-day events (for example, “Movie Night tonight at 6:30 PM”).</div>
+                <div>📆 <strong>Shared calendar:</strong> Add the PTA calendar to your phone once and it will stay updated automatically.</div>
+              </div>
+              <p style="margin-top:0.7rem; font-size:0.8rem;">
+                To be added to any of these, e-mail
+                <strong>pta@riverbendelementary.org</strong> with your name, child’s teacher, and which
+                options you prefer. You can change your preferences at any time.
+              </p>
+            </div>
+          </section>
+        </div>
+
+        <footer class="family-footer">
+          <div class="family-footer-inner">
+            <div>© <span id="family-year"></span> Riverbend Elementary PTA · For questions, e-mail <strong>pta@riverbendelementary.org</strong></div>
+            <div class="family-footer-links">
+              <a href="#family-this-week">This week</a>
+              <a href="#family-upcoming">Upcoming</a>
+              <a href="#family-volunteer">Volunteer</a>
+            </div>
+          </div>
+        </footer>
+      </section>
+
+      <!-- ================= PRINCIPAL VIEW ================= -->
+      <section id="principal-view" class="view principal-root">
+        <div class="principal-page">
+          <aside class="principal-sidebar">
+            <div class="principal-logo">RB</div>
+            <div class="principal-school-name">Riverbend Elementary</div>
+            <div class="principal-role">Principal dashboard · PTA events</div>
+
+            <div class="principal-sidebar-title">View</div>
+            <ul class="principal-nav-list">
+              <li class="principal-nav-link active">
+                <span>This week</span>
+                <span>5 events</span>
+              </li>
+              <li class="principal-nav-link">
+                <span>Next 30 days</span>
+                <span>12 events</span>
+              </li>
+              <li class="principal-nav-link">
+                <span>By grade level</span>
+                <span>Overview</span>
+              </li>
+            </ul>
+
+            <div class="principal-sidebar-title">Quick checks</div>
+            <ul class="principal-nav-list">
+              <li class="principal-nav-link">
+                <span>Volunteer coverage</span>
+                <span>2 low</span>
+              </li>
+              <li class="principal-nav-link">
+                <span>Evening events</span>
+                <span>3 this week</span>
+              </li>
+              <li class="principal-nav-link">
+                <span>Building load</span>
+                <span>Balanced</span>
+              </li>
+            </ul>
+
+            <div class="principal-sidebar-note">
+              This dashboard summarizes PTA activity so you can spot busy nights,
+              staffing gaps, and parent interest at a glance — without reading every flyer.
+            </div>
+          </aside>
+
+          <main class="principal-main">
+            <header class="principal-header">
+              <div class="principal-title-block">
+                <div class="principal-kicker">This Week · Snapshot</div>
+                <h1 class="principal-title">PTA events and building impact</h1>
+                <p class="principal-sub">
+                  Current week overview. Green means comfortably covered, orange needs a second look,
+                  red means something may need to move or get extra support.
+                </p>
+              </div>
+              <div class="principal-controls">
+                <span class="principal-date-pill" id="principal-week-label">Week of —</span>
+                <button class="principal-btn-outline" type="button"
+                  onclick="alert('In a live system, this would open filters for grade levels, event types, etc.')">
+                  Adjust filters
+                </button>
+                <button class="principal-btn-solid" type="button"
+                  onclick="alert('In a live system, this would export a PDF/CSV snapshot.')">
+                  Export snapshot
+                </button>
+              </div>
+            </header>
+
+            <section class="principal-summary-grid" aria-label="Summary metrics for this week">
+              <article class="principal-summary-card" style="--fill:70%;">
+                <div class="principal-summary-label">Total events (Sun–Sat)</div>
+                <div class="principal-summary-value">5</div>
+                <div class="principal-summary-chip">2 student-facing · 3 family/teacher</div>
+                <div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+              </article>
+
+              <article class="principal-summary-card" style="--fill:60%;">
+                <div class="principal-summary-label">Evening events</div>
+                <div class="principal-summary-value">3</div>
+                <div class="principal-summary-chip">Within typical range</div>
+                <div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+              </article>
+
+              <article class="principal-summary-card" style="--fill:45%;">
+                <div class="principal-summary-label">Volunteer coverage</div>
+                <div class="principal-summary-value">~65%</div>
+                <div class="principal-summary-chip">2 events under 50% staffed</div>
+                <div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+              </article>
+
+              <article class="principal-summary-card" style="--fill:55%;">
+                <div class="principal-summary-label">Building load</div>
+                <div class="principal-summary-value">Moderate</div>
+                <div class="principal-summary-chip">No back-to-back late nights</div>
+                <div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+              </article>
+            </section>
+
+            <section class="principal-grid-2">
+              <article class="principal-card" aria-label="Event load by weekday">
+                <header class="principal-card-header">
+                  <div>
+                    <div class="principal-card-title">Event load by weekday</div>
+                    <div class="principal-card-sub">
+                      Helps avoid overloading the same night each week.
+                    </div>
+                  </div>
+                  <div class="principal-small">This week only</div>
+                </header>
+
+                <div class="principal-week-load">
+                  <div class="principal-day-col">
+                    <div class="principal-day-bar-wrapper">
+                      <div class="principal-day-bar" style="--height:35%;"></div>
+                    </div>
+                    <div class="principal-day-label">Mon</div>
+                    <div class="principal-day-count">1 event</div>
+                  </div>
+                  <div class="principal-day-col">
+                    <div class="principal-day-bar-wrapper">
+                      <div class="principal-day-bar" style="--height:70%;"></div>
+                    </div>
+                    <div class="principal-day-label">Tue</div>
+                    <div class="principal-day-count">2 events</div>
+                  </div>
+                  <div class="principal-day-col">
+                    <div class="principal-day-bar-wrapper">
+                      <div class="principal-day-bar" style="--height:35%;"></div>
+                    </div>
+                    <div class="principal-day-label">Wed</div>
+                    <div class="principal-day-count">1 event</div>
+                  </div>
+                  <div class="principal-day-col">
+                    <div class="principal-day-bar-wrapper">
+                      <div class="principal-day-bar" style="--height:35%;"></div>
+                    </div>
+                    <div class="principal-day-label">Thu</div>
+                    <div class="principal-day-count">1 event</div>
+                  </div>
+                  <div class="principal-day-col">
+                    <div class="principal-day-bar-wrapper">
+                      <div class="principal-day-bar" style="--height:10%; opacity:0.4;"></div>
+                    </div>
+                    <div class="principal-day-label">Fri</div>
+                    <div class="principal-day-count">0 events</div>
+                  </div>
+                </div>
+
+                <p class="principal-small" style="margin-top:0.55rem;">
+                  Note: Tuesday is the busiest night (PTA Meeting + Book Fair evening). If you see more than
+                  3 events on one weekday, consider spacing new requests.
+                </p>
+              </article>
+
+              <article class="principal-card" aria-label="Volunteer coverage by event">
+                <header class="principal-card-header">
+                  <div>
+                    <div class="principal-card-title">Volunteer coverage</div>
+                    <div class="principal-card-sub">
+                      Where the PTA could use extra staff or admin support.
+                    </div>
+                  </div>
+                </header>
+
+                <ul class="principal-coverage-list">
+                  <li class="principal-coverage-item">
+                    <span class="principal-coverage-label">Book Fair — Family Night</span>
+                    <div class="principal-coverage-meter" style="--fill:80%;">
+                      <div class="principal-coverage-fill"></div>
+                    </div>
+                    <span class="principal-coverage-status">Comfortable</span>
+                  </li>
+                  <li class="principal-coverage-item">
+                    <span class="principal-coverage-label">Walk &amp; Roll to School</span>
+                    <div class="principal-coverage-meter" style="--fill:45%;">
+                      <div class="principal-coverage-fill"></div>
+                    </div>
+                    <span class="principal-coverage-status">Needs 2 adults</span>
+                  </li>
+                  <li class="principal-coverage-item">
+                    <span class="principal-coverage-label">Teacher Snack Cart</span>
+                    <div class="principal-coverage-meter" style="--fill:35%;">
+                      <div class="principal-coverage-fill"></div>
+                    </div>
+                    <span class="principal-coverage-status">Low coverage</span>
+                  </li>
+                  <li class="principal-coverage-item">
+                    <span class="principal-coverage-label">After-school Club Support</span>
+                    <div class="principal-coverage-meter" style="--fill:70%;">
+                      <div class="principal-coverage-fill"></div>
+                    </div>
+                    <span class="principal-coverage-status">On track</span>
+                  </li>
+                </ul>
+
+                <p class="principal-small" style="margin-top:0.6rem;">
+                  A quick e-mail or morning announcement from the office often fills the last few
+                  volunteer spots faster than another flyer.
+                </p>
+              </article>
+            </section>
+
+            <section class="principal-grid-3" aria-label="Parent interest and scheduling risks">
+              <article class="principal-card">
+                <header class="principal-card-header">
+                  <div>
+                    <div class="principal-card-title">Parent interest (informal signals)</div>
+                    <div class="principal-card-sub">
+                      Based on RSVP forms, hallway chatter, and PTA feedback — not a formal survey.
+                    </div>
+                  </div>
+                </header>
+
+                <table class="principal-interest-table">
+                  <thead>
+                    <tr>
+                      <th>Event</th>
+                      <th>Signal</th>
+                      <th>Note</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Fall Family Movie Night</td>
+                      <td><span class="principal-interest-badge">High interest</span></td>
+                      <td>Lots of “Are we doing this again?” comments.</td>
+                    </tr>
+                    <tr>
+                      <td>PTA General Meeting</td>
+                      <td><span class="principal-interest-badge" style="border-color:#f59e0b;color:#fed7aa;">Mixed</span></td>
+                      <td>Parents prefer hybrid option &amp; shorter agenda.</td>
+                    </tr>
+                    <tr>
+                      <td>STEM Night</td>
+                      <td><span class="principal-interest-badge">High interest</span></td>
+                      <td>Teachers &amp; parents excited, kids talk about it.</td>
+                    </tr>
+                    <tr>
+                      <td>Snack Cart Drop-offs</td>
+                      <td><span class="principal-interest-badge" style="border-color:#22c55e;color:#bbf7d0;">Steady</span></td>
+                      <td>Low lift for families, high impact for staff.</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p class="principal-small" style="margin-top:0.6rem;">
+                  High-interest events are good places to pilot new ideas — raffles, community partners,
+                  or student showcases — because turnout is already strong.
+                </p>
+              </article>
+
+              <article class="principal-card">
+                <header class="principal-card-header">
+                  <div>
+                    <div class="principal-card-title">Scheduling &amp; fatigue watchlist</div>
+                    <div class="principal-card-sub">
+                      Helps prevent “too many nights at school in a row” for families and staff.
+                    </div>
+                  </div>
+                </header>
+
+                <ul class="principal-risk-list">
+                  <li class="principal-risk-item">
+                    <div class="principal-risk-tag-row">
+                      <span>Tue evening stack</span>
+                      <span class="principal-risk-level principal-risk-med">Medium</span>
+                    </div>
+                    <p class="principal-risk-text">
+                      Book Fair evening + PTA Meeting the same night. <br />
+                      ✅ Acceptable this week, but keep an eye on similar patterns.
+                    </p>
+                  </li>
+                  <li class="principal-risk-item">
+                    <div class="principal-risk-tag-row">
+                      <span>Staff bandwidth</span>
+                      <span class="principal-risk-level principal-risk-high">Higher</span>
+                    </div>
+                    <p class="principal-risk-text">
+                      Teacher committees also meeting this week. <br />
+                      Consider PTO/PTA covering more logistics so staff can leave on time.
+                    </p>
+                  </li>
+                  <li class="principal-risk-item">
+                    <div class="principal-risk-tag-row">
+                      <span>Family time balance</span>
+                      <span class="principal-risk-level principal-risk-low">Low</span>
+                    </div>
+                    <p class="principal-risk-text">
+                      No Friday events and only one late-night this week — good for overall family balance.
+                    </p>
+                  </li>
+                </ul>
+
+                <p class="principal-small" style="margin-top:0.6rem;">
+                  If you ever see multiple “Higher” risks in a week, that’s a good trigger to
+                  pause new event approvals or ask PTA to regroup on timing.
+                </p>
+              </article>
+            </section>
+          </main>
+        </div>
+      </section>
+
+      <!-- ================= PTA BOARD VIEW ================= -->
+      <section id="pta-board-view" class="view board-root">
+        <div class="board-shell">
+          <header class="board-header">
+            <div class="board-title-block">
+              <div class="board-kicker">PTA Leadership</div>
+              <h1 class="board-title">Board, meetings, and key documents.</h1>
+              <p class="board-sub">
+                A clear overview of who’s serving this year, when the board meets,
+                and where to find bylaws and minutes — so families always know
+                how decisions are made.
+              </p>
+            </div>
+            <div>
+              <div class="board-badge">
+                ✅ Transparent · Organized · Parent-led
+              </div>
+            </div>
+          </header>
+
+          <section class="board-layout">
+            <div>
+              <h2 class="board-section-title">2024–2025 PTA Board</h2>
+              <p class="board-section-sub">
+                All positions are volunteer roles. You can contact any officer with questions
+                or ideas — they’re here to represent families and support the school.
+              </p>
+
+              <div class="board-officers-grid">
+                <article class="board-card">
+                  <div class="board-role">President</div>
+                  <div class="board-name">Alex Johnson</div>
+                  <div class="board-contact">📧 president.riverbendpta@example.org</div>
+                  <div class="board-focus-tags">
+                    <span class="board-tag-pill">Agenda &amp; priorities</span>
+                    <span class="board-tag-pill">Principal liaison</span>
+                  </div>
+                </article>
+
+                <article class="board-card">
+                  <div class="board-role">Vice President</div>
+                  <div class="board-name">Maria Lopez</div>
+                  <div class="board-contact">📧 vp.riverbendpta@example.org</div>
+                  <div class="board-focus-tags">
+                    <span class="board-tag-pill">Events support</span>
+                    <span class="board-tag-pill">Volunteer teams</span>
+                  </div>
+                </article>
+
+                <article class="board-card">
+                  <div class="board-role">Treasurer</div>
+                  <div class="board-name">Jordan Kim</div>
+                  <div class="board-contact">📧 treasurer.riverbendpta@example.org</div>
+                  <div class="board-focus-tags">
+                    <span class="board-tag-pill">Budget &amp; reports</span>
+                    <span class="board-tag-pill">Fundraisers</span>
+                  </div>
+                </article>
+
+                <article class="board-card">
+                  <div class="board-role">Secretary</div>
+                  <div class="board-name">Priya Patel</div>
+                  <div class="board-contact">📧 secretary.riverbendpta@example.org</div>
+                  <div class="board-focus-tags">
+                    <span class="board-tag-pill">Minutes</span>
+                    <span class="board-tag-pill">Bylaws &amp; records</span>
+                  </div>
+                </article>
+
+                <article class="board-card">
+                  <div class="board-role">Volunteer Chair</div>
+                  <div class="board-name">Taylor Brooks</div>
+                  <div class="board-contact">📧 volunteers.riverbendpta@example.org</div>
+                  <div class="board-focus-tags">
+                    <span class="board-tag-pill">Sign-ups</span>
+                    <span class="board-tag-pill">Room parents</span>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <aside class="board-meeting-card">
+              <h2 class="board-section-title">Board meetings</h2>
+              <div class="board-meeting-row">
+                <strong>Schedule:</strong> 1st Tuesday of each month, 6:30–8:00 PM
+              </div>
+              <div class="board-meeting-row">
+                <strong>Location:</strong> Media Center (hybrid option via Zoom when noted)
+              </div>
+              <div class="board-meeting-row">
+                <strong>Who may attend:</strong> All interested parents, guardians, staff, and community members.
+              </div>
+              <p class="board-meeting-note">
+                Time is reserved at the start of each meeting for questions and ideas from families.
+                You do not need to be a “member” to listen in.
+              </p>
+            </aside>
+          </section>
+
+          <section class="board-docs-layout">
+            <div>
+              <h2 class="board-section-title">Bylaws &amp; key documents</h2>
+              <p class="board-section-sub">
+                These documents guide how the PTA operates. For official copies, please contact the Secretary.
+              </p>
+
+              <table class="board-table">
+                <thead>
+                  <tr>
+                    <th>Document</th>
+                    <th>Last updated</th>
+                    <th>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><a href="#" class="board-doc-link">PTA Bylaws (current)</a></td>
+                    <td>August 2024</td>
+                    <td><span class="board-doc-pill">Bylaws</span></td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" class="board-doc-link">2024–2025 Budget Overview</a></td>
+                    <td>September 2024</td>
+                    <td><span class="board-doc-pill">Finance</span></td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" class="board-doc-link">September Meeting Minutes</a></td>
+                    <td>September 10, 2024</td>
+                    <td><span class="board-doc-pill">Minutes</span></td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" class="board-doc-link">October Meeting Minutes</a></td>
+                    <td>October 8, 2024</td>
+                    <td><span class="board-doc-pill">Minutes</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <aside class="board-quick-card">
+              <h2 class="board-section-title">How families can get involved in decisions</h2>
+              <ul class="board-quick-list">
+                <li>Attend at least one board or general meeting this year to see how things work.</li>
+                <li>E-mail the President or any officer if you have a concern or idea for an event.</li>
+                <li>Review bylaws and budget summary before the annual voting meeting.</li>
+                <li>Join a short-term committee (for example, Movie Night, STEM Night, Book Fair).</li>
+              </ul>
+              <p style="font-size:0.78rem; color:#4b5563;">
+                The goal is for PTA decisions to feel open, understandable, and collaborative —
+                never like they’re happening “behind closed doors.”
+              </p>
+            </aside>
+          </section>
+        </div>
+      </section>
+
+      <!-- ================= STUDENT VIEW ================= -->
+      <section id="student-view" class="view student-root">
+        <div class="student-shell">
+          <header class="student-header">
+            <div class="student-kicker">For Students</div>
+            <h1 class="student-title">
+              What’s happening at <span>our school</span> this week? 🎉
+            </h1>
+            <p class="student-sub">
+              This page is just for you. See the fun stuff that’s coming up and how you can join in.
+            </p>
+          </header>
+
+          <section class="student-grid">
+            <article class="student-card">
+              <div class="student-card-title">
+                <span class="student-emoji">📅</span>
+                This week’s fun things
+              </div>
+              <ul class="student-list">
+                <li>
+                  <strong>Book Fair Night</strong>
+                  <span class="student-badge green">Today</span>
+                  <br />
+                  Come to the library with your grown-ups to look at books.
+                  You can help pick classroom books from your teacher’s wish list.
+                </li>
+                <li>
+                  <strong>Walk &amp; Roll to School</strong>
+                  <span class="student-badge">Morning</span>
+                  <br />
+                  Meet other students and walk in together from the front parking lot.
+                  Scooters and strollers are okay — just listen to the helpers.
+                </li>
+                <li>
+                  <strong>Teacher Snack Cart</strong>
+                  <br />
+                  The PTA is surprising teachers with snacks.
+                  If you see the cart, you can say “Thanks for teaching us!” 🧃
+                </li>
+              </ul>
+            </article>
+
+            <article class="student-card">
+              <div class="student-card-title">
+                <span class="student-emoji">👀</span>
+                Coming up soon
+              </div>
+              <ul class="student-list">
+                <li>
+                  <strong>Family Movie Night</strong>
+                  <br />
+                  Wear comfy clothes, bring a blanket, and watch a movie in the gym.
+                  You must come with a grown-up.
+                </li>
+                <li>
+                  <strong>STEM Night</strong>
+                  <br />
+                  Try science and tech stations around the school.
+                  You can show your family the projects you’ve been working on.
+                </li>
+                <li>
+                  <strong>Winter Concert &amp; Art Walk</strong>
+                  <br />
+                  Sing, play instruments, or show your artwork on the walls.
+                  Dates will be announced in class and here.
+                </li>
+              </ul>
+            </article>
+          </section>
+
+          <section class="student-tips">
+            <strong>How to be ready for events ⭐</strong>
+            <ul class="student-tips-list">
+              <li>Ask your grown-up which events you might go to this week.</li>
+              <li>Check what you should wear (comfy clothes, school spirit shirt, etc.).</li>
+              <li>If you’re nervous, bring a friend or ask a teacher where to go.</li>
+              <li>Say “thank you” to the helpers — most of them are parents volunteering their time.</li>
+            </ul>
+          </section>
+
+          <p class="student-footer-note">
+            If you’re not sure about any event, just ask your teacher or grown-up and they can
+            check the family page for more details. 💬
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // --- Global view toggle ---
+    const viewButtons = document.querySelectorAll(".view-toggle-btn");
+    const views = document.querySelectorAll(".view");
+
+    viewButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-view-target");
+
+        viewButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        views.forEach(v => {
+          if (v.id === targetId) {
+            v.classList.add("active");
+          } else {
+            v.classList.remove("active");
+          }
+        });
+
+        // Body background vibe swap
+        if (targetId === "principal-view") {
+          document.body.style.background = "#020617";
+          document.body.style.color = "#e5e7eb";
+        } else if (targetId === "student-view") {
+          document.body.style.background =
+            "radial-gradient(circle at top, #e0f2fe 0, #f9fafb 38%, #fef3c7 100%)";
+          document.body.style.color = "#111827";
+        } else {
+          document.body.style.background = "#f3f4f6";
+          document.body.style.color = "#111827";
+        }
+      });
+    });
+
+    // --- Family view date + year ---
+    const familyTodayElem = document.getElementById("family-today-date");
+    const familyYearElem = document.getElementById("family-year");
+    const now = new Date();
+    const options = { weekday: "long", month: "long", day: "numeric" };
+    if (familyTodayElem) familyTodayElem.textContent = now.toLocaleDateString(undefined, options);
+    if (familyYearElem) familyYearElem.textContent = now.getFullYear();
+
+    // --- Principal week label (Mon–Sun) ---
+    const weekLabel = document.getElementById("principal-week-label");
+    if (weekLabel) {
+      const day = now.getDay(); // 0=Sun, 1=Mon...
+      const diffToMonday = (day === 0 ? -6 : 1) - day;
+      const monday = new Date(now);
+      monday.setDate(now.getDate() + diffToMonday);
+      const formatter = new Intl.DateTimeFormat(undefined, {
+        month: "short",
+        day: "numeric"
+      });
+      weekLabel.textContent = "Week of " + formatter.format(monday);
+    }
+  </script>
+</body>
+</html>
