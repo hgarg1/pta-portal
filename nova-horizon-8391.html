@@ -118,7 +118,7 @@
 
     .portal-header-inner {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
       gap: 1.5rem;
       padding: 1.5rem clamp(1.25rem, 2vw, 2.5rem);
@@ -160,7 +160,7 @@
 
     .portal-toggle-group {
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       gap: 0.75rem;
       justify-self: end;
       align-items: center;
@@ -1679,6 +1679,8 @@
       }
       .portal-toggle-group {
         justify-self: start;
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
       }
       .family-hero-actions {
         flex-direction: column;
