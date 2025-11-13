@@ -3217,6 +3217,9 @@ kbd {
     const views = document.querySelectorAll(".view");
     let activeViewId =
       (Array.from(views).find(view => view.classList.contains("active")) || views[0])?.id || null;
+    const principalToggleButton = document.querySelector(
+      '.view-toggle-btn[data-view-target="principal-view"]'
+    );
 
     const principalView = document.getElementById("principal-view");
     const principalLockedBanner = document.getElementById("principal-locked-banner");
@@ -3359,6 +3362,60 @@ kbd {
       });
       activeViewId = targetId;
       applyViewTheme();
+    }
+
+    function requestView(targetId, originButton) {
+      if (!targetId || activeViewId === targetId) return;
+      if (targetId === "principal-view" && !principalAccessGranted) {
+        pendingViewButton = originButton || pendingViewButton;
+        openPrincipalAccessModal();
+        return;
+      }
+      switchView(targetId);
+    }
+
+    function isPrincipalHashTarget(hash) {
+      if (!hash) return false;
+      if (hash === "principal-view") return true;
+      if (!principalView) return false;
+      const target = document.getElementById(hash);
+      return Boolean(target && principalView.contains(target));
+    }
+
+    function clearPrincipalHash() {
+      if (!window.location.hash) return;
+      const hashValue = window.location.hash.slice(1);
+      if (!isPrincipalHashTarget(hashValue)) return;
+      try {
+        if (history.replaceState) {
+          history.replaceState(null, "", window.location.pathname + window.location.search);
+        } else {
+          window.location.hash = "";
+        }
+      } catch (error) {
+        window.location.hash = "";
+      }
+    }
+
+    function handlePrincipalHashAccess({ isInitialLoad = false } = {}) {
+      const hashValue = window.location.hash.slice(1);
+      if (!isPrincipalHashTarget(hashValue)) return;
+
+      if (!principalAccessGranted) {
+        requestView("principal-view", principalToggleButton || null);
+        clearPrincipalHash();
+        return;
+      }
+
+      requestView("principal-view");
+      if (hashValue && hashValue !== "principal-view") {
+        requestAnimationFrame(() => {
+          const target = document.getElementById(hashValue);
+          if (target) {
+            target.scrollIntoView({ behavior: isInitialLoad ? "auto" : "smooth", block: "start" });
+          }
+        });
+      }
     }
 
     function updatePrincipalLockState() {
@@ -3632,30 +3689,25 @@ kbd {
     principalAccessGranted = isPrincipalUnlocked();
     updatePrincipalLockState();
     applyViewTheme();
+    handlePrincipalHashAccess({ isInitialLoad: true });
+    window.addEventListener("hashchange", () => handlePrincipalHashAccess());
 
     viewButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         const targetId = btn.getAttribute("data-view-target");
-        if (targetId === "principal-view" && !principalAccessGranted) {
-          pendingViewButton = btn;
-          openPrincipalAccessModal();
-          return;
-        }
-        switchView(targetId);
+        requestView(targetId, btn);
       });
     });
 
     if (principalLockedOpenBtn) {
       principalLockedOpenBtn.addEventListener("click", () => {
-        pendingViewButton = principalLockedOpenBtn;
-        openPrincipalAccessModal();
+        requestView("principal-view", principalLockedOpenBtn);
       });
     }
 
     if (principalManageAccessBtn) {
       principalManageAccessBtn.addEventListener("click", () => {
-        pendingViewButton = principalManageAccessBtn;
-        openPrincipalAccessModal();
+        requestView("principal-view", principalManageAccessBtn);
       });
     }
 
