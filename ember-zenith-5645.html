@@ -14,9 +14,11 @@
   --surface-strong: rgba(17, 25, 40, 0.92);
   --surface-soft: rgba(42, 56, 87, 0.48);
   --border-glow: rgba(142, 197, 252, 0.28);
-  --text-strong: #f8fbff;
-  --text-soft: #c3cbe8;
-  --text-muted: #8d96b8;
+  --text-strong: #f6f9ff;
+  --text-soft: #dce6ff;
+  --text-muted: #a8b6d8;
+  --text-secondary: rgba(228, 233, 255, 0.88);
+  --text-hint: rgba(210, 220, 255, 0.76);
   --accent-family: #7ae8b4;
   --accent-principal: #7ab8ff;
   --accent-board: #f39cc8;
@@ -54,6 +56,7 @@ body {
               radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.22), transparent 55%),
               linear-gradient(140deg, var(--gradient-start), var(--gradient-mid) 58%, var(--gradient-end));
   color: var(--text-soft);
+  line-height: 1.65;
   display: flex;
 }
 
@@ -168,7 +171,7 @@ button {
   font-size: 0.75rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-hint);
 }
 
 .constellation-toggle-stack {
@@ -208,7 +211,7 @@ button {
 .constellation-sidebar-note {
   font-size: 0.82rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--text-secondary);
 }
 
 .constellation-main {
@@ -243,7 +246,7 @@ button {
 .constellation-topline p {
   margin: 0;
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 .constellation-panels {
@@ -350,7 +353,7 @@ button {
 .family-section-sub {
   font-size: 0.95rem;
   max-width: 42ch;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--text-secondary);
   line-height: 1.6;
 }
 
@@ -363,7 +366,7 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.24em;
   font-size: 0.7rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-hint);
 }
 
 .family-btn-primary,
@@ -435,11 +438,53 @@ button {
 
 .card-hover {
   transition: transform 0.2s ease, box-shadow 0.25s ease;
+  color: var(--text-soft);
 }
 
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 24px 44px rgba(5, 12, 32, 0.42);
+}
+
+.card-hover p,
+.card-hover li {
+  color: var(--text-secondary);
+}
+
+.card-hover p {
+  line-height: 1.7;
+}
+
+.card-hover strong {
+  color: var(--text-strong);
+}
+
+.portal-note {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.portal-note--compact {
+  margin-top: 0.35rem;
+}
+
+.portal-note--spacious {
+  margin-top: 0.7rem;
+}
+
+.portal-note--separated {
+  margin-top: 0.6rem;
+}
+
+.portal-note--loose {
+  margin-top: 0.8rem;
+}
+
+.portal-note--fine {
+  font-size: 0.78rem;
+  color: rgba(226, 232, 255, 0.74);
 }
 
 /* Family view ----------------------------------------------------------- */
@@ -522,7 +567,7 @@ button {
 }
 
 .family-hero-sub {
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--text-secondary);
   font-size: 1rem;
   max-width: 40ch;
 }
@@ -531,7 +576,7 @@ button {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--text-secondary);
 }
 
 .family-hero-meta span {
@@ -596,12 +641,12 @@ button {
 
 .family-today-item-meta {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 .family-today-note {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--text-secondary);
 }
 
 .family-events-grid,
@@ -691,7 +736,7 @@ button {
   border: 1px solid rgba(122, 184, 255, 0.35);
   background: rgba(15, 23, 42, 0.45);
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--text-soft);
 }
 
 .family-filter-pill.active {
@@ -701,7 +746,7 @@ button {
 
 .family-feedback {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.65);
+  color: var(--text-secondary);
 }
 
 .family-footer {
@@ -709,7 +754,7 @@ button {
   gap: var(--space-sm);
   padding-top: var(--space-md);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-hint);
   font-size: 0.8rem;
 }
 
@@ -772,7 +817,7 @@ button {
   border-radius: var(--radius-sm);
   border: 1px solid rgba(122, 184, 255, 0.24);
   background: rgba(12, 19, 36, 0.5);
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--text-secondary);
 }
 
 .principal-nav-link.active,
@@ -785,6 +830,19 @@ button {
 .principal-main {
   display: grid;
   gap: var(--space-lg);
+}
+
+.principal-protected {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+#principal-view[data-locked="true"] .principal-protected {
+  display: none;
+}
+
+#principal-view:not([data-locked="true"]) .principal-locked-banner {
+  display: none;
 }
 
 .principal-locked-banner {
@@ -824,6 +882,7 @@ button {
   display: grid;
   place-items: center;
   padding: 1.5rem;
+  overflow-y: auto;
   z-index: 90;
 }
 
@@ -837,6 +896,8 @@ button {
   padding: var(--space-lg);
   box-shadow: var(--shadow-lg);
   color: var(--text-soft);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .principal-filter-header {
@@ -904,7 +965,7 @@ button {
 
 .principal-summary-label {
   font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
 }
 
 .principal-summary-value {
@@ -915,7 +976,7 @@ button {
 
 .principal-summary-chip {
   font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 .principal-summary-bar {
@@ -1051,7 +1112,7 @@ button {
 .principal-small,
 .principal-micro-note {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.58);
+  color: var(--text-secondary);
 }
 
 .principal-summary-bar::after,
@@ -1178,7 +1239,7 @@ button {
   display: grid;
   gap: 0.45rem;
   font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--text-secondary);
 }
 
 .student-checklist li {
@@ -1209,7 +1270,7 @@ button {
 
 .student-footer-note {
   font-size: 0.82rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 .student-link-card a {
@@ -1233,6 +1294,7 @@ button {
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
+  overflow-y: auto;
   z-index: 120;
 }
 
@@ -1263,6 +1325,8 @@ button {
   gap: var(--space-md);
   box-shadow: var(--shadow-lg);
   color: var(--text-soft);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .family-action-header,
@@ -1295,7 +1359,7 @@ button {
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--text-hint);
 }
 
 .family-action-input,
@@ -1319,7 +1383,7 @@ button {
 .principal-access-hint,
 .principal-access-status {
   font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
 }
 
 .principal-access-status.is-error {
@@ -1751,11 +1815,11 @@ kbd {
 <li>Walk &amp; Roll Day: 3 adults to help at crosswalks from 7:10–7:40 AM.</li>
 <li>Snack Cart: bottled water, granola bars, single-serve tea/coffee pods.</li>
 </ul>
-<p style="margin-top:0.7rem;">
+<p class="portal-note portal-note--spacious">
                   To sign up, please use the PTA e-mail below or the sign-up links shared in the
                   weekly newsletter. It’s always okay to bring younger siblings with you.
                 </p>
-<a class="family-btn-primary" href="https://riverbendpta.example.org/volunteer-signup" rel="noopener" style="margin-top:0.8rem;" target="_blank">
+<a class="family-btn-primary" href="https://riverbendpta.example.org/volunteer-signup" rel="noopener" target="_blank">
                   Open volunteer sign-up form
                 </a>
 </div>
@@ -1767,7 +1831,7 @@ kbd {
 <li>Drop a thank-you note in the office for a favorite staff member.</li>
 <li>Attend one PTA meeting this semester to stay in the loop.</li>
 </ul>
-<p style="margin-top:0.7rem; font-size:0.8rem; color:#6b7280;">
+<p class="portal-note portal-note--spacious">
                   There is no minimum time commitment. Your presence at events already counts as support.
                 </p>
 </div>
@@ -1784,7 +1848,7 @@ kbd {
 <a class="portal-inline-link" href="https://riverbendpta.example.org/signup/garden" rel="noopener" target="_blank">Garden keepers</a> · adopt a planter box for monthly watering and weeding.
                   </li>
 </ul>
-<p style="margin-top:0.7rem; font-size:0.8rem;">
+<p class="portal-note portal-note--spacious">
                   Need to update your background check? Complete the district form at
                   <a class="portal-inline-link" href="https://riverbendpta.example.org/background-check" rel="noopener" target="_blank">riverbendpta.example.org/background-check</a> before your first shift.
                 </p>
@@ -1803,19 +1867,19 @@ kbd {
 <div class="family-info-row">
 <div>
 <strong>📧 Weekly PTA e-mail</strong>
-<p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+<p class="portal-note portal-note--compact">
                     Sent on Sunday evenings with highlights for the coming week, direct links to sign-ups, and any forms due soon.
                   </p>
 </div>
 <div>
 <strong>📱 Text alerts</strong>
-<p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+<p class="portal-note portal-note--compact">
                     Same-day nudges such as “Movie Night tonight at 6:30 PM.” Opt out anytime by replying STOP.
                   </p>
 </div>
 <div>
 <strong>📆 Shared calendar</strong>
-<p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+<p class="portal-note portal-note--compact">
                     Subscribe once and every PTA event appears on your phone and computer calendars automatically.
                   </p>
 </div>
@@ -1832,7 +1896,7 @@ kbd {
                 </button>
 </div>
 <div aria-live="polite" class="family-feedback" hidden="" id="family-info-feedback" role="status"></div>
-<p style="margin-top:0.8rem; font-size:0.78rem; color:#4b5563;">
+<p class="portal-note portal-note--fine portal-note--loose">
                 Questions? Reply to any update or e-mail <a class="portal-inline-link" href="mailto:pta@riverbendelementary.org">pta@riverbendelementary.org</a>.
                 We can add grandparents or caregivers too.
               </p>
@@ -1885,7 +1949,7 @@ kbd {
 </div>
 </footer>
 </section>
-<section class="view principal-root constellation-view" id="principal-view">
+<section class="view principal-root constellation-view" data-locked="true" id="principal-view">
 <div class="principal-page">
 <aside class="principal-sidebar">
 <div class="principal-logo">RB</div>
@@ -1939,9 +2003,10 @@ kbd {
             </div>
 </aside>
 <main class="principal-main">
-<div class="principal-locked-banner" hidden="" id="principal-locked-banner">
+<div class="principal-locked-banner" id="principal-locked-banner">
               Principal access required. Enter the password to unlock this view.
             </div>
+<div class="principal-protected" id="principal-protected">
 <header class="principal-header">
 <div class="principal-title-block">
 <div class="principal-kicker" id="principal-view-kicker">This Week · Snapshot</div>
@@ -2638,6 +2703,7 @@ kbd {
 </article>
 </section>
 </div>
+</div>
 </main>
 </div>
 </section>
@@ -2853,7 +2919,7 @@ kbd {
 <li>Review bylaws and budget summary before the annual voting meeting.</li>
 <li>Join a short-term committee (for example, Movie Night, STEM Night, Book Fair).</li>
 </ul>
-<p style="font-size:0.78rem; color:#4b5563;">
+<p class="portal-note portal-note--fine">
                 The goal is for PTA decisions to feel open, understandable, and collaborative —
                 never like they’re happening “behind closed doors.”
               </p>
@@ -2982,7 +3048,7 @@ kbd {
 <li>Pack a labeled water bottle and jacket in case the gym or playground feels chilly.</li>
 <li>Charge your Chromebook if you need it for STEM Night stations or homework afterward.</li>
 </ul>
-<p style="margin-top:0.6rem; font-size:0.82rem; color:#4b5563;">
+<p class="portal-note portal-note--separated">
                 Need help? Use the <a class="portal-inline-link" href="https://riverbendpta.example.org/students/help" rel="noopener" target="_blank">student help form</a>
                 and a counselor or PTA volunteer will follow up.
               </p>
@@ -3138,6 +3204,7 @@ kbd {
 
     const principalView = document.getElementById("principal-view");
     const principalLockedBanner = document.getElementById("principal-locked-banner");
+    const principalProtected = document.getElementById("principal-protected");
     const principalManageAccessBtn = document.getElementById("principal-manage-access");
 
     const principalAccessModal = document.getElementById("principal-access-modal");
@@ -3257,18 +3324,10 @@ kbd {
       return Number.isFinite(expires) && expires > Date.now();
     }
 
-    function applyViewTheme(targetId) {
-      if (targetId === "principal-view") {
-        bodyElement.style.background = "#020617";
-        bodyElement.style.color = "#e5e7eb";
-      } else if (targetId === "student-view") {
-        bodyElement.style.background =
-          "radial-gradient(circle at top, #e0f2fe 0, #f9fafb 38%, #fef3c7 100%)";
-        bodyElement.style.color = "#111827";
-      } else {
-        bodyElement.style.background = "#f3f4f6";
-        bodyElement.style.color = "#111827";
-      }
+    function applyViewTheme() {
+      if (!bodyElement) return;
+      bodyElement.style.background = "";
+      bodyElement.style.color = "";
     }
 
     function switchView(targetId) {
@@ -3282,7 +3341,7 @@ kbd {
         view.classList.toggle("active", view.id === targetId);
       });
       activeViewId = targetId;
-      applyViewTheme(targetId);
+      applyViewTheme();
     }
 
     function updatePrincipalLockState() {
@@ -3292,10 +3351,20 @@ kbd {
         if (principalLockedBanner) {
           principalLockedBanner.hidden = true;
         }
+        if (principalProtected) {
+          principalProtected.hidden = false;
+          principalProtected.removeAttribute("aria-hidden");
+          principalProtected.removeAttribute("inert");
+        }
       } else {
         principalView.setAttribute("data-locked", "true");
         if (principalLockedBanner) {
           principalLockedBanner.hidden = false;
+        }
+        if (principalProtected) {
+          principalProtected.hidden = true;
+          principalProtected.setAttribute("aria-hidden", "true");
+          principalProtected.setAttribute("inert", "");
         }
       }
     }
@@ -3545,7 +3614,7 @@ kbd {
     ensureDefaultPrincipalPassword();
     principalAccessGranted = isPrincipalUnlocked();
     updatePrincipalLockState();
-    applyViewTheme(activeViewId);
+    applyViewTheme();
 
     viewButtons.forEach(btn => {
       btn.addEventListener("click", () => {
