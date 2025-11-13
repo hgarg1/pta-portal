@@ -4475,18 +4475,35 @@
       principalCountdownTimer = setInterval(tick, 1000);
     }
 
-    function goToResetStep(step) {
-      const order = resetStepOrder[step] ?? 0;
+    function resetResetFlowUI() {
       if (principalResetSteps) {
         principalResetSteps.querySelectorAll("li").forEach(item => {
           const itemStep = item.getAttribute("data-step") || "kit";
-          const itemOrder = resetStepOrder[itemStep] ?? 0;
+          item.classList.remove("complete", "active");
+          if (itemStep === "kit") {
+            item.classList.add("active");
+          }
+        });
+      }
+      if (principalResetKitStep) principalResetKitStep.classList.remove("is-complete");
+      if (principalResetVerifyStep) principalResetVerifyStep.hidden = true;
+      if (principalResetSetStep) principalResetSetStep.hidden = true;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+    }
+
+    function goToResetStep(step) {
+      const order = resetStepOrder[step] ?? resetStepOrder.kit;
+      if (principalResetSteps) {
+        principalResetSteps.querySelectorAll("li").forEach(item => {
+          const itemStep = item.getAttribute("data-step") || "kit";
+          const itemOrder = resetStepOrder[itemStep] ?? resetStepOrder.kit;
           item.classList.toggle("active", itemOrder === order);
           item.classList.toggle("complete", itemOrder < order);
         });
       }
-      if (principalResetVerifyStep) principalResetVerifyStep.hidden = order < resetStepOrder.verify;
-      if (principalResetSetStep) principalResetSetStep.hidden = order < resetStepOrder.set;
+      if (principalResetVerifyStep) principalResetVerifyStep.hidden = order !== resetStepOrder.verify;
+      if (principalResetSetStep) principalResetSetStep.hidden = order !== resetStepOrder.set;
       if (principalResetSuccess) principalResetSuccess.hidden = true;
       if (principalResetKitStep) {
         principalResetKitStep.classList.toggle("is-complete", order > resetStepOrder.kit);
@@ -4499,11 +4516,11 @@
       requestAnimationFrame(() => principalAccessModal.classList.add("active"));
       document.body.classList.add("prevent-scroll");
       resetPrincipalAccessStatus();
+      resetResetFlowUI();
       setPrincipalAccessStatus("Enter your access password to unlock the dashboard.", "info");
       if (principalResetSection) principalResetSection.hidden = true;
       if (principalLoginForm) principalLoginForm.hidden = false;
-      if (principalResetSuccess) principalResetSuccess.hidden = true;
-      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      if (principalResetKit) principalResetKit.hidden = true;
       stopResetCountdown();
       if (principalPasswordInput) {
         principalPasswordInput.value = "";
@@ -4522,10 +4539,10 @@
       }, 200);
       pendingViewButton = null;
       stopResetCountdown();
+      resetResetFlowUI();
       if (principalResetSection) principalResetSection.hidden = true;
       if (principalLoginForm) principalLoginForm.hidden = false;
-      if (principalResetSuccess) principalResetSuccess.hidden = true;
-      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      if (principalResetKit) principalResetKit.hidden = true;
       resetPrincipalAccessStatus();
     }
 
@@ -4533,8 +4550,7 @@
       if (!principalResetSection || !principalLoginForm) return;
       principalLoginForm.hidden = true;
       principalResetSection.hidden = false;
-      if (principalResetSuccess) principalResetSuccess.hidden = true;
-      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      resetResetFlowUI();
       if (principalResetCodeInput) principalResetCodeInput.value = "";
       if (principalResetPasswordInput) principalResetPasswordInput.value = "";
       if (principalResetConfirmInput) principalResetConfirmInput.value = "";
@@ -4561,11 +4577,10 @@
 
     function returnToLoginFromReset() {
       stopResetCountdown();
+      resetResetFlowUI();
       if (principalResetSection) principalResetSection.hidden = true;
       if (principalLoginForm) principalLoginForm.hidden = false;
       if (principalResetKit) principalResetKit.hidden = true;
-      if (principalResetSuccess) principalResetSuccess.hidden = true;
-      if (principalResetNewPass) principalResetNewPass.hidden = true;
       if (principalPasswordInput) {
         setTimeout(() => principalPasswordInput.focus(), 80);
       }
