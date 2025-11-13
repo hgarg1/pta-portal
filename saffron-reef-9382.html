@@ -25,7 +25,7 @@
       --radius-sm: 12px;
       --gradient-aurora: linear-gradient(135deg, rgba(96, 165, 250, 0.22), rgba(52, 211, 153, 0.18));
       --gradient-sunrise: linear-gradient(135deg, rgba(250, 204, 21, 0.32), rgba(251, 113, 133, 0.25));
-      font-size: 16px;
+      font-size: clamp(15px, 1.9vw, 16px);
     }
 
     *, *::before, *::after {
@@ -109,6 +109,39 @@
     @media (max-width: 960px) {
       .portal-app {
         padding: 1rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .portal-app {
+        padding: 0.85rem;
+      }
+      .view.active {
+        gap: 2.25rem;
+      }
+      .family-hero,
+      .principal-hero,
+      .pta-board-hero,
+      .student-hero {
+        text-align: center;
+        gap: 1.85rem;
+      }
+      .family-hero-meta,
+      .family-hero-actions {
+        justify-content: center;
+      }
+      .family-hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .principal-status-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.65rem;
       }
     }
 
