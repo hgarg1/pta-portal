@@ -43,6 +43,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 html {
   font-size: 16px;
   scroll-behavior: smooth;
@@ -387,6 +391,11 @@ button {
   font-weight: 600;
   letter-spacing: 0.01em;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
 }
 
 .family-btn-primary,
@@ -852,6 +861,8 @@ button {
   padding: var(--space-sm);
   border-radius: var(--radius-sm);
   text-align: center;
+  display: grid;
+  gap: 0.6rem;
 }
 
 .principal-controls {
@@ -1180,12 +1191,16 @@ button {
 
 .board-contact {
   display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
   padding: var(--space-sm);
   border-radius: var(--radius-md);
   background: rgba(243, 156, 200, 0.12);
   border: 1px solid rgba(243, 156, 200, 0.3);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 /* Student view --------------------------------------------------------- */
@@ -2004,9 +2019,10 @@ kbd {
 </aside>
 <main class="principal-main">
 <div class="principal-locked-banner" id="principal-locked-banner">
-              Principal access required. Enter the password to unlock this view.
+              <span>Principal access required. Enter the password to unlock this view.</span>
+              <button class="principal-btn-solid" id="principal-locked-open" type="button">Unlock dashboard</button>
             </div>
-<div class="principal-protected" id="principal-protected">
+<div aria-hidden="true" class="principal-protected" hidden="" id="principal-protected" inert="">
 <header class="principal-header">
 <div class="principal-title-block">
 <div class="principal-kicker" id="principal-view-kicker">This Week · Snapshot</div>
@@ -3204,6 +3220,7 @@ kbd {
 
     const principalView = document.getElementById("principal-view");
     const principalLockedBanner = document.getElementById("principal-locked-banner");
+    const principalLockedOpenBtn = document.getElementById("principal-locked-open");
     const principalProtected = document.getElementById("principal-protected");
     const principalManageAccessBtn = document.getElementById("principal-manage-access");
 
@@ -3627,6 +3644,13 @@ kbd {
         switchView(targetId);
       });
     });
+
+    if (principalLockedOpenBtn) {
+      principalLockedOpenBtn.addEventListener("click", () => {
+        pendingViewButton = principalLockedOpenBtn;
+        openPrincipalAccessModal();
+      });
+    }
 
     if (principalManageAccessBtn) {
       principalManageAccessBtn.addEventListener("click", () => {
