@@ -1,0 +1,4499 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Riverbend PTA Portal – Immersive Dashboard</title>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<style>
+:root {
+  --gradient-start: #070c1f;
+  --gradient-mid: #111f3b;
+  --gradient-end: #05060f;
+  --surface: rgba(17, 25, 40, 0.78);
+  --surface-strong: rgba(17, 25, 40, 0.92);
+  --surface-soft: rgba(42, 56, 87, 0.48);
+  --border-glow: rgba(142, 197, 252, 0.28);
+  --text-strong: #f8fbff;
+  --text-soft: #c3cbe8;
+  --text-muted: #8d96b8;
+  --accent-family: #7ae8b4;
+  --accent-principal: #7ab8ff;
+  --accent-board: #f39cc8;
+  --accent-student: #ffd166;
+  --shadow-lg: 0 40px 80px rgba(5, 12, 32, 0.55);
+  --shadow-md: 0 22px 44px rgba(5, 12, 32, 0.45);
+  --shadow-sm: 0 12px 30px rgba(5, 12, 32, 0.35);
+  --radius-xl: 26px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+  --space-xs: 0.65rem;
+  --space-sm: 0.9rem;
+  --space-md: 1.35rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --glass-blur: blur(26px);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: radial-gradient(circle at top left, rgba(106, 17, 203, 0.28), transparent 45%),
+              radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.22), transparent 55%),
+              linear-gradient(140deg, var(--gradient-start), var(--gradient-mid) 58%, var(--gradient-end));
+  color: var(--text-soft);
+  display: flex;
+}
+
+body.prevent-scroll {
+  overflow: hidden;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--text-strong);
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+.constellation-shell {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+  gap: 0;
+  min-height: 100vh;
+}
+
+@media (max-width: 1080px) {
+  .constellation-shell {
+    grid-template-columns: 1fr;
+  }
+}
+
+.constellation-sidebar {
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(15, 23, 42, 0.75));
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+  padding: var(--space-xl) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  backdrop-filter: var(--glass-blur);
+  color: var(--text-soft);
+}
+
+@media (max-width: 1080px) {
+  .constellation-sidebar {
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--space-lg) var(--space-md) var(--space-md);
+  }
+}
+
+.constellation-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.constellation-mark {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #60a5fa, #22d3ee);
+  color: #050b1d;
+  font-weight: 800;
+  font-size: 1.1rem;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 16px 28px rgba(96, 165, 250, 0.32);
+}
+
+.constellation-brand-copy {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.constellation-brand-title {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.constellation-brand-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.constellation-nav-group {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.constellation-nav-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.constellation-toggle-stack {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(15, 23, 42, 0.4);
+  color: var(--text-soft);
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.view-toggle-btn span:first-child {
+  font-size: 1.2rem;
+}
+
+.view-toggle-btn.active {
+  color: var(--text-strong);
+  background: linear-gradient(135deg, rgba(122, 184, 255, 0.26), rgba(122, 232, 180, 0.22));
+  border-color: rgba(255, 255, 255, 0.32);
+  transform: translateX(4px);
+}
+
+.view-toggle-btn:not(.active):hover {
+  border-color: rgba(122, 184, 255, 0.45);
+  transform: translateX(2px);
+}
+
+.constellation-sidebar-note {
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.constellation-main {
+  position: relative;
+  overflow: hidden;
+}
+
+.constellation-main-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--space-xl) clamp(1.4rem, 4vw, 3rem) var(--space-xl);
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.constellation-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: 0 var(--space-sm);
+}
+
+.constellation-topline h1 {
+  margin: 0;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.constellation-topline p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.constellation-panels {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.constellation-view {
+  background: linear-gradient(160deg, rgba(17, 24, 48, 0.78), rgba(21, 31, 58, 0.58));
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: var(--space-lg) clamp(1.4rem, 4vw, 3rem);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(22px);
+  position: relative;
+}
+
+.constellation-view::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: calc(var(--radius-xl) - 1px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+}
+
+.constellation-view[data-accent="family"]::after,
+.family-root.constellation-view::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  pointer-events: none;
+  background: linear-gradient(140deg, rgba(122, 232, 180, 0.12), transparent 65%);
+  opacity: 0.8;
+}
+
+.principal-root.constellation-view::after {
+  background: linear-gradient(140deg, rgba(122, 184, 255, 0.12), transparent 65%);
+}
+
+.board-root.constellation-view::after {
+  background: linear-gradient(140deg, rgba(243, 156, 200, 0.15), transparent 65%);
+}
+
+.student-root.constellation-view::after {
+  background: linear-gradient(140deg, rgba(255, 209, 102, 0.12), transparent 65%);
+}
+
+.family-root.constellation-view,
+.principal-root.constellation-view,
+.board-root.constellation-view,
+.student-root.constellation-view {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Shared elements ------------------------------------------------------- */
+.family-shell,
+.board-shell,
+.student-shell {
+  display: grid;
+  gap: var(--space-xl);
+}
+
+.family-section,
+.board-section,
+.student-section,
+.principal-panel {
+  display: grid;
+  gap: var(--space-md);
+  position: relative;
+  z-index: 1;
+}
+
+.family-section-header,
+.board-section,
+.student-header,
+.principal-header,
+.principal-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+[class*="section-title"],
+.principal-title,
+.board-title,
+.student-title,
+.principal-card-title,
+.family-today-title {
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  color: var(--text-strong);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+[class*="section-sub"],
+.principal-sub,
+.board-sub,
+.student-sub,
+.family-section-sub {
+  font-size: 0.95rem;
+  max-width: 42ch;
+  color: rgba(255, 255, 255, 0.68);
+  line-height: 1.6;
+}
+
+[class*="section-kicker"],
+.principal-kicker,
+.board-kicker,
+.student-kicker,
+.family-hero-tag,
+.principal-sidebar-title {
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.family-btn-primary,
+.family-link-btn,
+.principal-btn-solid,
+.principal-btn-outline,
+.principal-btn-ghost,
+.board-btn,
+.family-btn-ghost,
+.student-link-card a,
+.family-action-primary,
+.family-action-secondary,
+.principal-access-submit,
+.principal-access-secondary {
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.family-btn-primary,
+.principal-btn-solid,
+.family-action-primary,
+.principal-access-submit {
+  background: linear-gradient(135deg, rgba(122, 232, 180, 0.45), rgba(122, 184, 255, 0.45));
+  color: #031427;
+  border: none;
+  box-shadow: 0 18px 36px rgba(122, 184, 255, 0.25);
+}
+
+.family-btn-primary:hover,
+.principal-btn-solid:hover,
+.family-action-primary:hover,
+.principal-access-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 26px 46px rgba(122, 184, 255, 0.35);
+}
+
+.family-btn-ghost,
+.principal-btn-outline,
+.principal-btn-ghost,
+.family-action-secondary,
+.principal-access-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(15, 23, 42, 0.35);
+  color: var(--text-soft);
+}
+
+.family-btn-ghost:hover,
+.principal-btn-outline:hover,
+.principal-btn-ghost:hover,
+.family-action-secondary:hover,
+.principal-access-secondary:hover {
+  background: rgba(122, 184, 255, 0.1);
+  color: var(--text-strong);
+}
+
+.portal-inline-link {
+  color: rgba(122, 208, 255, 0.9);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+}
+
+.portal-inline-link:hover {
+  color: #fff;
+}
+
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 44px rgba(5, 12, 32, 0.42);
+}
+
+/* Family view ----------------------------------------------------------- */
+.family-nav {
+  display: grid;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  background: rgba(15, 23, 42, 0.55);
+  border: var(--glass-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.family-nav-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.family-school-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(122, 232, 180, 0.9), rgba(122, 184, 255, 0.8));
+  color: #081425;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.family-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.family-nav-links a {
+  position: relative;
+  padding-bottom: 0.2rem;
+}
+
+.family-nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: rgba(122, 232, 180, 0.9);
+  transition: width 0.18s ease;
+}
+
+.family-nav-links a:hover::after {
+  width: 100%;
+}
+
+.family-nav-pill {
+  background: rgba(122, 232, 180, 0.1);
+  color: var(--text-strong);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  border: 1px solid rgba(122, 232, 180, 0.45);
+}
+
+.family-hero {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: center;
+}
+
+.family-hero-title {
+  font-size: clamp(2rem, 4vw, 2.7rem);
+}
+
+.family-hero-title span {
+  color: var(--accent-family);
+}
+
+.family-hero-sub {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 1rem;
+  max-width: 40ch;
+}
+
+.family-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.family-hero-meta span {
+  background: rgba(15, 23, 42, 0.52);
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(122, 232, 180, 0.25);
+}
+
+.family-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.family-today-card {
+  background: rgba(15, 23, 42, 0.6);
+  padding: var(--space-md);
+  border-radius: var(--radius-lg);
+  border: var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.family-today-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.family-today-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(122, 232, 180, 0.12);
+  border: 1px solid rgba(122, 232, 180, 0.4);
+}
+
+.family-today-pill-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-family);
+}
+
+.family-today-list {
+  list-style: none;
+  display: grid;
+  gap: var(--space-sm);
+  padding: 0;
+  margin: 0;
+}
+
+.family-today-item-title {
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.family-today-item-meta {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.family-today-note {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.family-events-grid,
+.family-vol-grid,
+.family-resource-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.family-event-card,
+.family-vol-card,
+.family-resource-card,
+.family-info-card {
+  background: rgba(15, 23, 42, 0.58);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  border: var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.family-event-badges,
+.family-event-meta,
+.family-event-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.family-event-badge,
+.family-event-badge--today {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(122, 232, 180, 0.16);
+  border: 1px solid rgba(122, 232, 180, 0.35);
+  color: var(--accent-family);
+}
+
+.family-event-badge--today {
+  background: rgba(252, 211, 77, 0.22);
+  border-color: rgba(252, 211, 77, 0.45);
+  color: #fcd34d;
+}
+
+.family-event-tag-pill {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(122, 184, 255, 0.12);
+  border: 1px solid rgba(122, 184, 255, 0.3);
+  font-size: 0.75rem;
+}
+
+.family-vol-list,
+.family-info-card ul,
+.family-resource-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+}
+
+.family-info-row {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+@media (min-width: 720px) {
+  .family-info-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.family-info-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.family-filter-pill {
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid rgba(122, 184, 255, 0.35);
+  background: rgba(15, 23, 42, 0.45);
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.family-filter-pill.active {
+  background: rgba(122, 184, 255, 0.25);
+  color: var(--text-strong);
+}
+
+.family-feedback {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.family-footer {
+  display: grid;
+  gap: var(--space-sm);
+  padding-top: var(--space-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.8rem;
+}
+
+.family-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Principal view ------------------------------------------------------- */
+.principal-page {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: minmax(250px, 280px) minmax(0, 1fr);
+}
+
+@media (max-width: 980px) {
+  .principal-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+.principal-sidebar {
+  background: rgba(15, 23, 42, 0.55);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  border: var(--glass-border);
+  display: grid;
+  gap: var(--space-md);
+  align-content: start;
+  box-shadow: var(--shadow-sm);
+}
+
+.principal-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(122, 184, 255, 0.9), rgba(99, 102, 241, 0.75));
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #0b1020;
+  font-size: 1.1rem;
+}
+
+.principal-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.principal-nav-link {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0.95rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(122, 184, 255, 0.24);
+  background: rgba(12, 19, 36, 0.5);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.principal-nav-link.active,
+.principal-nav-link:hover {
+  color: var(--text-strong);
+  border-color: rgba(122, 184, 255, 0.45);
+  background: rgba(122, 184, 255, 0.18);
+}
+
+.principal-main {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.principal-locked-banner {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+  color: #fecaca;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+.principal-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.principal-date-pill {
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  background: rgba(122, 184, 255, 0.16);
+  border: 1px solid rgba(122, 184, 255, 0.4);
+  font-size: 0.85rem;
+}
+
+.principal-status-message {
+  min-height: 1.2rem;
+  font-size: 0.85rem;
+  color: rgba(122, 208, 255, 0.85);
+}
+
+.principal-filter-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 18, 0.76);
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  z-index: 90;
+}
+
+.principal-filter-panel {
+  background: rgba(15, 23, 42, 0.9);
+  border-radius: var(--radius-lg);
+  border: var(--glass-border);
+  width: min(680px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-lg);
+  color: var(--text-soft);
+}
+
+.principal-filter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.principal-filter-group {
+  margin: var(--space-sm) 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+}
+
+.principal-filter-options {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.6rem;
+}
+
+.principal-filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.principal-panel {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.principal-summary-grid,
+.principal-grid-2,
+.principal-grid-3 {
+  display: grid;
+  gap: var(--space-md);
+}
+
+.principal-summary-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.principal-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.principal-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.principal-summary-card,
+.principal-card,
+.principal-full-card {
+  background: rgba(15, 23, 42, 0.58);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  border: var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.principal-summary-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.principal-summary-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.principal-summary-chip {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.principal-summary-bar {
+  position: relative;
+  height: 8px;
+  background: rgba(122, 184, 255, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.principal-summary-card .principal-summary-bar-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(122, 184, 255, 0.9), rgba(122, 232, 180, 0.9));
+  transform-origin: left center;
+  transform: scaleX(var(--fill, 0.6));
+}
+
+.principal-checklist {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding-left: 1.1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.principal-checklist li::marker {
+  color: rgba(122, 184, 255, 0.7);
+}
+
+.principal-card-link {
+  color: rgba(122, 208, 255, 0.88);
+  text-decoration: underline;
+}
+
+.principal-full-card header,
+.principal-full-card .principal-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.principal-interest-table,
+.principal-event-table,
+.board-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.principal-event-table th,
+.principal-event-table td,
+.board-table th,
+.board-table td {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.75rem 0.6rem;
+  text-align: left;
+}
+
+.principal-event-table tbody tr:hover {
+  background: rgba(122, 184, 255, 0.08);
+}
+
+.principal-event-pill {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(122, 184, 255, 0.2);
+  font-size: 0.78rem;
+}
+
+.principal-coverage-meter {
+  position: relative;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.principal-coverage-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.8), rgba(251, 191, 36, 0.8), rgba(16, 185, 129, 0.8));
+}
+
+.principal-risk-list {
+  list-style: none;
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+}
+
+.principal-risk-item {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: var(--space-sm);
+  background: rgba(12, 19, 36, 0.55);
+}
+
+.principal-risk-tag-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.principal-risk-level {
+  border-radius: 999px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.principal-risk-low {
+  background: rgba(16, 185, 129, 0.16);
+  color: #6ee7b7;
+}
+
+.principal-risk-med {
+  background: rgba(251, 191, 36, 0.16);
+  color: #facc15;
+}
+
+.principal-risk-high {
+  background: rgba(248, 113, 113, 0.18);
+  color: #f87171;
+}
+
+.principal-small,
+.principal-micro-note {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.principal-summary-bar::after,
+.principal-coverage-meter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Board view ----------------------------------------------------------- */
+.board-shell {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.board-layout {
+  display: grid;
+  gap: var(--space-lg);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.board-card,
+.board-quick-card,
+.board-resource-card {
+  background: rgba(15, 23, 42, 0.58);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  border: var(--glass-border);
+  display: grid;
+  gap: 0.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.board-badge,
+.board-doc-pill,
+.board-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(243, 156, 200, 0.4);
+  background: rgba(243, 156, 200, 0.16);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.75rem;
+}
+
+.board-quick-list,
+.board-doc-detail {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.55rem;
+  font-size: 0.92rem;
+}
+
+.board-officers-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.board-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: var(--space-sm);
+  border-radius: var(--radius-md);
+  background: rgba(243, 156, 200, 0.12);
+  border: 1px solid rgba(243, 156, 200, 0.3);
+}
+
+/* Student view --------------------------------------------------------- */
+.student-shell {
+  display: grid;
+  gap: var(--space-lg);
+}
+
+.student-header {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.student-grid,
+.student-link-grid {
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.student-card,
+.student-link-card,
+.student-tips {
+  background: rgba(15, 23, 42, 0.55);
+  border-radius: var(--radius-lg);
+  border: var(--glass-border);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  display: grid;
+  gap: 0.65rem;
+}
+
+.student-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.05rem;
+  color: var(--text-strong);
+}
+
+.student-emoji {
+  font-size: 1.4rem;
+}
+
+.student-list,
+.student-checklist,
+.student-tips-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.45rem;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.student-checklist li {
+  position: relative;
+  padding-left: 1.4rem;
+}
+
+.student-checklist li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  top: 0.1rem;
+  color: var(--accent-student);
+  font-size: 0.8rem;
+}
+
+.student-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(255, 209, 102, 0.18);
+  border: 1px solid rgba(255, 209, 102, 0.35);
+  color: var(--accent-student);
+  font-size: 0.75rem;
+}
+
+.student-footer-note {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.student-link-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(122, 184, 255, 0.95);
+  text-decoration: none;
+}
+
+.student-link-card a:hover {
+  color: #fff;
+}
+
+/* Family action drawer ------------------------------------------------- */
+.family-action-drawer,
+.principal-access-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 120;
+}
+
+.family-action-drawer.active,
+.principal-access-modal.active {
+  display: flex;
+}
+
+.family-action-backdrop,
+.principal-access-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 6, 16, 0.78);
+  backdrop-filter: blur(18px);
+}
+
+.family-action-panel,
+.principal-access-dialog {
+  position: relative;
+  background: rgba(15, 23, 42, 0.95);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: var(--space-lg);
+  width: min(640px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  display: grid;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-lg);
+  color: var(--text-soft);
+}
+
+.family-action-header,
+.principal-access-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-sm);
+}
+
+.family-action-close,
+.principal-access-close {
+  border-radius: 999px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.family-action-form,
+.principal-access-form {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.family-action-label,
+.principal-access-label {
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.family-action-input,
+.family-action-textarea,
+.principal-access-input {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(5, 12, 32, 0.65);
+  color: var(--text-strong);
+  padding: 0.7rem 0.85rem;
+}
+
+.family-action-input:focus,
+.family-action-textarea:focus,
+.principal-access-input:focus {
+  outline: 2px solid rgba(122, 184, 255, 0.55);
+}
+
+.family-action-note,
+.principal-access-hint,
+.principal-access-status {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.principal-access-status.is-error {
+  color: #fecaca;
+}
+
+.principal-access-status.is-success {
+  color: #bbf7d0;
+}
+
+/* Tables and inline helpers -------------------------------------------- */
+caption,
+th {
+  color: var(--text-strong);
+}
+
+table caption {
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+kbd {
+  background: rgba(15, 23, 42, 0.65);
+  border-radius: 6px;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Responsive tweaks ---------------------------------------------------- */
+@media (max-width: 720px) {
+  .constellation-main-inner {
+    padding: var(--space-lg) 1.1rem var(--space-xl);
+  }
+  .constellation-view {
+    padding: var(--space-lg) 1.2rem;
+  }
+  .principal-controls {
+    justify-content: flex-start;
+  }
+  .constellation-sidebar {
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+  }
+}
+
+@media (max-width: 540px) {
+  .view-toggle-btn {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+  .principal-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .principal-nav-link span:last-child {
+    font-size: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+<div class="constellation-shell">
+<aside class="constellation-sidebar">
+<div class="constellation-brand">
+<div class="constellation-mark">RB</div>
+<div class="constellation-brand-copy">
+<div class="constellation-brand-title">Riverbend Elementary</div>
+<div class="constellation-brand-name">PTA Portal</div>
+</div>
+</div>
+<div class="constellation-nav-group">
+<div class="constellation-nav-title">Switch view</div>
+<div class="constellation-toggle-stack">
+<button class="view-toggle-btn active" data-view-target="family-view"><span>🌼</span><span>PTA Family</span></button>
+<button class="view-toggle-btn" data-view-target="principal-view"><span>🎓</span><span>Principal</span></button>
+<button class="view-toggle-btn" data-view-target="pta-board-view"><span>📝</span><span>PTA Board</span></button>
+<button class="view-toggle-btn" data-view-target="student-view"><span>🎒</span><span>Students</span></button>
+</div>
+</div>
+
+</aside>
+<main class="constellation-main">
+<div class="constellation-main-inner">
+<div class="constellation-topline"><div><h1>Riverbend Elementary PTA Portal</h1><p>Family · Principal · Board · Students</p></div></div>
+<div class="constellation-panels">
+<section class="view active family-root constellation-view" id="family-view">
+<div class="family-shell">
+<div class="family-nav">
+<div class="family-nav-left">
+<div class="family-school-mark">PTA</div>
+<div>
+<div class="family-school-main">Riverbend Elementary</div>
+<div class="family-school-sub">Parent–Teacher Association</div>
+</div>
+</div>
+<nav class="family-nav-links">
+<a href="#family-this-week">This Week</a>
+<a href="#family-upcoming">Upcoming</a>
+<a href="#family-volunteer">Volunteer</a>
+<a href="#family-resources">Resources</a>
+<a class="family-nav-pill" href="#family-info">Stay Informed</a>
+</nav>
+</div>
+<section class="family-hero">
+<div>
+<div class="family-hero-tag">
+<div class="family-hero-tag-dot"></div>
+<span>Made for busy families</span>
+</div>
+<h1 class="family-hero-title">
+                One place for every <span>school event</span>.
+              </h1>
+<p class="family-hero-sub">
+                See what’s happening this week, what’s coming up, and where you can jump in to help —
+                all in a simple, parent-friendly view.
+              </p>
+<div class="family-hero-meta">
+<span><strong>Today:</strong> Quick snapshot of events</span>
+<span><strong>Green labels:</strong> Happening this week</span>
+<span><strong>Blue labels:</strong> Plan-ahead dates</span>
+</div>
+<div class="family-hero-actions">
+<button class="family-btn-primary" onclick="document.getElementById('family-this-week').scrollIntoView({behavior:'smooth'})">
+                  View this week’s events →
+                </button>
+<button class="family-btn-ghost" onclick="document.getElementById('family-upcoming').scrollIntoView({behavior:'smooth'})">
+                  Jump to upcoming months
+                </button>
+</div>
+</div>
+<aside aria-label="Today's overview" class="family-today-card card-hover">
+<div class="family-today-header">
+<div>
+<div class="family-today-title">Today at a Glance</div>
+<div class="family-today-date" id="family-today-date">Today’s date</div>
+</div>
+</div>
+<div class="family-today-pill">
+<div class="family-today-pill-dot"></div>
+<span>Happening today</span>
+</div>
+<ul class="family-today-list">
+<li>
+<div class="family-today-item-title">Book Fair – Family Shopping Night</div>
+<div class="family-today-item-meta">
+                    5:00 – 7:30 PM · School Library
+                  </div>
+</li>
+<li>
+<div class="family-today-item-title">PTA General Meeting (Hybrid)</div>
+<div class="family-today-item-meta">
+                    7:00 – 8:00 PM · Media Center &amp; Zoom
+                  </div>
+</li>
+<li>
+<div class="family-today-item-title">Walk &amp; Roll to School Day meetup</div>
+<div class="family-today-item-meta">
+                    7:10 – 7:45 AM · Front parking lot check-in tent
+                  </div>
+</li>
+</ul>
+<div class="family-today-note">
+                Running late? Text the PTA hotline at <a class="portal-inline-link" href="sms:+15551234567">(555)
+                  123-4567</a> and a volunteer will save you a seat or check in your student badge.
+              </div>
+</aside>
+</section>
+<section class="family-section" id="family-this-week">
+<div class="family-section-header">
+<div>
+<div class="family-section-kicker">This Week</div>
+<h2 class="family-section-title">Events happening now.</h2>
+</div>
+<p class="family-section-sub">
+                Green “This week” labels mean these are current events. If you only have a few minutes,
+                this is the section to scan.
+              </p>
+</div>
+<div aria-label="Filter this week's events" class="family-filters" role="toolbar">
+<button aria-pressed="true" class="family-filter-pill active" data-filter="all" type="button">
+                All this week
+              </button>
+<button aria-pressed="false" class="family-filter-pill" data-filter="evening" type="button">
+                Evening events
+              </button>
+<button aria-pressed="false" class="family-filter-pill" data-filter="students" type="button">
+                For students
+              </button>
+<button aria-pressed="false" class="family-filter-pill" data-filter="grownups" type="button">
+                For grown-ups
+              </button>
+</div>
+<div class="family-events-grid fade-seq">
+<article class="family-event-card card-hover" data-categories="evening,families">
+<div class="family-event-badges">
+<span class="family-event-badge family-event-badge--today">Today</span>
+<span class="family-event-badge">This week</span>
+</div>
+<h3 class="family-event-title">Book Fair – Family Shopping Night</h3>
+<div class="family-event-meta">
+<span>📅 Tuesday, 5:00 – 7:30 PM</span>
+<span>📍 School Library</span>
+</div>
+<p class="family-event-note">
+                  Teacher wish-lists are posted by grade level. Cash, card, and e-wallet accepted. PTA readers are
+                  available for younger students.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Family event</span>
+<span class="family-event-tag-pill">Fundraiser</span>
+</div>
+</article>
+<article class="family-event-card card-hover" data-categories="students,morning">
+<div class="family-event-badges">
+<span class="family-event-badge">This week</span>
+</div>
+<h3 class="family-event-title">Walk &amp; Roll to School Day</h3>
+<div class="family-event-meta">
+<span>📅 Wednesday, 7:10 – 7:45 AM</span>
+<span>📍 Front parking lot</span>
+</div>
+<p class="family-event-note">
+                  Meet at the blue PTA tent for stickers and hot cocoa. Volunteers will lead walking groups down Park
+                  Avenue and River Trail.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Health &amp; wellness</span>
+<span class="family-event-tag-pill">Students</span>
+</div>
+</article>
+<article class="family-event-card card-hover" data-categories="grownups,daytime">
+<div class="family-event-badges">
+<span class="family-event-badge">This week</span>
+</div>
+<h3 class="family-event-title">Teacher Appreciation Snack Cart</h3>
+<div class="family-event-meta">
+<span>📅 Thursday, 8:30 – 11:30 AM</span>
+<span>📍 Staff lounge</span>
+</div>
+<p class="family-event-note">
+                  Drop donations at morning car line or sign up for a restock shift in the <a class="portal-inline-link" href="#family-volunteer">volunteer hub</a>. Gluten-free and caffeine-free options welcome.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Staff support</span>
+<span class="family-event-tag-pill">Donations</span>
+</div>
+</article>
+<article class="family-event-card card-hover" data-categories="evening,grownups">
+<div class="family-event-badges">
+<span class="family-event-badge">This week</span>
+</div>
+<h3 class="family-event-title">PTA Meeting &amp; Budget Q&amp;A</h3>
+<div class="family-event-meta">
+<span>📅 Tuesday, 7:00 – 8:00 PM</span>
+<span>📍 Media Center &amp; Zoom</span>
+</div>
+<p class="family-event-note">
+                  Quick updates on fall fundraisers followed by an open Q&amp;A with the treasurer. Zoom link emailed at
+                  noon; recordings posted within 24 hours.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Grown-up focus</span>
+<span class="family-event-tag-pill">Finance</span>
+</div>
+</article>
+<article class="family-event-card card-hover" data-categories="students,after-school">
+<div class="family-event-badges">
+<span class="family-event-badge">This week</span>
+</div>
+<h3 class="family-event-title">Chess Club Tournament Practice</h3>
+<div class="family-event-meta">
+<span>📅 Thursday, 3:00 – 4:15 PM</span>
+<span>📍 Innovation Lab</span>
+</div>
+<p class="family-event-note">
+                  Open to 3rd–5th graders. Boards provided; bring a water bottle. Parents pick up at the car-rider loop at
+                  4:20 PM.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Students</span>
+<span class="family-event-tag-pill">Clubs</span>
+</div>
+</article>
+<article class="family-event-card card-hover" data-categories="grownups,daytime">
+<div class="family-event-badges">
+<span class="family-event-badge">This week</span>
+</div>
+<h3 class="family-event-title">Lunchroom Buddy Express Shift</h3>
+<div class="family-event-meta">
+<span>📅 Friday, 11:15 AM – 12:45 PM</span>
+<span>📍 Cafeteria</span>
+</div>
+<p class="family-event-note">
+                  Spend one lunch period helping younger grades open containers and clean up. Background check on file
+                  required — complete it online if you haven’t yet.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Volunteer shift</span>
+<span class="family-event-tag-pill">Grown-ups</span>
+</div>
+</article>
+</div>
+</section>
+<section class="family-section" id="family-upcoming">
+<div class="family-section-header">
+<div>
+<div class="family-section-kicker">Upcoming</div>
+<h2 class="family-section-title">Events to plan ahead for.</h2>
+</div>
+<p class="family-section-sub">
+                These dates are a little further out. Add them to your calendar now so nothing sneaks up on you.
+              </p>
+</div>
+<div class="family-events-grid fade-seq">
+<article class="family-event-card card-hover">
+<div class="family-event-badges">
+<span class="family-event-badge">Next week</span>
+</div>
+<h3 class="family-event-title">Fall Family Movie Night</h3>
+<div class="family-event-meta">
+<span>📅 Friday, 6:30 – 8:30 PM</span>
+<span>📍 Gymnasium</span>
+</div>
+<p class="family-event-note">
+                  Bring blankets and lawn chairs. Concessions will be available (cash and card).
+                  Children must be accompanied by an adult.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Family event</span>
+<span class="family-event-tag-pill">PTA fundraiser</span>
+</div>
+</article>
+<article class="family-event-card card-hover">
+<div class="family-event-badges">
+<span class="family-event-badge">Later this month</span>
+</div>
+<h3 class="family-event-title">STEM Night &amp; Classroom Showcase</h3>
+<div class="family-event-meta">
+<span>📅 Thursday, 6:00 – 7:30 PM</span>
+<span>📍 Classrooms &amp; Cafeteria</span>
+</div>
+<p class="family-event-note">
+                  Hands-on science and technology stations around the building. Great opportunity
+                  to see classroom projects and meet other families.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Academics</span>
+<span class="family-event-tag-pill">Hands-on</span>
+</div>
+</article>
+<article class="family-event-card card-hover">
+<div class="family-event-badges">
+<span class="family-event-badge">Next month</span>
+</div>
+<h3 class="family-event-title">Winter Concert &amp; Art Walk</h3>
+<div class="family-event-meta">
+<span>📅 Date TBA (evening)</span>
+<span>📍 Auditorium &amp; Hallways</span>
+</div>
+<p class="family-event-note">
+                  Student performances followed by an art walk featuring work from all grade levels.
+                  Exact date will be shared once confirmed.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Fine arts</span>
+<span class="family-event-tag-pill">Families welcome</span>
+</div>
+</article>
+<article class="family-event-card card-hover">
+<div class="family-event-badges">
+<span class="family-event-badge">Early November</span>
+</div>
+<h3 class="family-event-title">Holiday Giving Tree Kickoff</h3>
+<div class="family-event-meta">
+<span>📅 Monday, Nov 4 – Friday, Nov 15</span>
+<span>📍 Front office lobby</span>
+</div>
+<p class="family-event-note">
+                  Pick an ornament with a requested item for a Riverbend family. Gifts are returned unwrapped by Nov 15 so
+                  counselors can distribute them before break.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Community care</span>
+<span class="family-event-tag-pill">Donations</span>
+</div>
+</article>
+<article class="family-event-card card-hover">
+<div class="family-event-badges">
+<span class="family-event-badge">Next month</span>
+</div>
+<h3 class="family-event-title">Community Garden Clean-Up Day</h3>
+<div class="family-event-meta">
+<span>📅 Saturday, Nov 9 · 9:00 – 11:30 AM</span>
+<span>📍 School garden (behind cafeteria)</span>
+</div>
+<p class="family-event-note">
+                  Bring garden gloves and water bottles. PTA provides tools and snacks. Great for families who like hands-on
+                  projects.
+                </p>
+<div class="family-event-tags">
+<span class="family-event-tag-pill">Outdoor</span>
+<span class="family-event-tag-pill">All ages</span>
+</div>
+</article>
+</div>
+</section>
+<section class="family-section" id="family-volunteer">
+<div class="family-section-header">
+<div>
+<div class="family-section-kicker">Volunteer &amp; Sign-ups</div>
+<h2 class="family-section-title">Ways to help (big and small).</h2>
+</div>
+<p class="family-section-sub">
+                You do not have to be “on the board” to help. A single hour makes a real difference.
+                Choose what fits your week.
+              </p>
+</div>
+<div class="family-vol-grid fade-seq">
+<div class="family-vol-card card-hover">
+<strong>This week’s needs</strong>
+<ul class="family-vol-list">
+<li>Book Fair: 30-minute check-out helpers (evening slots).</li>
+<li>Walk &amp; Roll Day: 3 adults to help at crosswalks from 7:10–7:40 AM.</li>
+<li>Snack Cart: bottled water, granola bars, single-serve tea/coffee pods.</li>
+</ul>
+<p style="margin-top:0.7rem;">
+                  To sign up, please use the PTA e-mail below or the sign-up links shared in the
+                  weekly newsletter. It’s always okay to bring younger siblings with you.
+                </p>
+<a class="family-btn-primary" href="https://riverbendpta.example.org/volunteer-signup" rel="noopener" style="margin-top:0.8rem;" target="_blank">
+                  Open volunteer sign-up form
+                </a>
+</div>
+<div class="family-vol-card card-hover">
+<strong>Low-pressure ways to support</strong>
+<ul class="family-vol-list">
+<li>Share PTA events in your classroom chats or carpool groups.</li>
+<li>Ask your workplace about matching gifts for school fundraisers.</li>
+<li>Drop a thank-you note in the office for a favorite staff member.</li>
+<li>Attend one PTA meeting this semester to stay in the loop.</li>
+</ul>
+<p style="margin-top:0.7rem; font-size:0.8rem; color:#6b7280;">
+                  There is no minimum time commitment. Your presence at events already counts as support.
+                </p>
+</div>
+<div class="family-vol-card card-hover">
+<strong>Recurring opportunities</strong>
+<ul class="family-vol-list">
+<li>
+<a class="portal-inline-link" href="https://riverbendpta.example.org/signup/lunchroom" rel="noopener" target="_blank">Lunchroom Buddy rotation</a> · 45-minute shifts assisting grades K–2.
+                  </li>
+<li>
+<a class="portal-inline-link" href="https://riverbendpta.example.org/signup/library" rel="noopener" target="_blank">Library shelving crew</a> · help Mrs. Owens re-shelve books on Fridays.
+                  </li>
+<li>
+<a class="portal-inline-link" href="https://riverbendpta.example.org/signup/garden" rel="noopener" target="_blank">Garden keepers</a> · adopt a planter box for monthly watering and weeding.
+                  </li>
+</ul>
+<p style="margin-top:0.7rem; font-size:0.8rem;">
+                  Need to update your background check? Complete the district form at
+                  <a class="portal-inline-link" href="https://riverbendpta.example.org/background-check" rel="noopener" target="_blank">riverbendpta.example.org/background-check</a> before your first shift.
+                </p>
+</div>
+</div>
+</section>
+<section class="family-section" id="family-info">
+<div class="family-section-header">
+<div>
+<div class="family-section-kicker">Stay Informed</div>
+<h2 class="family-section-title">Never miss an event reminder.</h2>
+</div>
+</div>
+<div class="family-info-card card-hover" id="family-info-card">
+<strong>Choose at least one way to stay updated:</strong>
+<div class="family-info-row">
+<div>
+<strong>📧 Weekly PTA e-mail</strong>
+<p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+                    Sent on Sunday evenings with highlights for the coming week, direct links to sign-ups, and any forms due soon.
+                  </p>
+</div>
+<div>
+<strong>📱 Text alerts</strong>
+<p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+                    Same-day nudges such as “Movie Night tonight at 6:30 PM.” Opt out anytime by replying STOP.
+                  </p>
+</div>
+<div>
+<strong>📆 Shared calendar</strong>
+<p style="margin-top:0.35rem; font-size:0.8rem; color:#374151;">
+                    Subscribe once and every PTA event appears on your phone and computer calendars automatically.
+                  </p>
+</div>
+</div>
+<div class="family-info-actions">
+<button class="family-link-btn" id="family-request-email-btn" type="button">
+                  Request weekly e-mails
+                </button>
+<button class="family-link-btn" id="family-text-alert-btn" type="button">
+                  Join text alerts
+                </button>
+<button class="family-link-btn" id="family-calendar-btn" type="button">
+                  Download calendar (.ics)
+                </button>
+</div>
+<div aria-live="polite" class="family-feedback" hidden="" id="family-info-feedback" role="status"></div>
+<p style="margin-top:0.8rem; font-size:0.78rem; color:#4b5563;">
+                Questions? Reply to any update or e-mail <a class="portal-inline-link" href="mailto:pta@riverbendelementary.org">pta@riverbendelementary.org</a>.
+                We can add grandparents or caregivers too.
+              </p>
+</div>
+<section aria-label="Family resources and downloads" class="family-section" id="family-resources">
+<div class="family-section-header">
+<div>
+<div class="family-section-kicker">Quick resources</div>
+<h2 class="family-section-title">Helpful guides, forms, and how-tos.</h2>
+</div>
+<p class="family-section-sub">
+                  Save or share these cheat sheets whenever a new event pops up. They’re updated as details change.
+                </p>
+</div>
+<div class="family-resource-grid fade-seq">
+<article class="family-resource-card card-hover" id="family-checklist">
+<strong>Family event checklist</strong>
+<ul>
+<li><a class="portal-inline-link" href="https://riverbendpta.example.org/checklists/family-night.pdf" rel="noopener" target="_blank">Family Night printable checklist (PDF)</a></li>
+<li>Includes suggested arrival times, what to bring, and student pick-up notes.</li>
+</ul>
+</article>
+<article class="family-resource-card card-hover" id="family-calendar">
+<strong>Master calendar &amp; reminders</strong>
+<ul>
+<li><a class="portal-inline-link" href="https://riverbendpta.example.org/calendar" rel="noopener" target="_blank">View the interactive PTA calendar</a></li>
+<li>Syncs automatically with Google, Apple, and Outlook once added.</li>
+</ul>
+</article>
+<article class="family-resource-card card-hover" id="family-forms">
+<strong>Forms &amp; contacts</strong>
+<ul>
+<li><a class="portal-inline-link" href="https://riverbendpta.example.org/forms/reimbursement.pdf" rel="noopener" target="_blank">Reimbursement request (PDF)</a></li>
+<li><a class="portal-inline-link" href="mailto:roomparents@riverbendpta.example.org">Room parent coordinator</a> · share classroom-specific questions.</li>
+</ul>
+</article>
+</div>
+</section>
+</section>
+</div>
+<footer class="family-footer">
+<div class="family-footer-inner">
+<div>© <span id="family-year"></span> Riverbend Elementary PTA · For questions, e-mail <strong>pta@riverbendelementary.org</strong></div>
+<div class="family-footer-links">
+<a href="#family-this-week">This week</a>
+<a href="#family-upcoming">Upcoming</a>
+<a href="#family-volunteer">Volunteer</a>
+<a href="#family-resources">Resources</a>
+</div>
+</div>
+</footer>
+</section>
+<section class="view principal-root constellation-view" id="principal-view">
+<div class="principal-page">
+<aside class="principal-sidebar">
+<div class="principal-logo">RB</div>
+<div class="principal-school-name">Riverbend Elementary</div>
+<div class="principal-role">Principal dashboard · PTA events</div>
+<div class="principal-sidebar-title">View</div>
+<ul class="principal-nav-list">
+<li class="principal-nav-item">
+<button aria-pressed="true" class="principal-nav-link active" data-panel-target="this-week" type="button">
+<span>This week</span>
+<span>5 events</span>
+</button>
+</li>
+<li class="principal-nav-item">
+<button aria-pressed="false" class="principal-nav-link" data-panel-target="next-30" type="button">
+<span>Next 30 days</span>
+<span>12 events</span>
+</button>
+</li>
+<li class="principal-nav-item">
+<button aria-pressed="false" class="principal-nav-link" data-panel-target="by-grade" type="button">
+<span>By grade level</span>
+<span>Overview</span>
+</button>
+</li>
+</ul>
+<div class="principal-sidebar-title">Quick checks</div>
+<ul class="principal-nav-list">
+<li class="principal-nav-item">
+<button class="principal-nav-link" data-highlight-target="#principal-volunteer-card" data-panel-force="this-week" data-scroll-target="#principal-volunteer-card" type="button">
+<span>Volunteer coverage</span>
+<span>2 low</span>
+</button>
+</li>
+<li class="principal-nav-item">
+<button class="principal-nav-link" data-filter-timing="evening" data-panel-force="this-week" data-quick-message="Filtered to evening events for this week." data-scroll-target="#principal-events-card" type="button">
+<span>Evening events</span>
+<span>3 this week</span>
+</button>
+</li>
+<li class="principal-nav-item">
+<button class="principal-nav-link" data-highlight-target="#principal-load-card" data-panel-force="this-week" data-quick-message="Review building load and staffing balance." data-scroll-target="#principal-load-card" type="button">
+<span>Building load</span>
+<span>Balanced</span>
+</button>
+</li>
+</ul>
+<div class="principal-sidebar-note">
+              This dashboard summarizes PTA activity so you can spot busy nights,
+              staffing gaps, and parent interest at a glance — without reading every flyer.
+            </div>
+</aside>
+<main class="principal-main">
+<div class="principal-locked-banner" hidden="" id="principal-locked-banner">
+              Principal access required. Enter the password to unlock this view.
+            </div>
+<header class="principal-header">
+<div class="principal-title-block">
+<div class="principal-kicker" id="principal-view-kicker">This Week · Snapshot</div>
+<h1 class="principal-title" id="principal-view-title">PTA events and building impact</h1>
+<p class="principal-sub" id="principal-view-sub">
+                  Current week overview. Green means comfortably covered, orange needs a second look,
+                  red means something may need to move or get extra support.
+                </p>
+</div>
+<div class="principal-controls">
+<button class="principal-btn-ghost" id="principal-manage-access" type="button">
+                  Manage access
+                </button>
+<span class="principal-date-pill" id="principal-date-pill">Week of —</span>
+<button aria-expanded="false" class="principal-btn-outline" id="principal-filter-btn" type="button">
+                  Adjust filters
+                </button>
+<button class="principal-btn-solid" id="principal-export-btn" type="button">
+                  Export snapshot
+                </button>
+</div>
+</header>
+<p aria-live="polite" class="principal-status-message" id="principal-status-message" role="status"></p>
+<div class="principal-filter-overlay" hidden="" id="principal-filter-overlay">
+<div aria-labelledby="principal-filter-heading" aria-modal="true" class="principal-filter-panel" role="dialog">
+<div class="principal-filter-header">
+<h2 id="principal-filter-heading">Adjust event filters</h2>
+<button class="principal-filter-close" id="principal-filter-close" type="button">Close</button>
+</div>
+<form id="principal-filter-form">
+<fieldset class="principal-filter-group">
+<legend>Focus areas</legend>
+<div class="principal-filter-options">
+<label class="principal-filter-option" for="principal-filter-family">
+<input checked="" id="principal-filter-family" name="focus" type="checkbox" value="family"/>
+                        Family events
+                      </label>
+<label class="principal-filter-option" for="principal-filter-staff">
+<input checked="" id="principal-filter-staff" name="focus" type="checkbox" value="staff"/>
+                        Staff support
+                      </label>
+<label class="principal-filter-option" for="principal-filter-students">
+<input checked="" id="principal-filter-students" name="focus" type="checkbox" value="students"/>
+                        Student-facing
+                      </label>
+<label class="principal-filter-option" for="principal-filter-community">
+<input checked="" id="principal-filter-community" name="focus" type="checkbox" value="community"/>
+                        Community / fundraising
+                      </label>
+</div>
+</fieldset>
+<fieldset class="principal-filter-group">
+<legend>Timing</legend>
+<div class="principal-filter-options">
+<label class="principal-filter-option" for="principal-filter-morning">
+<input checked="" id="principal-filter-morning" name="timing" type="checkbox" value="morning"/>
+                        Morning
+                      </label>
+<label class="principal-filter-option" for="principal-filter-schoolday">
+<input checked="" id="principal-filter-schoolday" name="timing" type="checkbox" value="schoolday"/>
+                        School day
+                      </label>
+<label class="principal-filter-option" for="principal-filter-evening">
+<input checked="" id="principal-filter-evening" name="timing" type="checkbox" value="evening"/>
+                        Evening
+                      </label>
+</div>
+</fieldset>
+<div class="principal-filter-actions">
+<button class="principal-btn-outline" id="principal-filter-reset" type="button">Reset</button>
+<button class="principal-btn-solid" type="submit">Apply filters</button>
+</div>
+</form>
+</div>
+</div>
+<div class="principal-panel active" data-panel="this-week" id="principal-panel-this-week">
+<section aria-label="Summary metrics for this week" class="principal-summary-grid">
+<article class="principal-summary-card card-hover" style="--fill:70%;">
+<div class="principal-summary-label">Total events (Sun–Sat)</div>
+<div class="principal-summary-value">5</div>
+<div class="principal-summary-chip">2 student-facing · 3 family/teacher</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:60%;">
+<div class="principal-summary-label">Evening events</div>
+<div class="principal-summary-value">3</div>
+<div class="principal-summary-chip">Within typical range</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:45%;">
+<div class="principal-summary-label">Volunteer coverage</div>
+<div class="principal-summary-value">~65%</div>
+<div class="principal-summary-chip">2 events under 50% staffed</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:55%;">
+<div class="principal-summary-label">Building load</div>
+<div class="principal-summary-value">Moderate</div>
+<div class="principal-summary-chip">No back-to-back late nights</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+</section>
+<section aria-label="Detailed list of this week's events" class="principal-full-card">
+<article class="principal-card card-hover" id="principal-events-card">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">This week’s event roster</div>
+<div class="principal-card-sub">Filter to see the events that need your attention.</div>
+</div>
+<div class="principal-small" id="principal-events-count">Showing 5 of 5 events</div>
+</header>
+<p class="principal-small">
+                    Use the filters to focus on student-facing events, staffing needs, or evening commitments.
+                  </p>
+<table class="principal-event-table" id="principal-event-table">
+<thead>
+<tr>
+<th scope="col">Event</th>
+<th scope="col">When</th>
+<th scope="col">Focus</th>
+<th scope="col">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr data-focus="family,community" data-timing="evening">
+<td>Book Fair — Family Night</td>
+<td>Tue · 5:00 – 7:30 PM</td>
+<td><span class="principal-event-pill">Family · Fundraiser</span></td>
+<td>Coverage comfortable — confirm cash box pickup at 4:30 PM.</td>
+</tr>
+<tr data-focus="students" data-timing="morning">
+<td>Walk &amp; Roll to School Day</td>
+<td>Wed · 7:10 – 7:45 AM</td>
+<td><span class="principal-event-pill">Student-facing</span></td>
+<td>Needs two additional crosswalk adults.</td>
+</tr>
+<tr data-focus="staff" data-timing="schoolday">
+<td>Teacher Snack Cart</td>
+<td>Thu · 8:30 – 11:30 AM</td>
+<td><span class="principal-event-pill">Staff support</span></td>
+<td>Check storage space for extra donations arriving Wednesday.</td>
+</tr>
+<tr data-focus="students" data-timing="schoolday">
+<td>Chess Club Tournament Practice</td>
+<td>Thu · 3:00 – 4:15 PM</td>
+<td><span class="principal-event-pill">Student enrichment</span></td>
+<td>Confirm dismissal coverage for car-rider loop at 4:20 PM.</td>
+</tr>
+<tr data-focus="family,community" data-timing="evening">
+<td>PTA Meeting &amp; Budget Q&amp;A</td>
+<td>Tue · 7:00 – 8:00 PM</td>
+<td><span class="principal-event-pill">Family · Governance</span></td>
+<td>Hybrid option open; watch for Zoom chat questions during finance report.</td>
+</tr>
+</tbody>
+</table>
+<p class="principal-inline-note principal-small">
+                    Exporting a snapshot saves these rows so you can share them with APs or office staff.
+                  </p>
+</article>
+</section>
+<section class="principal-grid-2">
+<article aria-label="Event load by weekday" class="principal-card card-hover" id="principal-load-card">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Event load by weekday</div>
+<div class="principal-card-sub">
+                      Helps avoid overloading the same night each week.
+                    </div>
+</div>
+<div class="principal-small">This week only</div>
+</header>
+<div class="principal-week-load">
+<div class="principal-day-col">
+<div class="principal-day-bar-wrapper">
+<div class="principal-day-bar" style="--height:35%;"></div>
+</div>
+<div class="principal-day-label">Mon</div>
+<div class="principal-day-count">1 event</div>
+</div>
+<div class="principal-day-col">
+<div class="principal-day-bar-wrapper">
+<div class="principal-day-bar" style="--height:70%;"></div>
+</div>
+<div class="principal-day-label">Tue</div>
+<div class="principal-day-count">2 events</div>
+</div>
+<div class="principal-day-col">
+<div class="principal-day-bar-wrapper">
+<div class="principal-day-bar" style="--height:35%;"></div>
+</div>
+<div class="principal-day-label">Wed</div>
+<div class="principal-day-count">1 event</div>
+</div>
+<div class="principal-day-col">
+<div class="principal-day-bar-wrapper">
+<div class="principal-day-bar" style="--height:35%;"></div>
+</div>
+<div class="principal-day-label">Thu</div>
+<div class="principal-day-count">1 event</div>
+</div>
+<div class="principal-day-col">
+<div class="principal-day-bar-wrapper">
+<div class="principal-day-bar" style="--height:10%; opacity:0.4;"></div>
+</div>
+<div class="principal-day-label">Fri</div>
+<div class="principal-day-count">0 events</div>
+</div>
+</div>
+<p class="principal-small" style="margin-top:0.55rem;">
+                  Note: Tuesday is the busiest night (PTA Meeting + Book Fair evening). If you see more than
+                  3 events on one weekday, consider spacing new requests.
+                </p>
+</article>
+<article aria-label="Volunteer coverage by event" class="principal-card card-hover" id="principal-volunteer-card">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Volunteer coverage</div>
+<div class="principal-card-sub">
+                      Where the PTA could use extra staff or admin support.
+                    </div>
+</div>
+</header>
+<ul class="principal-coverage-list">
+<li class="principal-coverage-item">
+<span class="principal-coverage-label">Book Fair — Family Night</span>
+<div class="principal-coverage-meter" style="--fill:80%;">
+<div class="principal-coverage-fill"></div>
+</div>
+<span class="principal-coverage-status">Comfortable</span>
+</li>
+<li class="principal-coverage-item">
+<span class="principal-coverage-label">Walk &amp; Roll to School</span>
+<div class="principal-coverage-meter" style="--fill:45%;">
+<div class="principal-coverage-fill"></div>
+</div>
+<span class="principal-coverage-status">Needs 2 adults</span>
+</li>
+<li class="principal-coverage-item">
+<span class="principal-coverage-label">Teacher Snack Cart</span>
+<div class="principal-coverage-meter" style="--fill:35%;">
+<div class="principal-coverage-fill"></div>
+</div>
+<span class="principal-coverage-status">Low coverage</span>
+</li>
+<li class="principal-coverage-item">
+<span class="principal-coverage-label">After-school Club Support</span>
+<div class="principal-coverage-meter" style="--fill:70%;">
+<div class="principal-coverage-fill"></div>
+</div>
+<span class="principal-coverage-status">On track</span>
+</li>
+</ul>
+<p class="principal-small" style="margin-top:0.6rem;">
+                  A quick e-mail or morning announcement from the office often fills the last few
+                  volunteer spots faster than another flyer.
+                </p>
+</article>
+</section>
+<section aria-label="Parent interest and scheduling risks" class="principal-grid-3">
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Parent interest (informal signals)</div>
+<div class="principal-card-sub">
+                      Based on RSVP forms, hallway chatter, and PTA feedback — not a formal survey.
+                    </div>
+</div>
+</header>
+<table class="principal-interest-table">
+<thead>
+<tr>
+<th>Event</th>
+<th>Signal</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fall Family Movie Night</td>
+<td><span class="principal-interest-badge">High interest</span></td>
+<td>Lots of “Are we doing this again?” comments.</td>
+</tr>
+<tr>
+<td>PTA General Meeting</td>
+<td><span class="principal-interest-badge" style="border-color:#f59e0b;color:#fed7aa;">Mixed</span></td>
+<td>Parents prefer hybrid option &amp; shorter agenda.</td>
+</tr>
+<tr>
+<td>STEM Night</td>
+<td><span class="principal-interest-badge">High interest</span></td>
+<td>Teachers &amp; parents excited, kids talk about it.</td>
+</tr>
+<tr>
+<td>Snack Cart Drop-offs</td>
+<td><span class="principal-interest-badge" style="border-color:#22c55e;color:#bbf7d0;">Steady</span></td>
+<td>Low lift for families, high impact for staff.</td>
+</tr>
+</tbody>
+</table>
+<p class="principal-small" style="margin-top:0.6rem;">
+                  High-interest events are good places to pilot new ideas — raffles, community partners,
+                  or student showcases — because turnout is already strong.
+                </p>
+</article>
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Scheduling &amp; fatigue watchlist</div>
+<div class="principal-card-sub">
+                      Helps prevent “too many nights at school in a row” for families and staff.
+                    </div>
+</div>
+</header>
+<ul class="principal-risk-list">
+<li class="principal-risk-item">
+<div class="principal-risk-tag-row">
+<span>Tue evening stack</span>
+<span class="principal-risk-level principal-risk-med">Medium</span>
+</div>
+<p class="principal-risk-text">
+                      Book Fair evening + PTA Meeting the same night. <br/>
+                      ✅ Acceptable this week, but keep an eye on similar patterns.
+                    </p>
+</li>
+<li class="principal-risk-item">
+<div class="principal-risk-tag-row">
+<span>Staff bandwidth</span>
+<span class="principal-risk-level principal-risk-high">Higher</span>
+</div>
+<p class="principal-risk-text">
+                      Teacher committees also meeting this week. <br/>
+                      Consider PTO/PTA covering more logistics so staff can leave on time.
+                    </p>
+</li>
+<li class="principal-risk-item">
+<div class="principal-risk-tag-row">
+<span>Family time balance</span>
+<span class="principal-risk-level principal-risk-low">Low</span>
+</div>
+<p class="principal-risk-text">
+                      No Friday events and only one late-night this week — good for overall family balance.
+                    </p>
+</li>
+</ul>
+<p class="principal-small" style="margin-top:0.6rem;">
+                  If you ever see multiple “Higher” risks in a week, that’s a good trigger to
+                  pause new event approvals or ask PTA to regroup on timing.
+                </p>
+</article>
+</section>
+<section aria-label="Action items and communication notes" class="principal-grid-2">
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Action items for the principal</div>
+<div class="principal-card-sub">Quick wins that keep the week smooth.</div>
+</div>
+</header>
+<ul class="principal-checklist">
+<li>
+                    Confirm building coverage for <strong>Friday Movie Night</strong> by looping in the evening custodian
+                    team (reply-all to <a class="principal-card-link" href="mailto:operations@riverbendpta.example.org">operations@riverbendpta.example.org</a>).
+                  </li>
+<li>
+                    Approve PTA table placement in the front lobby so families can check in for <strong>Walk &amp; Roll</strong>
+                    and pick up reflective stickers.
+                  </li>
+<li>
+                    Record a 30-second <strong>morning announcement shout-out</strong> to staff for the snack cart; PTA will
+                    drop the script in your inbox by noon Tuesday.
+                  </li>
+</ul>
+<p class="principal-micro-note">
+                  Knock these out and volunteers can handle the rest. Each one removes a frequent “Can we get approval?”
+                  e-mail.
+                </p>
+</article>
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Communications &amp; facilities notes</div>
+<div class="principal-card-sub">What the office team should know for newsletters and setups.</div>
+</div>
+</header>
+<ul class="principal-checklist">
+<li>
+                    Add the <strong>Giving Tree kickoff</strong> to next week’s family newsletter with drop-off instructions and
+                    counselor contact info.
+                  </li>
+<li>
+                    Ensure <strong>gym floor covering</strong> is scheduled for Movie Night (submit request via
+                    <a class="principal-card-link" href="https://district.example.org/facilities" rel="noopener" target="_blank">district facilities portal</a>).
+                  </li>
+<li>
+                    Share <strong>bus loop reminder</strong> with staff: Walk &amp; Roll groups will use the main sidewalk so buses
+                    should unload 5 minutes early on Wednesday.
+                  </li>
+</ul>
+<p class="principal-micro-note">
+                  PTA comms lead <a class="principal-card-link" href="mailto:vp.riverbendpta@example.org">vp.riverbendpta@example.org</a>
+                  is ready to plug these into templates once you give the thumbs up.
+                </p>
+</article>
+</section>
+</div>
+<div class="principal-panel" data-panel="next-30" id="principal-panel-next-30">
+<section aria-label="Summary metrics for the next 30 days" class="principal-summary-grid">
+<article class="principal-summary-card card-hover" style="--fill:65%;">
+<div class="principal-summary-label">Total PTA touchpoints (30 days)</div>
+<div class="principal-summary-value">18</div>
+<div class="principal-summary-chip">7 evening commitments</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:52%;">
+<div class="principal-summary-label">High-demand nights</div>
+<div class="principal-summary-value">4</div>
+<div class="principal-summary-chip">Watch Oct 17 · Nov 1</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:58%;">
+<div class="principal-summary-label">Volunteer commitments</div>
+<div class="principal-summary-value">82</div>
+<div class="principal-summary-chip">Goal: 95 pledged</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:62%;">
+<div class="principal-summary-label">Budget impact</div>
+<div class="principal-summary-value">$6.4K</div>
+<div class="principal-summary-chip">Book Fair + Giving Tree</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+</section>
+<section aria-label="Upcoming calendar and approvals" class="principal-grid-2">
+<article class="principal-card card-hover" id="principal-next30-calendar">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Next 30-day calendar highlights</div>
+<div class="principal-card-sub">Key events that impact building use and staffing.</div>
+</div>
+</header>
+<table class="principal-event-table" id="principal-next30-table">
+<thead>
+<tr>
+<th scope="col">Event</th>
+<th scope="col">Date &amp; time</th>
+<th scope="col">Focus</th>
+<th scope="col">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STEM Night</td>
+<td>Thu, Nov 7 · 6:00 – 8:00 PM</td>
+<td><span class="principal-event-pill">Family · STEM</span></td>
+<td>Finalize custodial overtime request by Oct 28.</td>
+</tr>
+<tr>
+<td>Community Garden Clean-Up</td>
+<td>Sat, Nov 9 · 9:00 – 11:30 AM</td>
+<td><span class="principal-event-pill">Community</span></td>
+<td>Order mulch delivery for Nov 8 (PTA covers cost).</td>
+</tr>
+<tr>
+<td>Holiday Giving Tree Kickoff</td>
+<td>Nov 4 – Nov 15</td>
+<td><span class="principal-event-pill">Community care</span></td>
+<td>Counselors confirming 12 families receiving support.</td>
+</tr>
+<tr>
+<td>Teacher Conference Meals</td>
+<td>Nov 18 – Nov 20</td>
+<td><span class="principal-event-pill">Staff support</span></td>
+<td>Catering deposit due Nov 8; confirm dietary list.</td>
+</tr>
+<tr>
+<td>Winter Concert Support</td>
+<td>Tue, Dec 3 · 5:30 – 8:30 PM</td>
+<td><span class="principal-event-pill">Students &amp; families</span></td>
+<td>Need ushers + sound volunteer assigned by Nov 20.</td>
+</tr>
+</tbody>
+</table>
+<p class="principal-small principal-inline-note">
+                    Dates include district non-school days so you can plan custodial coverage and HVAC schedules.
+                  </p>
+</article>
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Upcoming approvals &amp; deadlines</div>
+<div class="principal-card-sub">Handle these early to avoid last-minute scrambles.</div>
+</div>
+</header>
+<ul class="principal-checklist">
+<li>Approve STEM Night vendor list (electric + robotics) by <strong>Oct 18</strong>.</li>
+<li>Confirm gym access for the <strong>Nov 9 Garden Clean-Up</strong> rain plan.</li>
+<li>Sign updated facilities agreement for <strong>Winter Concert</strong> stage lighting by Oct 30.</li>
+<li>Review PTA reimbursement batch scheduled for <strong>Nov 12</strong> (Book Fair expenses).</li>
+</ul>
+<p class="principal-micro-note">
+                    Once these approvals are logged, PTA officers can finalize communication and volunteer pushes.
+                  </p>
+</article>
+</section>
+<section aria-label="Logistics and volunteer planning for next 30 days" class="principal-grid-2">
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Logistics watchlist (30 days)</div>
+<div class="principal-card-sub">Spot friction points before they become emergencies.</div>
+</div>
+</header>
+<ul class="principal-risk-list">
+<li class="principal-risk-item">
+<div class="principal-risk-tag-row">
+<span>STEM Night exhibits</span>
+<span class="principal-risk-level principal-risk-med">Medium</span>
+</div>
+<p class="principal-risk-text">Need final electricity map from vendors — PTA following up by Oct 21.</p>
+</li>
+<li class="principal-risk-item">
+<div class="principal-risk-tag-row">
+<span>Giving Tree storage</span>
+<span class="principal-risk-level principal-risk-low">Low</span>
+</div>
+<p class="principal-risk-text">Stage closet reserved; request custodial key access for counselors.</p>
+</li>
+<li class="principal-risk-item">
+<div class="principal-risk-tag-row">
+<span>Winter concert load-out</span>
+<span class="principal-risk-level principal-risk-med">Medium</span>
+</div>
+<p class="principal-risk-text">Coordinate custodians for chair reset by 8:30 PM on Dec 3.</p>
+</li>
+</ul>
+<p class="principal-small principal-inline-note">
+                    Invite AP Turner to the Nov 1 planning check-in so decisions can be made on the spot.
+                  </p>
+</article>
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Volunteer pipeline</div>
+<div class="principal-card-sub">Where PTA still needs a principal signal boost.</div>
+</div>
+</header>
+<ul class="principal-checklist">
+<li><strong>STEM Night</strong> — 6 of 10 classroom hosts confirmed; highlight during staff meeting.</li>
+<li><strong>Conference Meals</strong> — catering covered, but need 4 dessert drop-offs (ask 4th grade families).</li>
+<li><strong>Garden Clean-Up</strong> — scouts partnering; principal shout-out could add family turnout.</li>
+<li><strong>Winter Concert</strong> — seek 2 bilingual greeters for newcomer families.</li>
+</ul>
+<p class="principal-micro-note">
+                    A single paragraph in the Sunday family message typically fills these remaining slots.</p>
+</article>
+</section>
+</div>
+<div class="principal-panel" data-panel="by-grade" id="principal-panel-by-grade">
+<section aria-label="Summary metrics by grade level" class="principal-summary-grid">
+<article class="principal-summary-card card-hover" style="--fill:68%;">
+<div class="principal-summary-label">Grades engaged this month</div>
+<div class="principal-summary-value">6</div>
+<div class="principal-summary-chip">Every grade has an event touchpoint</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:54%;">
+<div class="principal-summary-label">Highest need grade</div>
+<div class="principal-summary-value">3rd grade</div>
+<div class="principal-summary-chip">STEM presenters running low</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:60%;">
+<div class="principal-summary-label">Shared opportunities</div>
+<div class="principal-summary-value">4</div>
+<div class="principal-summary-chip">Cross-grade family events</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+<article class="principal-summary-card card-hover" style="--fill:48%;">
+<div class="principal-summary-label">Open classroom requests</div>
+<div class="principal-summary-value">8</div>
+<div class="principal-summary-chip">Focus on K–1 classroom support</div>
+<div class="principal-summary-bar"><div class="principal-summary-bar-fill"></div></div>
+</article>
+</section>
+<section aria-label="Grade-level focus overview" class="principal-grid-2">
+<article class="principal-card card-hover" id="principal-grade-table-card">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Grade-level spotlights</div>
+<div class="principal-card-sub">Where PTA is partnering directly with each grade.</div>
+</div>
+</header>
+<table class="principal-event-table" id="principal-grade-table">
+<thead>
+<tr>
+<th scope="col">Grade</th>
+<th scope="col">Upcoming highlight</th>
+<th scope="col">PTA lead</th>
+<th scope="col">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K</td>
+<td>Playground refresh helpers · Oct 18</td>
+<td>Volunteer Chair</td>
+<td>Need 2 more adults for paint touch-ups.</td>
+</tr>
+<tr>
+<td>1st</td>
+<td>Reading Buddies kickoff · Oct 24</td>
+<td>Teacher Liaison</td>
+<td>Principal welcome video requested for families.</td>
+</tr>
+<tr>
+<td>2nd</td>
+<td>Science lab docents · Oct 30</td>
+<td>STEM Night Lead</td>
+<td>Safety glasses inventory complete; confirm parent training slides.</td>
+</tr>
+<tr>
+<td>3rd</td>
+<td>STEM Night presenters · Nov 7</td>
+<td>VP Programs</td>
+<td>Short 3 presenters — ask classroom teachers for referrals.</td>
+</tr>
+<tr>
+<td>4th</td>
+<td>Walk &amp; Roll route leaders · Nov 6</td>
+<td>Safety Chair</td>
+<td>Staffing strong; send thank-you note post-event.</td>
+</tr>
+<tr>
+<td>5th</td>
+<td>Safety patrol breakfast · Nov 15</td>
+<td>Treasurer</td>
+<td>Awaiting principal approval for early cafeteria access.</td>
+</tr>
+</tbody>
+</table>
+</article>
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Support requests by grade</div>
+<div class="principal-card-sub">Quick wins that remove classroom friction.</div>
+</div>
+</header>
+<ul class="principal-checklist">
+<li><strong>K</strong> — request 2 lunch buddies for Oct 23 (introduce car-line volunteers).</li>
+<li><strong>1st</strong> — need Spanish translation of Reading Buddies flyer.</li>
+<li><strong>2nd</strong> — confirm science lab doors unlocked by 7:45 AM on Oct 30.</li>
+<li><strong>3rd</strong> — principal shout-out in newsletter for STEM presenters.</li>
+<li><strong>5th</strong> — approve PA system use for safety patrol breakfast announcements.</li>
+</ul>
+<p class="principal-micro-note">
+                    These items align with SIP goals around literacy and family engagement — easy wins to highlight in reports.
+                  </p>
+</article>
+</section>
+<section aria-label="Cross-grade opportunities and family engagement" class="principal-grid-2">
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Cross-grade opportunities</div>
+<div class="principal-card-sub">Pair older helpers with younger grades for stronger turnout.</div>
+</div>
+</header>
+<ul class="principal-checklist">
+<li><strong>Buddy reading</strong> — 5th grade can rotate through 1st grade classes during conference week.</li>
+<li><strong>Garden clean-up</strong> — Suggest 2nd + 4th grade combo teams for tool sharing.</li>
+<li><strong>Spirit assemblies</strong> — Invite 3rd grade to host November assembly with student council.</li>
+<li><strong>STEM Night welcome crew</strong> — pair kindergarten families with 5th grade ambassadors.</li>
+</ul>
+<p class="principal-micro-note">
+                    Announce these pairings during the Oct 21 staff huddle so teachers can prep students.</p>
+</article>
+<article class="principal-card card-hover">
+<header class="principal-card-header">
+<div>
+<div class="principal-card-title">Family engagement notes</div>
+<div class="principal-card-sub">Signals from grade-level liaisons and PTA feedback forms.</div>
+</div>
+</header>
+<ul class="principal-checklist">
+<li>3rd grade families asking for more hands-on STEM previews — PTA filming lab teaser.</li>
+<li>1st grade prefer earlier volunteer sign-ups; send November sheet by Oct 15.</li>
+<li>5th grade parents offered to lead secondary transition Q&amp;A in December.</li>
+<li>Kindergarten appreciates clear parking instructions; share map again week of Oct 16.</li>
+</ul>
+<p class="principal-micro-note">
+                    Sharing these quick notes in your staff newsletter keeps teachers aligned with PTA messaging.</p>
+</article>
+</section>
+</div>
+</main>
+</div>
+</section>
+<section class="view board-root constellation-view" id="pta-board-view">
+<div class="board-shell">
+<header class="board-header">
+<div class="board-title-block">
+<div class="board-kicker">PTA Leadership</div>
+<h1 class="board-title">Board, meetings, and key documents.</h1>
+<p class="board-sub">
+                A clear overview of who’s serving this year, when the board meets,
+                and where to find bylaws and minutes — so families always know
+                how decisions are made.
+              </p>
+</div>
+<div>
+<div class="board-badge">
+                ✅ Transparent · Organized · Parent-led
+              </div>
+</div>
+</header>
+<section class="board-layout">
+<div>
+<h2 class="board-section-title">2024–2025 PTA Board</h2>
+<p class="board-section-sub">
+                All positions are volunteer roles. You can contact any officer with questions
+                or ideas — they’re here to represent families and support the school.
+              </p>
+<div class="board-officers-grid fade-seq">
+<article class="board-card card-hover">
+<div class="board-role">President</div>
+<div class="board-name">Alex Johnson</div>
+<div class="board-contact">📧 president.riverbendpta@example.org</div>
+<div class="board-focus-tags">
+<span class="board-tag-pill">Agenda &amp; priorities</span>
+<span class="board-tag-pill">Principal liaison</span>
+</div>
+</article>
+<article class="board-card card-hover">
+<div class="board-role">Vice President</div>
+<div class="board-name">Maria Lopez</div>
+<div class="board-contact">📧 vp.riverbendpta@example.org</div>
+<div class="board-focus-tags">
+<span class="board-tag-pill">Events support</span>
+<span class="board-tag-pill">Volunteer teams</span>
+</div>
+</article>
+<article class="board-card card-hover">
+<div class="board-role">Treasurer</div>
+<div class="board-name">Jordan Kim</div>
+<div class="board-contact">📧 treasurer.riverbendpta@example.org</div>
+<div class="board-focus-tags">
+<span class="board-tag-pill">Budget &amp; reports</span>
+<span class="board-tag-pill">Fundraisers</span>
+</div>
+</article>
+<article class="board-card card-hover">
+<div class="board-role">Secretary</div>
+<div class="board-name">Priya Patel</div>
+<div class="board-contact">📧 secretary.riverbendpta@example.org</div>
+<div class="board-focus-tags">
+<span class="board-tag-pill">Minutes</span>
+<span class="board-tag-pill">Bylaws &amp; records</span>
+</div>
+</article>
+<article class="board-card card-hover">
+<div class="board-role">Volunteer Chair</div>
+<div class="board-name">Taylor Brooks</div>
+<div class="board-contact">📧 volunteers.riverbendpta@example.org</div>
+<div class="board-focus-tags">
+<span class="board-tag-pill">Sign-ups</span>
+<span class="board-tag-pill">Room parents</span>
+</div>
+</article>
+<article class="board-card card-hover">
+<div class="board-role">Teacher Liaison</div>
+<div class="board-name">Ms. Lacey Reed</div>
+<div class="board-contact">📧 lacey.reed@riverbendpta.example.org</div>
+<div class="board-focus-tags">
+<span class="board-tag-pill">Staff voice</span>
+<span class="board-tag-pill">Classroom needs</span>
+</div>
+</article>
+<article class="board-card card-hover">
+<div class="board-role">Fundraising Chair</div>
+<div class="board-name">Chris Alvarez</div>
+<div class="board-contact">📧 fundraising.riverbendpta@example.org</div>
+<div class="board-focus-tags">
+<span class="board-tag-pill">Community partners</span>
+<span class="board-tag-pill">Grants</span>
+</div>
+</article>
+</div>
+</div>
+<aside class="board-meeting-card card-hover">
+<h2 class="board-section-title">Board meetings</h2>
+<div class="board-meeting-row">
+<strong>Schedule:</strong> 1st Tuesday of each month, 6:30–8:00 PM
+              </div>
+<div class="board-meeting-row">
+<strong>Location:</strong> Media Center (hybrid option via Zoom when noted)
+              </div>
+<div class="board-meeting-row">
+<strong>Who may attend:</strong> All interested parents, guardians, staff, and community members.
+              </div>
+<p class="board-meeting-note">
+                Time is reserved at the start of each meeting for questions and ideas from families.
+                You do not need to be a “member” to listen in.
+              </p>
+</aside>
+</section>
+<section class="board-docs-layout">
+<div>
+<h2 class="board-section-title">Bylaws &amp; key documents</h2>
+<p class="board-section-sub">
+                These documents guide how the PTA operates. For official copies, please contact the Secretary.
+              </p>
+<table class="board-table">
+<thead>
+<tr>
+<th>Document</th>
+<th>Last updated</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="board-doc-link" href="#doc-bylaws">PTA Bylaws (current)</a></td>
+<td>August 2024</td>
+<td><span class="board-doc-pill">Bylaws</span></td>
+</tr>
+<tr>
+<td><a class="board-doc-link" href="#doc-budget">2024–2025 Budget Overview</a></td>
+<td>September 2024</td>
+<td><span class="board-doc-pill">Finance</span></td>
+</tr>
+<tr>
+<td><a class="board-doc-link" href="#doc-minutes-sept">September Meeting Minutes</a></td>
+<td>September 10, 2024</td>
+<td><span class="board-doc-pill">Minutes</span></td>
+</tr>
+<tr>
+<td><a class="board-doc-link" href="#doc-minutes-oct">October Meeting Minutes</a></td>
+<td>October 8, 2024</td>
+<td><span class="board-doc-pill">Minutes</span></td>
+</tr>
+<tr>
+<td><a class="board-doc-link" href="#doc-audit">Annual Financial Review Summary</a></td>
+<td>July 2024</td>
+<td><span class="board-doc-pill">Finance</span></td>
+</tr>
+<tr>
+<td><a class="board-doc-link" href="#doc-volunteer-handbook">Volunteer Handbook</a></td>
+<td>October 2024</td>
+<td><span class="board-doc-pill">Reference</span></td>
+</tr>
+</tbody>
+</table>
+<div class="board-doc-detail card-hover" id="doc-bylaws">
+<h3>PTA Bylaws (current)</h3>
+<p>Defines officer roles, meeting procedures, and how funds are approved.</p>
+<ul>
+<li>Download: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/bylaws.pdf" rel="noopener" target="_blank">bylaws.pdf</a></li>
+<li>Summary one-pager for quick reference: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/bylaws-cheatsheet.pdf" rel="noopener" target="_blank">cheatsheet</a></li>
+</ul>
+</div>
+<div class="board-doc-detail card-hover" id="doc-budget">
+<h3>2024–2025 Budget Overview</h3>
+<p>Shows projected income and expenses by category along with year-to-date actuals.</p>
+<ul>
+<li>View spreadsheet: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/budget.xlsx" rel="noopener" target="_blank">budget.xlsx</a></li>
+<li>Questions? E-mail <a class="portal-inline-link" href="mailto:treasurer.riverbendpta@example.org">treasurer.riverbendpta@example.org</a></li>
+</ul>
+</div>
+<div class="board-doc-detail card-hover" id="doc-minutes-sept">
+<h3>September Meeting Minutes</h3>
+<p>Approved during the October board meeting.</p>
+<ul>
+<li>Download minutes: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/minutes-sept.pdf" rel="noopener" target="_blank">minutes-sept.pdf</a></li>
+<li>Key votes: Movie Night budget increase, STEM Night co-lead approval.</li>
+</ul>
+</div>
+<div class="board-doc-detail card-hover" id="doc-minutes-oct">
+<h3>October Meeting Minutes</h3>
+<p>Draft shared for transparency; official approval happens at the November meeting.</p>
+<ul>
+<li>Draft minutes: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/minutes-oct-draft.pdf" rel="noopener" target="_blank">minutes-oct-draft.pdf</a></li>
+<li>Includes volunteer recognition list and fundraising progress chart.</li>
+</ul>
+</div>
+<div class="board-doc-detail card-hover" id="doc-audit">
+<h3>Annual Financial Review Summary</h3>
+<p>Independent audit verifying that income and expenses matched bank statements for 2023–2024.</p>
+<ul>
+<li>Summary PDF: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/financial-review.pdf" rel="noopener" target="_blank">financial-review.pdf</a></li>
+<li>Contact the audit committee at <a class="portal-inline-link" href="mailto:audit@riverbendpta.example.org">audit@riverbendpta.example.org</a></li>
+</ul>
+</div>
+<div class="board-doc-detail card-hover" id="doc-volunteer-handbook">
+<h3>Volunteer Handbook</h3>
+<p>A quick guide for new volunteers covering sign-in procedures, background checks, and event expectations.</p>
+<ul>
+<li>Handbook PDF: <a class="portal-inline-link" href="https://riverbendpta.example.org/docs/volunteer-handbook.pdf" rel="noopener" target="_blank">volunteer-handbook.pdf</a></li>
+<li>Printed copies available in the front office near the PTA mailbox.</li>
+</ul>
+</div>
+</div>
+<aside class="board-quick-card card-hover">
+<h2 class="board-section-title">How families can get involved in decisions</h2>
+<ul class="board-quick-list">
+<li>Attend at least one board or general meeting this year to see how things work.</li>
+<li>E-mail the President or any officer if you have a concern or idea for an event.</li>
+<li>Review bylaws and budget summary before the annual voting meeting.</li>
+<li>Join a short-term committee (for example, Movie Night, STEM Night, Book Fair).</li>
+</ul>
+<p style="font-size:0.78rem; color:#4b5563;">
+                The goal is for PTA decisions to feel open, understandable, and collaborative —
+                never like they’re happening “behind closed doors.”
+              </p>
+</aside>
+</section>
+<section aria-label="PTA resource library" class="board-section" style="margin-top:2rem;">
+<h2 class="board-section-title">Resource library for board &amp; committee leads</h2>
+<p class="board-section-sub">
+              These quick links keep everyone on the same page — share them with committee co-leads and room parents.
+            </p>
+<div class="board-resource-grid fade-seq">
+<article class="board-resource-card card-hover">
+<strong>Grants &amp; sponsorship tracker</strong>
+<p>Live spreadsheet of pending business partnerships, district grants, and deadlines.</p>
+<a href="https://riverbendpta.example.org/resources/grants-tracker" rel="noopener" target="_blank">Open tracker</a>
+</article>
+<article class="board-resource-card card-hover">
+<strong>Communications toolkit</strong>
+<p>Templates for flyers, social posts, and morning announcements. Includes brand colors and logos.</p>
+<a href="https://riverbendpta.example.org/resources/comms-kit.zip" rel="noopener" target="_blank">Download toolkit</a>
+</article>
+<article class="board-resource-card card-hover">
+<strong>Room parent starter pack</strong>
+<p>Sample e-mails, budget request form, and timeline for fall and spring classroom events.</p>
+<a href="https://riverbendpta.example.org/resources/room-parent-pack.pdf" rel="noopener" target="_blank">View starter pack</a>
+</article>
+</div>
+</section>
+</div>
+</section>
+<section class="view student-root constellation-view" id="student-view">
+<div class="student-shell">
+<header class="student-header">
+<div class="student-kicker">For Students</div>
+<h1 class="student-title">
+              What’s happening at <span>our school</span> this week? 🎉
+            </h1>
+<p class="student-sub">
+              This page is just for you. See the fun stuff that’s coming up and how you can join in.
+            </p>
+</header>
+<section class="student-grid fade-seq">
+<article class="student-card card-hover">
+<div class="student-card-title">
+<span class="student-emoji">📅</span>
+                This week’s fun things
+              </div>
+<ul class="student-list">
+<li>
+<strong>Book Fair Night</strong>
+<span class="student-badge green">Today</span>
+<br/>
+                  Come to the library with your grown-ups to look at books.
+                  You can help pick classroom books from your teacher’s wish list.
+                </li>
+<li>
+<strong>Walk &amp; Roll to School</strong>
+<span class="student-badge">Morning</span>
+<br/>
+                  Meet other students and walk in together from the front parking lot.
+                  Scooters and strollers are okay — just listen to the helpers.
+                </li>
+<li>
+<strong>Teacher Snack Cart</strong>
+<br/>
+                  The PTA is surprising teachers with snacks.
+                  If you see the cart, you can say “Thanks for teaching us!” 🧃
+                </li>
+<li>
+<strong>Chess Club Practice</strong>
+<span class="student-badge">After school</span>
+<br/>
+                  Meet in the Innovation Lab on Thursday. Bring a water bottle and practice matches your best moves.
+                </li>
+<li>
+<strong>Spirit Wear Friday</strong>
+<span class="student-badge">All day</span>
+<br/>
+                  Wear your Riverbend colors or favorite school shirt to earn house points for your class.
+                </li>
+</ul>
+</article>
+<article class="student-card card-hover">
+<div class="student-card-title">
+<span class="student-emoji">👀</span>
+                Coming up soon
+              </div>
+<ul class="student-list">
+<li>
+<strong>Family Movie Night</strong>
+<br/>
+                  Wear comfy clothes, bring a blanket, and watch a movie in the gym.
+                  You must come with a grown-up.
+                </li>
+<li>
+<strong>STEM Night</strong>
+<br/>
+                  Try science and tech stations around the school.
+                  You can show your family the projects you’ve been working on.
+                </li>
+<li>
+<strong>Winter Concert &amp; Art Walk</strong>
+<br/>
+                  Sing, play instruments, or show your artwork on the walls.
+                  Dates will be announced in class and here.
+                </li>
+<li>
+<strong>Holiday Giving Tree</strong>
+<br/>
+                  Choose an ornament with a wish list item to help a Riverbend family. Bring gifts back by November 15.
+                </li>
+<li>
+<strong>Garden Clean-Up Day</strong>
+<br/>
+                  Help plant bulbs and pull weeds with your family on Saturday, November 9. Gloves provided!
+                </li>
+</ul>
+</article>
+<article class="student-card card-hover">
+<div class="student-card-title">
+<span class="student-emoji">✅</span>
+                Before you go
+              </div>
+<ul class="student-checklist">
+<li>Ask a grown-up who is picking you up after the event and where to meet them.</li>
+<li>Pack a labeled water bottle and jacket in case the gym or playground feels chilly.</li>
+<li>Charge your Chromebook if you need it for STEM Night stations or homework afterward.</li>
+</ul>
+<p style="margin-top:0.6rem; font-size:0.82rem; color:#4b5563;">
+                Need help? Use the <a class="portal-inline-link" href="https://riverbendpta.example.org/students/help" rel="noopener" target="_blank">student help form</a>
+                and a counselor or PTA volunteer will follow up.
+              </p>
+</article>
+</section>
+<section class="student-tips card-hover">
+<strong>How to be ready for events ⭐</strong>
+<ul class="student-tips-list">
+<li>Ask your grown-up which events you might go to this week.</li>
+<li>Check what you should wear (comfy clothes, school spirit shirt, etc.).</li>
+<li>If you’re nervous, bring a friend or ask a teacher where to go.</li>
+<li>Say “thank you” to the helpers — most of them are parents volunteering their time.</li>
+<li>Pack a small snack or water bottle if the event happens right after school.</li>
+<li>Look at the weather so you know if you need a jacket or umbrella.</li>
+</ul>
+</section>
+<div class="student-link-grid fade-seq">
+<article class="student-link-card card-hover">
+<strong>Morning announcements replay</strong>
+<p>Catch up if you missed the news crew. New episodes post by 4:00 PM each day.</p>
+<a href="https://riverbendpta.example.org/students/announcements" rel="noopener" target="_blank">Listen online</a>
+</article>
+<article class="student-link-card card-hover">
+<strong>Clubs &amp; activities schedule</strong>
+<p>See which clubs meet on which days plus pick-up locations for families.</p>
+<a href="https://riverbendpta.example.org/students/clubs" rel="noopener" target="_blank">View schedule</a>
+</article>
+<article class="student-link-card card-hover">
+<strong>Spirit wear shop</strong>
+<p>Order school shirts and hoodies so you’re ready for Spirit Fridays.</p>
+<a href="https://riverbendpta.example.org/shop" rel="noopener" target="_blank">Visit the shop</a>
+</article>
+</div>
+<p class="student-footer-note">
+            If you’re not sure about any event, just ask your teacher or grown-up and they can
+            check the family page for more details. 💬
+          </p>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+<div class="family-action-drawer" hidden="" id="family-action-drawer">
+<div class="family-action-backdrop" id="family-action-backdrop"></div>
+<div aria-labelledby="family-action-title" aria-modal="true" class="family-action-panel" role="dialog">
+<header class="family-action-header">
+<div>
+<div class="family-action-kicker">Stay in the loop</div>
+<h2 class="family-action-title" id="family-action-title">PTA updates</h2>
+</div>
+<button aria-label="Close" class="family-action-close" id="family-action-close" type="button">
+          ×
+        </button>
+</header>
+<div class="family-action-body" id="family-action-body"></div>
+</div>
+</div>
+<div class="principal-access-modal" hidden="" id="principal-access-modal">
+<div class="principal-access-backdrop" id="principal-access-backdrop"></div>
+<div aria-labelledby="principal-access-title" aria-modal="true" class="principal-access-dialog" role="dialog">
+<header class="principal-access-header">
+<div>
+<div class="principal-access-kicker">Principal only</div>
+<h2 class="principal-access-title" id="principal-access-title">Unlock the dashboard</h2>
+</div>
+<button aria-label="Close" class="principal-access-close" id="principal-access-close" type="button">
+          ×
+        </button>
+</header>
+<div class="principal-access-body">
+<form class="principal-access-form" id="principal-login-form">
+<label class="principal-access-label" for="principal-password-input">Access password</label>
+<input autocomplete="current-password" class="principal-access-input" id="principal-password-input" placeholder="Enter password" required="" type="password"/>
+<button class="principal-access-submit" type="submit">Unlock dashboard</button>
+<button class="principal-access-secondary" id="principal-open-reset" type="button">
+            Forgot or reset password
+          </button>
+<p class="principal-access-hint">Unlocking keeps this tab active for four hours on this device.</p>
+</form>
+<div aria-live="assertive" class="principal-access-status" id="principal-access-status" role="alert"></div>
+<section aria-labelledby="principal-reset-heading" class="principal-reset-section" hidden="" id="principal-reset-section">
+<header class="principal-reset-header">
+<div>
+<div class="principal-reset-kicker">Secure reset</div>
+<h3 id="principal-reset-heading">Generate a new access password</h3>
+<p>Create a recovery kit, verify the code, then set a brand-new password.</p>
+</div>
+<button class="principal-access-secondary" id="principal-reset-back" type="button">
+              Back to sign-in
+            </button>
+</header>
+<ol class="principal-reset-steps" id="principal-reset-steps">
+<li class="active" data-step="kit">1. Recovery kit</li>
+<li data-step="verify">2. Verify code</li>
+<li data-step="set">3. New password</li>
+</ol>
+<div class="principal-reset-flow">
+<div class="principal-reset-step" data-step="kit" id="principal-reset-kit-step">
+<p>
+                Generate a one-time recovery kit that you can screenshot or copy. Share it with your assistant principal so the
+                dashboard is never locked out.
+              </p>
+<button class="principal-access-submit" id="principal-reset-generate" type="button">
+                Create recovery kit
+              </button>
+<div class="principal-reset-kit" hidden="" id="principal-reset-kit">
+<div aria-live="polite" class="principal-reset-code" id="principal-reset-code"></div>
+<div class="principal-reset-meta">
+<span id="principal-reset-countdown">Expires in 15:00</span>
+<button class="principal-access-secondary" id="principal-reset-copy" type="button">Copy code</button>
+</div>
+<p class="principal-reset-tip">We also saved this code locally so you can finish the reset without leaving the
+                  page.</p>
+</div>
+</div>
+<form class="principal-reset-step" data-step="verify" hidden="" id="principal-reset-verify-step">
+<label class="principal-access-label" for="principal-reset-code-input">Enter the 6-digit recovery code</label>
+<input class="principal-access-input" id="principal-reset-code-input" inputmode="numeric" maxlength="6" minlength="6" pattern="\d{6}" placeholder="Example: 204819" required="" type="text"/>
+<button class="principal-access-submit" type="submit">Verify code</button>
+</form>
+<form class="principal-reset-step" data-step="set" hidden="" id="principal-reset-set-step">
+<label class="principal-access-label" for="principal-reset-password">New password</label>
+<input autocomplete="new-password" class="principal-access-input" id="principal-reset-password" placeholder="Create new password" required="" type="password"/>
+<label class="principal-access-label" for="principal-reset-confirm">Confirm new password</label>
+<input autocomplete="new-password" class="principal-access-input" id="principal-reset-confirm" placeholder="Re-enter password" required="" type="password"/>
+<p class="principal-access-hint">Use at least 8 characters with a mix of letters, numbers, and a symbol.</p>
+<button class="principal-access-submit" type="submit">Save new password</button>
+</form>
+<div class="principal-reset-success" hidden="" id="principal-reset-success">
+<div aria-hidden="true" class="principal-reset-celebrate">🎉</div>
+<h4>Password updated!</h4>
+<p>Your new password is active immediately. We’ve cleared the old recovery kit for security.</p>
+<div class="principal-reset-newpass" hidden="" id="principal-reset-newpass">
+<span>New password:</span>
+<code id="principal-reset-newpass-text"></code>
+<button class="principal-access-secondary" id="principal-reset-newpass-copy" type="button">Copy</button>
+</div>
+<button class="principal-access-submit" id="principal-reset-finish" type="button">Return to sign-in</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+<script>
+    // --- Principal access + global view toggle ---
+    const bodyElement = document.body;
+    const viewButtons = document.querySelectorAll(".view-toggle-btn");
+    const views = document.querySelectorAll(".view");
+    let activeViewId =
+      (Array.from(views).find(view => view.classList.contains("active")) || views[0])?.id || null;
+
+    const principalView = document.getElementById("principal-view");
+    const principalLockedBanner = document.getElementById("principal-locked-banner");
+    const principalManageAccessBtn = document.getElementById("principal-manage-access");
+
+    const principalAccessModal = document.getElementById("principal-access-modal");
+    const principalAccessBackdrop = document.getElementById("principal-access-backdrop");
+    const principalAccessClose = document.getElementById("principal-access-close");
+    const principalLoginForm = document.getElementById("principal-login-form");
+    const principalPasswordInput = document.getElementById("principal-password-input");
+    const principalAccessStatus = document.getElementById("principal-access-status");
+    const principalOpenResetBtn = document.getElementById("principal-open-reset");
+    const principalResetSection = document.getElementById("principal-reset-section");
+    const principalResetBackBtn = document.getElementById("principal-reset-back");
+    const principalResetSteps = document.getElementById("principal-reset-steps");
+    const principalResetKitStep = document.getElementById("principal-reset-kit-step");
+    const principalResetGenerateBtn = document.getElementById("principal-reset-generate");
+    const principalResetKit = document.getElementById("principal-reset-kit");
+    const principalResetCodeElem = document.getElementById("principal-reset-code");
+    const principalResetCountdown = document.getElementById("principal-reset-countdown");
+    const principalResetCopyBtn = document.getElementById("principal-reset-copy");
+    const principalResetVerifyStep = document.getElementById("principal-reset-verify-step");
+    const principalResetCodeInput = document.getElementById("principal-reset-code-input");
+    const principalResetSetStep = document.getElementById("principal-reset-set-step");
+    const principalResetPasswordInput = document.getElementById("principal-reset-password");
+    const principalResetConfirmInput = document.getElementById("principal-reset-confirm");
+    const principalResetSuccess = document.getElementById("principal-reset-success");
+    const principalResetFinishBtn = document.getElementById("principal-reset-finish");
+    const principalResetNewPass = document.getElementById("principal-reset-newpass");
+    const principalResetNewPassText = document.getElementById("principal-reset-newpass-text");
+    const principalResetNewPassCopy = document.getElementById("principal-reset-newpass-copy");
+
+    const PRINCIPAL_PASSWORD_KEY = "ptaPrincipalPasswordHash";
+    const PRINCIPAL_RESET_KEY = "ptaPrincipalResetKit";
+    const PRINCIPAL_UNLOCK_KEY = "ptaPrincipalUnlockedUntil";
+    const PRINCIPAL_UNLOCK_DURATION = 4 * 60 * 60 * 1000;
+    const RESET_EXPIRATION_MS = 15 * 60 * 1000;
+    const DEFAULT_PRINCIPAL_PASSWORD = "RiverbendLead!2024";
+
+    let principalAccessGranted = false;
+    let pendingViewButton = null;
+    let principalCountdownTimer;
+    let lastSetPrincipalPassword = "";
+    const resetStepOrder = { kit: 0, verify: 1, set: 2 };
+
+    function safeGet(storage, key) {
+      try {
+        return storage.getItem(key);
+      } catch (error) {
+        console.warn("Storage get failed", error);
+        return null;
+      }
+    }
+
+    function safeSet(storage, key, value) {
+      try {
+        storage.setItem(key, value);
+      } catch (error) {
+        console.warn("Storage set failed", error);
+      }
+    }
+
+    function safeRemove(storage, key) {
+      try {
+        storage.removeItem(key);
+      } catch (error) {
+        console.warn("Storage remove failed", error);
+      }
+    }
+
+    function hashPassword(value) {
+      try {
+        return btoa(value);
+      } catch (error) {
+        return btoa(unescape(encodeURIComponent(value)));
+      }
+    }
+
+    function ensureDefaultPrincipalPassword() {
+      const stored = safeGet(localStorage, PRINCIPAL_PASSWORD_KEY);
+      if (!stored) {
+        safeSet(localStorage, PRINCIPAL_PASSWORD_KEY, hashPassword(DEFAULT_PRINCIPAL_PASSWORD));
+      }
+    }
+
+    function getStoredPrincipalPasswordHash() {
+      return safeGet(localStorage, PRINCIPAL_PASSWORD_KEY);
+    }
+
+    function setPrincipalPassword(newPassword) {
+      safeSet(localStorage, PRINCIPAL_PASSWORD_KEY, hashPassword(newPassword));
+    }
+
+    function storeResetKit(code, expiresAt) {
+      safeSet(localStorage, PRINCIPAL_RESET_KEY, JSON.stringify({ code, expiresAt }));
+    }
+
+    function loadResetKit() {
+      const raw = safeGet(localStorage, PRINCIPAL_RESET_KEY);
+      if (!raw) return null;
+      try {
+        return JSON.parse(raw);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function clearResetKit() {
+      safeRemove(localStorage, PRINCIPAL_RESET_KEY);
+    }
+
+    function markPrincipalUnlocked() {
+      safeSet(sessionStorage, PRINCIPAL_UNLOCK_KEY, String(Date.now() + PRINCIPAL_UNLOCK_DURATION));
+    }
+
+    function isPrincipalUnlocked() {
+      const raw = safeGet(sessionStorage, PRINCIPAL_UNLOCK_KEY);
+      if (!raw) return false;
+      const expires = Number(raw);
+      return Number.isFinite(expires) && expires > Date.now();
+    }
+
+    function applyViewTheme(targetId) {
+      if (targetId === "principal-view") {
+        bodyElement.style.background = "#020617";
+        bodyElement.style.color = "#e5e7eb";
+      } else if (targetId === "student-view") {
+        bodyElement.style.background =
+          "radial-gradient(circle at top, #e0f2fe 0, #f9fafb 38%, #fef3c7 100%)";
+        bodyElement.style.color = "#111827";
+      } else {
+        bodyElement.style.background = "#f3f4f6";
+        bodyElement.style.color = "#111827";
+      }
+    }
+
+    function switchView(targetId) {
+      if (!targetId || activeViewId === targetId) return;
+      viewButtons.forEach(button => {
+        const matches = button.getAttribute("data-view-target") === targetId;
+        button.classList.toggle("active", matches);
+        button.setAttribute("aria-pressed", String(matches));
+      });
+      views.forEach(view => {
+        view.classList.toggle("active", view.id === targetId);
+      });
+      activeViewId = targetId;
+      applyViewTheme(targetId);
+    }
+
+    function updatePrincipalLockState() {
+      if (!principalView) return;
+      if (principalAccessGranted) {
+        principalView.removeAttribute("data-locked");
+        if (principalLockedBanner) {
+          principalLockedBanner.hidden = true;
+        }
+      } else {
+        principalView.setAttribute("data-locked", "true");
+        if (principalLockedBanner) {
+          principalLockedBanner.hidden = false;
+        }
+      }
+    }
+
+    function setPrincipalAccessStatus(message, type = "info") {
+      if (!principalAccessStatus) return;
+      if (!message) {
+        principalAccessStatus.textContent = "";
+        principalAccessStatus.classList.remove("is-visible", "is-error", "is-success");
+        principalAccessStatus.hidden = true;
+        return;
+      }
+      principalAccessStatus.textContent = message;
+      principalAccessStatus.hidden = false;
+      principalAccessStatus.classList.add("is-visible");
+      principalAccessStatus.classList.toggle("is-error", type === "error");
+      principalAccessStatus.classList.toggle("is-success", type === "success");
+      if (type !== "error" && type !== "success") {
+        principalAccessStatus.classList.remove("is-error", "is-success");
+      }
+    }
+
+    function resetPrincipalAccessStatus() {
+      setPrincipalAccessStatus("");
+    }
+
+    function stopResetCountdown() {
+      if (principalCountdownTimer) {
+        clearInterval(principalCountdownTimer);
+        principalCountdownTimer = undefined;
+      }
+    }
+
+    function startResetCountdown(expiresAt) {
+      if (!principalResetCountdown) return;
+      stopResetCountdown();
+      function tick() {
+        const remaining = expiresAt - Date.now();
+        if (remaining <= 0) {
+          principalResetCountdown.textContent = "Expired";
+          stopResetCountdown();
+          if (principalResetKit) principalResetKit.hidden = true;
+          clearResetKit();
+          goToResetStep("kit");
+          setPrincipalAccessStatus("The recovery code expired. Generate a new kit to continue.", "error");
+          return;
+        }
+        const totalSeconds = Math.floor(remaining / 1000);
+        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+        principalResetCountdown.textContent = `Expires in ${minutes}:${seconds}`;
+      }
+      tick();
+      principalCountdownTimer = setInterval(tick, 1000);
+    }
+
+    function goToResetStep(step) {
+      const order = resetStepOrder[step] ?? 0;
+      if (principalResetSteps) {
+        principalResetSteps.querySelectorAll("li").forEach(item => {
+          const itemStep = item.getAttribute("data-step") || "kit";
+          const itemOrder = resetStepOrder[itemStep] ?? 0;
+          item.classList.toggle("active", itemOrder === order);
+          item.classList.toggle("complete", itemOrder < order);
+        });
+      }
+      if (principalResetVerifyStep) principalResetVerifyStep.hidden = order < resetStepOrder.verify;
+      if (principalResetSetStep) principalResetSetStep.hidden = order < resetStepOrder.set;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetKitStep) {
+        principalResetKitStep.classList.toggle("is-complete", order > resetStepOrder.kit);
+      }
+    }
+
+    function openPrincipalAccessModal() {
+      if (!principalAccessModal) return;
+      principalAccessModal.hidden = false;
+      requestAnimationFrame(() => principalAccessModal.classList.add("active"));
+      document.body.classList.add("prevent-scroll");
+      resetPrincipalAccessStatus();
+      setPrincipalAccessStatus("Enter your access password to unlock the dashboard.", "info");
+      if (principalResetSection) principalResetSection.hidden = true;
+      if (principalLoginForm) principalLoginForm.hidden = false;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      stopResetCountdown();
+      if (principalPasswordInput) {
+        principalPasswordInput.value = "";
+        setTimeout(() => principalPasswordInput.focus(), 80);
+      }
+    }
+
+    function closePrincipalAccessModal() {
+      if (!principalAccessModal) return;
+      principalAccessModal.classList.remove("active");
+      if (!(familyActionDrawer && !familyActionDrawer.hidden)) {
+        document.body.classList.remove("prevent-scroll");
+      }
+      setTimeout(() => {
+        principalAccessModal.hidden = true;
+      }, 200);
+      pendingViewButton = null;
+      stopResetCountdown();
+      if (principalResetSection) principalResetSection.hidden = true;
+      if (principalLoginForm) principalLoginForm.hidden = false;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      resetPrincipalAccessStatus();
+    }
+
+    function openResetFlow() {
+      if (!principalResetSection || !principalLoginForm) return;
+      principalLoginForm.hidden = true;
+      principalResetSection.hidden = false;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      if (principalResetCodeInput) principalResetCodeInput.value = "";
+      if (principalResetPasswordInput) principalResetPasswordInput.value = "";
+      if (principalResetConfirmInput) principalResetConfirmInput.value = "";
+      const kit = loadResetKit();
+      stopResetCountdown();
+      if (kit && kit.expiresAt > Date.now()) {
+        if (principalResetKit) principalResetKit.hidden = false;
+        if (principalResetCodeElem) principalResetCodeElem.textContent = kit.code;
+        goToResetStep("verify");
+        startResetCountdown(kit.expiresAt);
+        setPrincipalAccessStatus("Recovery kit restored. Enter the code below to continue.", "info");
+      } else {
+        clearResetKit();
+        if (principalResetKit) principalResetKit.hidden = true;
+        goToResetStep("kit");
+        setPrincipalAccessStatus("Step 1: create a recovery kit to begin the reset.", "info");
+      }
+      setTimeout(() => {
+        if (principalResetCodeInput && principalResetVerifyStep && !principalResetVerifyStep.hidden) {
+          principalResetCodeInput.focus();
+        }
+      }, 120);
+    }
+
+    function returnToLoginFromReset() {
+      stopResetCountdown();
+      if (principalResetSection) principalResetSection.hidden = true;
+      if (principalLoginForm) principalLoginForm.hidden = false;
+      if (principalResetKit) principalResetKit.hidden = true;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      if (principalPasswordInput) {
+        setTimeout(() => principalPasswordInput.focus(), 80);
+      }
+      setPrincipalAccessStatus("Enter your access password to unlock the dashboard.", "info");
+    }
+
+    function generateResetKit() {
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      const expiresAt = Date.now() + RESET_EXPIRATION_MS;
+      if (principalResetCodeElem) principalResetCodeElem.textContent = code;
+      if (principalResetKit) principalResetKit.hidden = false;
+      storeResetKit(code, expiresAt);
+      goToResetStep("verify");
+      setPrincipalAccessStatus("Recovery kit generated. Enter the code to verify your identity.", "success");
+      startResetCountdown(expiresAt);
+      if (principalResetCodeInput) {
+        principalResetCodeInput.value = "";
+        setTimeout(() => principalResetCodeInput.focus(), 80);
+      }
+    }
+
+    function validatePrincipalPassword(value) {
+      const hasLength = value.length >= 8;
+      const hasLetter = /[A-Za-z]/.test(value);
+      const hasNumber = /\d/.test(value);
+      const hasSymbol = /[^A-Za-z0-9\s]/.test(value);
+      return hasLength && hasLetter && hasNumber && hasSymbol;
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "absolute";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        const succeeded = document.execCommand("copy");
+        document.body.removeChild(textarea);
+        return succeeded ? Promise.resolve() : Promise.reject(new Error("Copy failed"));
+      } catch (error) {
+        document.body.removeChild(textarea);
+        return Promise.reject(error);
+      }
+    }
+
+    function showResetSuccess(newPassword) {
+      if (principalResetSteps) {
+        principalResetSteps.querySelectorAll("li").forEach(item => {
+          item.classList.add("complete");
+          item.classList.remove("active");
+        });
+        const finalStep = principalResetSteps.querySelector('li[data-step="set"]');
+        if (finalStep) finalStep.classList.add("active");
+      }
+      if (principalResetVerifyStep) principalResetVerifyStep.hidden = true;
+      if (principalResetSetStep) principalResetSetStep.hidden = true;
+      if (principalResetKitStep) principalResetKitStep.classList.add("is-complete");
+      if (principalResetSuccess) principalResetSuccess.hidden = false;
+      if (principalResetNewPass && principalResetNewPassText) {
+        principalResetNewPassText.textContent = newPassword;
+        principalResetNewPass.hidden = false;
+      }
+      stopResetCountdown();
+    }
+
+    function handlePrincipalLogin(event) {
+      event.preventDefault();
+      const entered = principalPasswordInput ? principalPasswordInput.value.trim() : "";
+      if (!entered) {
+        setPrincipalAccessStatus("Enter the access password to continue.", "error");
+        if (principalPasswordInput) principalPasswordInput.focus();
+        return;
+      }
+      const storedHash = getStoredPrincipalPasswordHash();
+      if (storedHash && hashPassword(entered) === storedHash) {
+        principalAccessGranted = true;
+        markPrincipalUnlocked();
+        updatePrincipalLockState();
+        closePrincipalAccessModal();
+        switchView("principal-view");
+        if (typeof setPrincipalStatus === "function") {
+          setPrincipalStatus("Principal dashboard unlocked. Session active for four hours.");
+        }
+        lastSetPrincipalPassword = entered;
+        if (principalPasswordInput) principalPasswordInput.value = "";
+      } else {
+        setPrincipalAccessStatus("Incorrect password. Try again or reset it below.", "error");
+        if (principalPasswordInput) {
+          principalPasswordInput.select();
+          principalPasswordInput.focus();
+        }
+      }
+    }
+
+    ensureDefaultPrincipalPassword();
+    principalAccessGranted = isPrincipalUnlocked();
+    updatePrincipalLockState();
+    applyViewTheme(activeViewId);
+
+    viewButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const targetId = btn.getAttribute("data-view-target");
+        if (targetId === "principal-view" && !principalAccessGranted) {
+          pendingViewButton = btn;
+          openPrincipalAccessModal();
+          return;
+        }
+        switchView(targetId);
+      });
+    });
+
+    if (principalManageAccessBtn) {
+      principalManageAccessBtn.addEventListener("click", () => {
+        pendingViewButton = principalManageAccessBtn;
+        openPrincipalAccessModal();
+      });
+    }
+
+    if (principalAccessClose) {
+      principalAccessClose.addEventListener("click", () => closePrincipalAccessModal());
+    }
+
+    if (principalAccessBackdrop) {
+      principalAccessBackdrop.addEventListener("click", () => closePrincipalAccessModal());
+    }
+
+    document.addEventListener("keydown", evt => {
+      if (evt.key === "Escape") {
+        if (principalAccessModal && !principalAccessModal.hidden) {
+          closePrincipalAccessModal();
+          return;
+        }
+        if (familyActionDrawer && !familyActionDrawer.hidden) {
+          closeFamilyAction();
+        }
+      }
+    });
+
+    if (principalLoginForm) {
+      principalLoginForm.addEventListener("submit", handlePrincipalLogin);
+    }
+
+    if (principalOpenResetBtn) {
+      principalOpenResetBtn.addEventListener("click", () => openResetFlow());
+    }
+
+    if (principalResetBackBtn) {
+      principalResetBackBtn.addEventListener("click", () => returnToLoginFromReset());
+    }
+
+    if (principalResetGenerateBtn) {
+      principalResetGenerateBtn.addEventListener("click", () => generateResetKit());
+    }
+
+    if (principalResetCopyBtn) {
+      principalResetCopyBtn.addEventListener("click", () => {
+        const code = principalResetCodeElem ? principalResetCodeElem.textContent.trim() : "";
+        if (!code) {
+          setPrincipalAccessStatus("Generate a recovery kit before copying.", "error");
+          return;
+        }
+        copyToClipboard(code)
+          .then(() => setPrincipalAccessStatus("Recovery code copied to your clipboard.", "success"))
+          .catch(() => setPrincipalAccessStatus("Copy failed. Use Ctrl+C or tap-and-hold to copy the code.", "error"));
+      });
+    }
+
+    if (principalResetVerifyStep) {
+      principalResetVerifyStep.addEventListener("submit", event => {
+        event.preventDefault();
+        const inputCode = principalResetCodeInput ? principalResetCodeInput.value.trim() : "";
+        const kit = loadResetKit();
+        if (!kit) {
+          setPrincipalAccessStatus("Generate a recovery kit first.", "error");
+          goToResetStep("kit");
+          if (principalResetKit) principalResetKit.hidden = true;
+          return;
+        }
+        if (kit.expiresAt <= Date.now()) {
+          setPrincipalAccessStatus("That recovery code has expired. Generate a new kit.", "error");
+          clearResetKit();
+          if (principalResetKit) principalResetKit.hidden = true;
+          goToResetStep("kit");
+          stopResetCountdown();
+          return;
+        }
+        if (kit.code !== inputCode) {
+          setPrincipalAccessStatus("That code doesn’t match the recovery kit.", "error");
+          if (principalResetCodeInput) principalResetCodeInput.focus();
+          return;
+        }
+        setPrincipalAccessStatus("Code verified. Set a new password below.", "success");
+        goToResetStep("set");
+        if (principalResetPasswordInput) {
+          setTimeout(() => principalResetPasswordInput.focus(), 80);
+        }
+      });
+    }
+
+    if (principalResetSetStep) {
+      principalResetSetStep.addEventListener("submit", event => {
+        event.preventDefault();
+        const newPassword = principalResetPasswordInput ? principalResetPasswordInput.value.trim() : "";
+        const confirmPassword = principalResetConfirmInput ? principalResetConfirmInput.value.trim() : "";
+        if (!validatePrincipalPassword(newPassword)) {
+          setPrincipalAccessStatus(
+            "Use at least 8 characters with a letter, number, and symbol for the new password.",
+            "error"
+          );
+          if (principalResetPasswordInput) principalResetPasswordInput.focus();
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          setPrincipalAccessStatus("Passwords do not match. Try again.", "error");
+          if (principalResetConfirmInput) principalResetConfirmInput.focus();
+          return;
+        }
+        setPrincipalPassword(newPassword);
+        clearResetKit();
+        lastSetPrincipalPassword = newPassword;
+        showResetSuccess(newPassword);
+        setPrincipalAccessStatus(
+          "Password updated. Return to sign-in to unlock the dashboard with your new password.",
+          "success"
+        );
+      });
+    }
+
+    if (principalResetFinishBtn) {
+      principalResetFinishBtn.addEventListener("click", () => {
+        returnToLoginFromReset();
+        if (principalPasswordInput) {
+          principalPasswordInput.value = lastSetPrincipalPassword;
+          principalPasswordInput.focus();
+        }
+        if (lastSetPrincipalPassword) {
+          setPrincipalAccessStatus(
+            "Password updated. Enter it above to unlock the dashboard.",
+            "success"
+          );
+        }
+      });
+    }
+
+    if (principalResetNewPassCopy) {
+      principalResetNewPassCopy.addEventListener("click", () => {
+        const text = principalResetNewPassText ? principalResetNewPassText.textContent : "";
+        copyToClipboard(text || "")
+          .then(() => setPrincipalAccessStatus("New password copied to clipboard.", "success"))
+          .catch(() => setPrincipalAccessStatus("Copy failed. Select the password and copy manually.", "error"));
+      });
+    }
+    // --- Family view date + year ---
+    const familyTodayElem = document.getElementById("family-today-date");
+    const familyYearElem = document.getElementById("family-year");
+    const now = new Date();
+    const dateOptions = { weekday: "long", month: "long", day: "numeric" };
+    if (familyTodayElem) familyTodayElem.textContent = now.toLocaleDateString(undefined, dateOptions);
+    if (familyYearElem) familyYearElem.textContent = now.getFullYear();
+
+    // --- Family actions & downloads ---
+    const familyRequestEmailBtn = document.getElementById("family-request-email-btn");
+    const familyTextAlertBtn = document.getElementById("family-text-alert-btn");
+    const familyCalendarBtn = document.getElementById("family-calendar-btn");
+    const familyInfoFeedback = document.getElementById("family-info-feedback");
+    const familyActionDrawer = document.getElementById("family-action-drawer");
+    const familyActionBody = document.getElementById("family-action-body");
+    const familyActionClose = document.getElementById("family-action-close");
+    const familyActionTitle = document.getElementById("family-action-title");
+    const familyActionBackdrop = document.getElementById("family-action-backdrop");
+
+    const FAMILY_EMAIL_ADDRESS = "subscribe@riverbendpta.example.org";
+    const TEXT_ALERT_NUMBER = "+15550123";
+    const TEXT_ALERT_DISPLAY = "(555) 012-3PTA";
+    const TEXT_ALERT_KEYWORD = "JOIN RIVERBEND";
+
+    const calendarEvents = [
+      {
+        title: "Book Fair — Family Night",
+        start: "2024-10-15T17:00",
+        end: "2024-10-15T19:30",
+        description: "Shop the fair together with literacy stations and a snack table supported by PTA volunteers.",
+        location: "Riverbend Elementary Library",
+        display: "Tue, Oct 15 · 5:00 – 7:30 PM"
+      },
+      {
+        title: "Walk & Roll to School Day",
+        start: "2024-10-16T07:10",
+        end: "2024-10-16T07:45",
+        description: "Meet at the corners around campus for the walking school bus and crosswalk cheers.",
+        location: "Neighborhood routes to Riverbend Elementary",
+        display: "Wed, Oct 16 · 7:10 – 7:45 AM"
+      },
+      {
+        title: "PTA Meeting & Budget Q&A",
+        start: "2024-10-22T19:00",
+        end: "2024-10-22T20:00",
+        description: "Hybrid meeting with finance updates, committee spotlights, and open Q&A for families.",
+        location: "Riverbend Elementary Media Center + Zoom",
+        display: "Tue, Oct 22 · 7:00 – 8:00 PM"
+      },
+      {
+        title: "STEM Night",
+        start: "2024-11-07T18:00",
+        end: "2024-11-07T20:00",
+        description: "Hands-on stations, robotics demos, and student presenters across the building.",
+        location: "Riverbend Elementary Campus",
+        display: "Thu, Nov 7 · 6:00 – 8:00 PM"
+      },
+      {
+        title: "Community Garden Clean-Up",
+        start: "2024-11-09T09:00",
+        end: "2024-11-09T11:30",
+        description: "Mulch delivery, planter refresh, and family-friendly outdoor projects.",
+        location: "Riverbend Community Garden",
+        display: "Sat, Nov 9 · 9:00 – 11:30 AM"
+      },
+      {
+        title: "Teacher Conference Meals",
+        start: "2024-11-18T08:30",
+        end: "2024-11-20T17:00",
+        description: "PTA coordinates daily meals for teachers during fall conferences; drop-off help welcome.",
+        location: "Riverbend Elementary Staff Lounge",
+        display: "Nov 18 – Nov 20"
+      }
+    ];
+
+    let familyFeedbackTimer;
+    let familyActionOrigin = null;
+
+    function setFamilyFeedback(message) {
+      if (!familyInfoFeedback) return;
+      familyInfoFeedback.textContent = message;
+      familyInfoFeedback.hidden = false;
+      familyInfoFeedback.classList.add("is-visible");
+      clearTimeout(familyFeedbackTimer);
+      familyFeedbackTimer = setTimeout(() => {
+        familyInfoFeedback.classList.remove("is-visible");
+        familyInfoFeedback.hidden = true;
+      }, 7000);
+    }
+
+    function closeFamilyAction() {
+      if (!familyActionDrawer) return;
+      familyActionDrawer.classList.remove("active");
+      setTimeout(() => {
+        familyActionDrawer.hidden = true;
+        if (familyActionBody) familyActionBody.innerHTML = "";
+      }, 220);
+      if (!(principalAccessModal && !principalAccessModal.hidden)) {
+        document.body.classList.remove("prevent-scroll");
+      }
+      if (familyActionOrigin) {
+        familyActionOrigin.focus();
+        familyActionOrigin = null;
+      }
+    }
+
+    function focusFamilyAction() {
+      if (!familyActionBody) return;
+      const first = familyActionBody.querySelector(
+        'input, button, textarea, select, a[href]'
+      );
+      if (first) first.focus();
+    }
+
+    function openFamilyAction(type, origin) {
+      if (!familyActionDrawer || !familyActionBody || !familyActionTitle) return;
+      familyActionOrigin = origin || null;
+      familyActionBody.innerHTML = "";
+      familyActionDrawer.hidden = false;
+      requestAnimationFrame(() => familyActionDrawer.classList.add("active"));
+      document.body.classList.add("prevent-scroll");
+      if (type === "email") {
+        familyActionTitle.textContent = "Request weekly e-mails";
+        renderEmailAction();
+      } else if (type === "text") {
+        familyActionTitle.textContent = "Join PTA text alerts";
+        renderTextAction();
+      } else {
+        familyActionTitle.textContent = "Download the PTA calendar";
+        renderCalendarAction();
+      }
+      setTimeout(() => focusFamilyAction(), 120);
+    }
+
+    function renderEmailAction() {
+      if (!familyActionBody) return;
+      familyActionBody.innerHTML = `
+        <p>We will pre-fill an e-mail to ${FAMILY_EMAIL_ADDRESS}. Add any notes and send it to join the weekly update list.</p>
+        <form class="family-action-form" id="family-email-form">
+          <label class="family-action-label" for="family-email-name">Your name</label>
+          <input class="family-action-input" id="family-email-name" name="family-email-name" type="text" required placeholder="Example: Jordan Lee" />
+          <label class="family-action-label" for="family-email-address">Preferred e-mail address</label>
+          <input class="family-action-input" id="family-email-address" name="family-email-address" type="email" required placeholder="you@example.com" />
+          <label class="family-action-label" for="family-email-notes">Notes (optional)</label>
+          <textarea class="family-action-textarea" id="family-email-notes" rows="3" placeholder="Add grandparents, grade-level notes, or questions."></textarea>
+          <button type="submit" class="family-action-primary">Compose request e-mail</button>
+          <p class="family-action-note">Your default mail app will open with a ready-to-send message.</p>
+        </form>
+        <button type="button" class="family-action-secondary" id="family-email-copy">Copy pre-written message</button>
+      `;
+
+      function composeEmailTemplate() {
+        const nameInput = document.getElementById("family-email-name");
+        const emailInput = document.getElementById("family-email-address");
+        const notesInput = document.getElementById("family-email-notes");
+        const name = nameInput ? nameInput.value.trim() : "Riverbend family";
+        const address = emailInput ? emailInput.value.trim() : "";
+        const notes = notesInput ? notesInput.value.trim() : "";
+        const lines = [
+          "Hello Riverbend PTA team,",
+          "",
+          `Please add ${name || "our family"} to the weekly PTA update list.`,
+          address ? `Preferred e-mail: ${address}` : "Preferred e-mail: (same as this message)"
+        ];
+        if (notes) {
+          lines.push("", notes);
+        }
+        lines.push("", "Thank you!");
+        return { name, address, notes, lines };
+      }
+
+      const emailForm = document.getElementById("family-email-form");
+      if (emailForm) {
+        emailForm.addEventListener("submit", event => {
+          event.preventDefault();
+          const template = composeEmailTemplate();
+          const subject = encodeURIComponent("Add me to PTA updates");
+          const body = encodeURIComponent(template.lines.join("\n"));
+          const mailto = `mailto:${FAMILY_EMAIL_ADDRESS}?subject=${subject}&body=${body}`;
+          window.location.href = mailto;
+          const addressSuffix = template.address ? ` for ${template.address}` : "";
+          setFamilyFeedback(`Email draft opened. Finish sending it to join the weekly PTA updates${addressSuffix}.`);
+          closeFamilyAction();
+        });
+      }
+
+      const copyBtn = document.getElementById("family-email-copy");
+      if (copyBtn) {
+        copyBtn.addEventListener("click", () => {
+          const template = composeEmailTemplate();
+          const message = `${template.lines.join("\n")}\n\nSend to: ${FAMILY_EMAIL_ADDRESS}`;
+          copyToClipboard(message)
+            .then(() => setFamilyFeedback("Copied the PTA subscription message. Paste it into any e-mail app."))
+            .catch(() => setFamilyFeedback(`Copy failed. Email ${FAMILY_EMAIL_ADDRESS} with subject “Add me to PTA updates.”`));
+        });
+      }
+    }
+
+    function renderTextAction() {
+      if (!familyActionBody) return;
+      familyActionBody.innerHTML = `
+        <p>We’ll prepare the exact opt-in message so you can start receiving PTA text alerts.</p>
+        <form class="family-action-form" id="family-text-form">
+          <label class="family-action-label" for="family-text-number">Your mobile number</label>
+          <input class="family-action-input" id="family-text-number" name="family-text-number" type="tel" required placeholder="555-123-4567" />
+          <button type="submit" class="family-action-primary">Open messaging app</button>
+          <p class="family-action-note">Standard messaging rates may apply. Reply STOP anytime to unsubscribe.</p>
+        </form>
+        <div class="family-action-steps">
+          <h3>What happens next</h3>
+          <ol class="family-action-list">
+            <li>We’ll launch your SMS app addressed to ${TEXT_ALERT_DISPLAY}.</li>
+            <li>Tap send to deliver “${TEXT_ALERT_KEYWORD}”.</li>
+            <li>Look for a confirmation reply within a minute.</li>
+          </ol>
+        </div>
+        <button type="button" class="family-action-secondary" id="family-text-copy">Copy join message</button>
+      `;
+
+      const textForm = document.getElementById("family-text-form");
+      if (textForm) {
+        textForm.addEventListener("submit", event => {
+          event.preventDefault();
+          const smsLink = `sms:${TEXT_ALERT_NUMBER}?&body=${encodeURIComponent(TEXT_ALERT_KEYWORD)}`;
+          window.location.href = smsLink;
+          setFamilyFeedback(`Opening your messaging app. Send “${TEXT_ALERT_KEYWORD}” to ${TEXT_ALERT_DISPLAY}.`);
+          closeFamilyAction();
+        });
+      }
+
+      const copyBtn = document.getElementById("family-text-copy");
+      if (copyBtn) {
+        copyBtn.addEventListener("click", () => {
+          const content = `${TEXT_ALERT_KEYWORD}\nText to: ${TEXT_ALERT_DISPLAY}`;
+          copyToClipboard(content)
+            .then(() => setFamilyFeedback(`Copied the opt-in message. Text “${TEXT_ALERT_KEYWORD}” to ${TEXT_ALERT_DISPLAY}.`))
+            .catch(() => setFamilyFeedback(`Copy failed. Manually text “${TEXT_ALERT_KEYWORD}” to ${TEXT_ALERT_DISPLAY}.`));
+        });
+      }
+    }
+
+    function formatUtc(date) {
+      return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    }
+
+    function toIcsDateTime(value) {
+      const [datePart, timePart = "00:00"] = value.split("T");
+      const date = datePart.replace(/-/g, "");
+      const time = (timePart.length === 5 ? `${timePart}:00` : timePart).replace(/:/g, "");
+      return `${date}T${time}`;
+    }
+
+    function escapeIcsText(text) {
+      return String(text)
+        .replace(/\/g, "\\")
+        .replace(/;/g, "\;")
+        .replace(/,/g, "\,")
+        .replace(/\n/g, "\n");
+    }
+
+    function buildIcsContent(events) {
+      const lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Riverbend Elementary PTA//Calendar//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH"
+      ];
+      const stamp = formatUtc(new Date());
+      events.forEach(event => {
+        const uid = (window.crypto && crypto.randomUUID)
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        lines.push("BEGIN:VEVENT");
+        lines.push(`UID:${uid}@riverbendpta.local`);
+        lines.push(`DTSTAMP:${stamp}`);
+        lines.push(`DTSTART;TZID=America/Chicago:${toIcsDateTime(event.start)}`);
+        lines.push(`DTEND;TZID=America/Chicago:${toIcsDateTime(event.end)}`);
+        lines.push(`SUMMARY:${escapeIcsText(event.title)}`);
+        if (event.description) lines.push(`DESCRIPTION:${escapeIcsText(event.description)}`);
+        if (event.location) lines.push(`LOCATION:${escapeIcsText(event.location)}`);
+        lines.push("END:VEVENT");
+      });
+      lines.push("END:VCALENDAR");
+      return lines.join("\r\n");
+    }
+
+    function downloadIcsFile(filename, content) {
+      const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function renderCalendarAction() {
+      if (!familyActionBody) return;
+      const eventsMarkup = calendarEvents
+        .map(event => `
+          <li class="family-action-event">
+            <strong>${event.title}</strong>
+            <span>${event.display}</span>
+            <p>${event.description}</p>
+          </li>
+        `)
+        .join("");
+      familyActionBody.innerHTML = `
+        <p>Download an .ics file that includes the latest PTA events so you can subscribe in any calendar app.</p>
+        <ul class="family-action-events">${eventsMarkup}</ul>
+        <button type="button" class="family-action-primary" id="family-calendar-download">Download .ics file</button>
+        <p class="family-action-note">Import into Google Calendar, Apple Calendar, Outlook, or any app that supports .ics files.</p>
+      `;
+      const downloadBtn = document.getElementById("family-calendar-download");
+      if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+          const icsContent = buildIcsContent(calendarEvents);
+          downloadIcsFile("riverbend-pta-calendar.ics", icsContent);
+          setFamilyFeedback("Downloaded the PTA calendar (.ics) with this month’s events.");
+          closeFamilyAction();
+        });
+      }
+    }
+
+    if (familyRequestEmailBtn) {
+      familyRequestEmailBtn.addEventListener("click", () => openFamilyAction("email", familyRequestEmailBtn));
+    }
+
+    if (familyTextAlertBtn) {
+      familyTextAlertBtn.addEventListener("click", () => openFamilyAction("text", familyTextAlertBtn));
+    }
+
+    if (familyCalendarBtn) {
+      familyCalendarBtn.addEventListener("click", () => openFamilyAction("calendar", familyCalendarBtn));
+    }
+
+    if (familyActionClose) {
+      familyActionClose.addEventListener("click", () => closeFamilyAction());
+    }
+
+    if (familyActionBackdrop) {
+      familyActionBackdrop.addEventListener("click", () => closeFamilyAction());
+    }
+
+    // --- Principal header + panels ---
+    const principalKicker = document.getElementById("principal-view-kicker");
+    const principalTitle = document.getElementById("principal-view-title");
+    const principalSub = document.getElementById("principal-view-sub");
+    const principalDatePill = document.getElementById("principal-date-pill");
+    const principalStatusMessage = document.getElementById("principal-status-message");
+    const principalPanels = document.querySelectorAll(".principal-panel");
+    const principalPanelButtons = document.querySelectorAll("[data-panel-target]");
+    const principalQuickButtons = document.querySelectorAll("[data-panel-force]");
+    const principalEventsRows = Array.from(document.querySelectorAll("#principal-event-table tbody tr"));
+    const principalEventsCount = document.getElementById("principal-events-count");
+    const principalFilterBtn = document.getElementById("principal-filter-btn");
+    const principalFilterOverlay = document.getElementById("principal-filter-overlay");
+    const principalFilterForm = document.getElementById("principal-filter-form");
+    const principalFilterClose = document.getElementById("principal-filter-close");
+    const principalFilterReset = document.getElementById("principal-filter-reset");
+    const principalExportBtn = document.getElementById("principal-export-btn");
+    const principalDateFormatter = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" });
+    const monday = new Date(now);
+    const day = now.getDay();
+    const diffToMonday = (day === 0 ? -6 : 1) - day;
+    monday.setDate(now.getDate() + diffToMonday);
+    const thisWeekLabel = "Week of " + principalDateFormatter.format(monday);
+    const rangeStart = new Date(now);
+    const rangeEnd = new Date(now);
+    rangeEnd.setDate(now.getDate() + 30);
+    const thirtyDayLabel =
+      principalDateFormatter.format(rangeStart) + " – " + principalDateFormatter.format(rangeEnd);
+    const principalPanelCopy = {
+      "this-week": {
+        kicker: "This Week · Snapshot",
+        title: "PTA events and building impact",
+        sub:
+          "Current week overview. Green means comfortably covered, orange needs a second look, red means something may need to move or get extra support.",
+        label: "this week"
+      },
+      "next-30": {
+        kicker: "Next 30 days · Planning view",
+        title: "Upcoming PTA schedule and approvals",
+        sub:
+          "Preview volunteer needs, building usage, and approvals coming due so you can plan ahead.",
+        label: "the next 30 days"
+      },
+      "by-grade": {
+        kicker: "By grade level · Coverage",
+        title: "Grade-level partnerships at a glance",
+        sub:
+          "See which grades have events, requests, and cross-grade opportunities so you can balance support.",
+        label: "grade-level coverage"
+      }
+    };
+    const principalDateLabels = {
+      "this-week": thisWeekLabel,
+      "next-30": thirtyDayLabel,
+      "by-grade": "Grades K–5 overview"
+    };
+    const defaultFocus = ["family", "staff", "students", "community"];
+    const defaultTiming = ["morning", "schoolday", "evening"];
+    const filterState = {
+      focus: new Set(defaultFocus),
+      timing: new Set(defaultTiming)
+    };
+    let principalStatusTimer;
+    let activePanelId = "this-week";
+
+    function setPrincipalStatus(message) {
+      if (!principalStatusMessage) return;
+      clearTimeout(principalStatusTimer);
+      if (message) {
+        principalStatusMessage.textContent = message;
+        principalStatusMessage.classList.add("is-visible");
+        principalStatusTimer = setTimeout(() => {
+          principalStatusMessage.classList.remove("is-visible");
+        }, 6000);
+      } else {
+        principalStatusMessage.textContent = "";
+        principalStatusMessage.classList.remove("is-visible");
+      }
+    }
+
+    function setsMatch(set, values) {
+      if (set.size !== values.length) return false;
+      return values.every(value => set.has(value));
+    }
+
+    function updateFilterButtonState() {
+      if (!principalFilterBtn) return;
+      const atDefault =
+        setsMatch(filterState.focus, defaultFocus) && setsMatch(filterState.timing, defaultTiming);
+      principalFilterBtn.classList.toggle("filters-active", !atDefault);
+    }
+
+    function syncFilterForm() {
+      if (!principalFilterForm) return;
+      const checkboxes = principalFilterForm.querySelectorAll('input[type="checkbox"]');
+      checkboxes.forEach(box => {
+        if (box.name === "focus") {
+          box.checked = filterState.focus.has(box.value);
+        } else if (box.name === "timing") {
+          box.checked = filterState.timing.has(box.value);
+        }
+      });
+    }
+
+    function applyPrincipalFilters() {
+      if (!principalEventsRows.length) return 0;
+      let visible = 0;
+      principalEventsRows.forEach(row => {
+        const focusTags = row.dataset.focus ? row.dataset.focus.split(",").map(tag => tag.trim()) : [];
+        const timingTag = row.dataset.timing;
+        const focusMatch = focusTags.some(tag => filterState.focus.has(tag));
+        const timingMatch = filterState.timing.has(timingTag);
+        const show = focusMatch && timingMatch;
+        row.classList.toggle("is-hidden", !show);
+        if (show) visible += 1;
+      });
+      if (principalEventsCount) {
+        principalEventsCount.textContent = `Showing ${visible} of ${principalEventsRows.length} events`;
+      }
+      return visible;
+    }
+
+    function activatePrincipalPanel(panelId) {
+      if (!panelId) return;
+      activePanelId = panelId;
+      principalPanels.forEach(panel => {
+        panel.classList.toggle("active", panel.dataset.panel === panelId);
+      });
+      principalPanelButtons.forEach(btn => {
+        const isActive = btn.getAttribute("data-panel-target") === panelId;
+        btn.classList.toggle("active", isActive);
+        btn.setAttribute("aria-pressed", String(isActive));
+      });
+      const copy = principalPanelCopy[panelId];
+      if (copy) {
+        if (principalKicker) principalKicker.textContent = copy.kicker;
+        if (principalTitle) principalTitle.textContent = copy.title;
+        if (principalSub) principalSub.textContent = copy.sub;
+      }
+      const labelText = principalDateLabels[panelId];
+      if (principalDatePill && labelText) {
+        principalDatePill.textContent = labelText;
+      }
+      if (panelId === "this-week") {
+        const visible = applyPrincipalFilters();
+        setPrincipalStatus(`Showing ${visible} of ${principalEventsRows.length} events this week.`);
+      } else {
+        setPrincipalStatus("");
+      }
+    }
+
+    principalPanelButtons.forEach(btn => {
+      btn.addEventListener("click", () => activatePrincipalPanel(btn.getAttribute("data-panel-target")));
+    });
+
+    function openFilterOverlay() {
+      if (!principalFilterOverlay) return;
+      principalFilterOverlay.hidden = false;
+      principalFilterOverlay.classList.add("active");
+      document.body.classList.add("prevent-scroll");
+      if (principalFilterBtn) principalFilterBtn.setAttribute("aria-expanded", "true");
+      syncFilterForm();
+      const firstInput = principalFilterOverlay.querySelector("input");
+      if (firstInput) firstInput.focus();
+    }
+
+    function closeFilterOverlay() {
+      if (!principalFilterOverlay) return;
+      principalFilterOverlay.classList.remove("active");
+      principalFilterOverlay.hidden = true;
+      document.body.classList.remove("prevent-scroll");
+      if (principalFilterBtn) {
+        principalFilterBtn.setAttribute("aria-expanded", "false");
+        principalFilterBtn.focus();
+      }
+    }
+
+    function setPrincipalFilters({ focus, timing, announce }) {
+      if (focus && focus.length) {
+        filterState.focus = new Set(focus);
+      }
+      if (timing && timing.length) {
+        filterState.timing = new Set(timing);
+      }
+      const visible = applyPrincipalFilters();
+      updateFilterButtonState();
+      syncFilterForm();
+      if (announce) {
+        setPrincipalStatus(announce);
+      } else {
+        setPrincipalStatus(`Showing ${visible} of ${principalEventsRows.length} events this week.`);
+      }
+    }
+
+    if (principalFilterBtn) {
+      principalFilterBtn.addEventListener("click", () => openFilterOverlay());
+    }
+
+    if (principalFilterClose) {
+      principalFilterClose.addEventListener("click", () => closeFilterOverlay());
+    }
+
+    if (principalFilterOverlay) {
+      principalFilterOverlay.addEventListener("click", evt => {
+        if (evt.target === principalFilterOverlay) {
+          closeFilterOverlay();
+        }
+      });
+    }
+
+    document.addEventListener("keydown", evt => {
+      if (evt.key === "Escape" && principalFilterOverlay && !principalFilterOverlay.hidden) {
+        closeFilterOverlay();
+      }
+    });
+
+    if (principalFilterForm) {
+      principalFilterForm.addEventListener("submit", evt => {
+        evt.preventDefault();
+        const selectedFocus = Array.from(
+          principalFilterForm.querySelectorAll('input[name="focus"]:checked')
+        ).map(box => box.value);
+        const selectedTiming = Array.from(
+          principalFilterForm.querySelectorAll('input[name="timing"]:checked')
+        ).map(box => box.value);
+        filterState.focus = new Set(selectedFocus.length ? selectedFocus : defaultFocus);
+        filterState.timing = new Set(selectedTiming.length ? selectedTiming : defaultTiming);
+        const visible = applyPrincipalFilters();
+        updateFilterButtonState();
+        closeFilterOverlay();
+        setPrincipalStatus(`Showing ${visible} of ${principalEventsRows.length} events this week.`);
+      });
+    }
+
+    if (principalFilterReset) {
+      principalFilterReset.addEventListener("click", () => {
+        filterState.focus = new Set(defaultFocus);
+        filterState.timing = new Set(defaultTiming);
+        const visible = applyPrincipalFilters();
+        updateFilterButtonState();
+        syncFilterForm();
+        setPrincipalStatus(`Showing ${visible} of ${principalEventsRows.length} events this week.`);
+      });
+    }
+
+    function highlightCard(selector) {
+      const element = document.querySelector(selector);
+      if (!element) return;
+      element.classList.add("principal-highlight");
+      setTimeout(() => element.classList.remove("principal-highlight"), 1600);
+    }
+
+    principalQuickButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const forcedPanel = btn.getAttribute("data-panel-force");
+        if (forcedPanel) {
+          activatePrincipalPanel(forcedPanel);
+        }
+        const timing = btn.getAttribute("data-filter-timing");
+        const message = btn.getAttribute("data-quick-message");
+        if (timing) {
+          setPrincipalFilters({
+            focus: defaultFocus,
+            timing: [timing],
+            announce: message || `Filtered to ${timing} events this week.`
+          });
+        } else if (message) {
+          setPrincipalStatus(message);
+        }
+        const highlightTarget = btn.getAttribute("data-highlight-target");
+        if (highlightTarget) {
+          highlightCard(highlightTarget);
+        }
+        const scrollTarget = btn.getAttribute("data-scroll-target");
+        if (scrollTarget) {
+          const target = document.querySelector(scrollTarget);
+          if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        btn.classList.add("active");
+        setTimeout(() => btn.classList.remove("active"), 1200);
+      });
+    });
+
+    const principalExportData = {
+      "this-week": [
+        {
+          name: "Book Fair — Family Night",
+          when: "Tue · 5:00 – 7:30 PM",
+          focus: "Family · Fundraiser",
+          notes: "Coverage comfortable; cash box pickup at 4:30 PM."
+        },
+        {
+          name: "Walk & Roll to School Day",
+          when: "Wed · 7:10 – 7:45 AM",
+          focus: "Student-facing",
+          notes: "Needs two additional crosswalk adults."
+        },
+        {
+          name: "Teacher Snack Cart",
+          when: "Thu · 8:30 – 11:30 AM",
+          focus: "Staff support",
+          notes: "Check storage for extra donations arriving Wednesday."
+        },
+        {
+          name: "Chess Club Tournament Practice",
+          when: "Thu · 3:00 – 4:15 PM",
+          focus: "Student enrichment",
+          notes: "Confirm dismissal coverage at the car-rider loop."
+        },
+        {
+          name: "PTA Meeting & Budget Q&A",
+          when: "Tue · 7:00 – 8:00 PM",
+          focus: "Family · Governance",
+          notes: "Monitor Zoom chat during the finance report."
+        }
+      ],
+      "next-30": [
+        {
+          name: "STEM Night",
+          when: "Nov 7 · 6:00 – 8:00 PM",
+          focus: "Family · STEM",
+          notes: "Finalize custodial overtime request by Oct 28."
+        },
+        {
+          name: "Community Garden Clean-Up",
+          when: "Nov 9 · 9:00 – 11:30 AM",
+          focus: "Community",
+          notes: "Mulch delivery scheduled for Nov 8."
+        },
+        {
+          name: "Holiday Giving Tree Kickoff",
+          when: "Nov 4 – Nov 15",
+          focus: "Community care",
+          notes: "Counselors coordinating support for 12 families."
+        },
+        {
+          name: "Teacher Conference Meals",
+          when: "Nov 18 – Nov 20",
+          focus: "Staff support",
+          notes: "Catering deposit due Nov 8."
+        },
+        {
+          name: "Winter Concert Support",
+          when: "Dec 3 · 5:30 – 8:30 PM",
+          focus: "Students & families",
+          notes: "Assign ushers and sound volunteer by Nov 20."
+        }
+      ],
+      "by-grade": [
+        {
+          name: "Kindergarten",
+          when: "Playground refresh helpers · Oct 18",
+          focus: "Volunteer Chair",
+          notes: "Need two more adults for paint touch-ups."
+        },
+        {
+          name: "1st grade",
+          when: "Reading Buddies kickoff · Oct 24",
+          focus: "Teacher Liaison",
+          notes: "Record a welcome video for families."
+        },
+        {
+          name: "2nd grade",
+          when: "Science lab docents · Oct 30",
+          focus: "STEM Night Lead",
+          notes: "Confirm parent training slides and lab access."
+        },
+        {
+          name: "3rd grade",
+          when: "STEM Night presenters · Nov 7",
+          focus: "VP Programs",
+          notes: "Recruit three additional presenters."
+        },
+        {
+          name: "4th grade",
+          when: "Walk & Roll route leaders · Nov 6",
+          focus: "Safety Chair",
+          notes: "Staffing on track; send thank-you note afterward."
+        },
+        {
+          name: "5th grade",
+          when: "Safety patrol breakfast · Nov 15",
+          focus: "Treasurer",
+          notes: "Awaiting principal approval for early cafeteria access."
+        }
+      ]
+    };
+
+    function exportPrincipalSnapshot() {
+      const activePanel = activePanelId;
+      const rows = principalExportData[activePanel] || [];
+      if (!rows.length) {
+        setPrincipalStatus("No data to export for this view.");
+        return;
+      }
+      const header = ["Name", "When", "Focus", "Notes"];
+      const csvLines = [header.join(",")];
+      rows.forEach(item => {
+        const cells = [item.name, item.when, item.focus, item.notes].map(value =>
+          `"${String(value).replace(/"/g, '""')}"`
+        );
+        csvLines.push(cells.join(","));
+      });
+      const csvContent = csvLines.join("\\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const todayStamp = new Date().toISOString().slice(0, 10);
+      link.href = url;
+      link.setAttribute("download", `riverbend-principal-${activePanel}-${todayStamp}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      const panelLabel = principalPanelCopy[activePanel]?.label || activePanel;
+      setPrincipalStatus(`Downloaded snapshot for ${panelLabel} (${rows.length} rows).`);
+    }
+
+    if (principalExportBtn) {
+      principalExportBtn.addEventListener("click", exportPrincipalSnapshot);
+    }
+
+    activatePrincipalPanel(activePanelId);
+    updateFilterButtonState();
+    const initialVisible = applyPrincipalFilters();
+    setPrincipalStatus(`Showing ${initialVisible} of ${principalEventsRows.length} events this week.`);
+
+    // --- Family event filters ---
+    const familyFilterButtons = document.querySelectorAll(".family-filter-pill");
+    const familyEventCards = document.querySelectorAll("#family-this-week [data-categories]");
+    familyFilterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        const filter = btn.getAttribute("data-filter");
+        familyFilterButtons.forEach(b => {
+          b.classList.remove("active");
+          b.setAttribute("aria-pressed", "false");
+        });
+        btn.classList.add("active");
+        btn.setAttribute("aria-pressed", "true");
+
+        familyEventCards.forEach(card => {
+          const categories = card.dataset.categories.split(",").map(c => c.trim());
+          const show = filter === "all" || categories.includes(filter);
+          card.classList.toggle("filtered-out", !show);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
