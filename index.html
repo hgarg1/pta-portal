@@ -689,10 +689,224 @@
       font-size: 0.8rem;
       font-weight: 600;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      text-decoration: none;
+      cursor: pointer;
     }
     .family-link-btn:hover {
       transform: translateY(-1px);
       box-shadow: 0 12px 24px rgba(37, 99, 235, 0.16);
+    }
+    button.family-link-btn {
+      background: #ffffff;
+      border: 1px solid #2563eb;
+    }
+    button.family-link-btn:focus-visible {
+      outline: 3px solid rgba(37, 99, 235, 0.45);
+      outline-offset: 2px;
+    }
+    .family-feedback {
+      margin-top: 0.75rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 0.75rem;
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.25);
+      font-size: 0.78rem;
+      color: #1d4ed8;
+      display: none;
+    }
+    .family-feedback.is-visible {
+      display: block;
+    }
+    .family-action-drawer {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      z-index: 70;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease;
+    }
+    .family-action-drawer.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .family-action-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(6px);
+    }
+    .family-action-panel {
+      position: relative;
+      width: min(560px, 100%);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(37, 99, 235, 0.18);
+      background: #ffffff;
+      box-shadow: 0 30px 60px rgba(15, 23, 42, 0.28);
+      padding: 1.6rem;
+      display: grid;
+      gap: 1.1rem;
+    }
+    .family-action-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .family-action-kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+      color: #2563eb;
+      font-weight: 600;
+    }
+    .family-action-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 0.25rem;
+    }
+    .family-action-close {
+      border: none;
+      background: rgba(15, 23, 42, 0.08);
+      color: #0f172a;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      font-size: 1.3rem;
+      line-height: 1;
+      display: grid;
+      place-items: center;
+    }
+    .family-action-close:hover {
+      background: rgba(37, 99, 235, 0.15);
+    }
+    .family-action-body {
+      display: grid;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: #0f172a;
+    }
+    .family-action-form {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .family-action-label {
+      font-weight: 600;
+      font-size: 0.82rem;
+      color: #1d4ed8;
+    }
+    .family-action-input,
+    .family-action-textarea {
+      width: 100%;
+      border: 1px solid rgba(37, 99, 235, 0.25);
+      border-radius: 0.85rem;
+      padding: 0.6rem 0.8rem;
+      font-size: 0.85rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .family-action-input:focus,
+    .family-action-textarea:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.18);
+      outline: none;
+    }
+    .family-action-textarea {
+      resize: vertical;
+      min-height: 96px;
+    }
+    .family-action-primary {
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.2rem;
+      background: linear-gradient(120deg, #2563eb, #22d3ee);
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 0.86rem;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .family-action-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 18px 36px rgba(37, 99, 235, 0.25);
+    }
+    .family-action-secondary {
+      border: 1px solid rgba(37, 99, 235, 0.35);
+      border-radius: 999px;
+      padding: 0.6rem 1.05rem;
+      background: rgba(37, 99, 235, 0.08);
+      color: #1d4ed8;
+      font-weight: 600;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+      justify-self: start;
+    }
+    .family-action-secondary:hover {
+      background: rgba(37, 99, 235, 0.18);
+      border-color: rgba(37, 99, 235, 0.55);
+    }
+    .family-action-note {
+      font-size: 0.78rem;
+      color: #475569;
+    }
+    .family-action-events {
+      list-style: none;
+      display: grid;
+      gap: 0.75rem;
+      margin: 0;
+      padding: 0;
+    }
+    .family-action-event {
+      border: 1px solid rgba(37, 99, 235, 0.18);
+      border-radius: 1rem;
+      padding: 0.75rem 1rem;
+      background: rgba(37, 99, 235, 0.06);
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+    }
+    .family-action-event strong {
+      font-size: 0.9rem;
+      color: #1e293b;
+    }
+    .family-action-event span {
+      font-size: 0.78rem;
+      color: #2563eb;
+      font-weight: 600;
+    }
+    .family-action-event p {
+      margin: 0;
+      color: #334155;
+    }
+    .family-action-steps {
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: 1rem;
+      padding: 0.9rem 1rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+    .family-action-steps h3 {
+      font-size: 0.85rem;
+      color: #1e293b;
+    }
+    .family-action-list {
+      margin: 0;
+      padding-left: 1.1rem;
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      color: #334155;
+    }
+    @media (max-width: 640px) {
+      .family-action-panel {
+        width: 100%;
+        border-radius: 1.1rem;
+        padding: 1.25rem;
+      }
     }
     .family-resource-grid {
       display: grid;
@@ -939,6 +1153,311 @@
       box-shadow: 0 16px 30px rgba(37, 99, 235, 0.6);
     }
 
+    .principal-btn-ghost {
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.55);
+      color: #cbd5f5;
+      font-weight: 600;
+      transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+    .principal-btn-ghost:hover {
+      background: rgba(51, 65, 85, 0.85);
+      border-color: rgba(96, 165, 250, 0.7);
+      transform: translateY(-1px);
+    }
+    .principal-btn-ghost:focus-visible {
+      outline: 3px solid rgba(96, 165, 250, 0.5);
+      outline-offset: 2px;
+    }
+    .principal-locked-banner {
+      padding: 0.75rem 1rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      background: rgba(37, 99, 235, 0.18);
+      color: #bfdbfe;
+      font-size: 0.82rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .principal-root[data-locked="true"] .principal-locked-banner {
+      display: block;
+    }
+    .principal-root[data-locked="true"] .principal-main > *:not(.principal-locked-banner) {
+      filter: blur(6px);
+      pointer-events: none;
+      user-select: none;
+    }
+    .principal-access-modal {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 1.5rem;
+      z-index: 120;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.28s ease;
+    }
+    .principal-access-modal.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .principal-access-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.75);
+      backdrop-filter: blur(8px);
+    }
+    .principal-access-dialog {
+      position: relative;
+      width: min(520px, 100%);
+      border-radius: 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: radial-gradient(circle at top, rgba(59, 130, 246, 0.15), transparent 70%),
+        rgba(15, 23, 42, 0.95);
+      box-shadow: 0 32px 70px rgba(15, 23, 42, 0.6);
+      padding: 1.8rem;
+      color: #e5e7eb;
+      display: grid;
+      gap: 1.2rem;
+    }
+    .principal-access-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .principal-access-kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      color: #60a5fa;
+      font-weight: 600;
+    }
+    .principal-access-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+    .principal-access-close {
+      border: none;
+      background: rgba(15, 23, 42, 0.6);
+      color: #e5e7eb;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+    .principal-access-close:hover {
+      background: rgba(59, 130, 246, 0.35);
+    }
+    .principal-access-body {
+      display: grid;
+      gap: 1rem;
+    }
+    .principal-access-form {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .principal-access-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: #94a3b8;
+      font-weight: 600;
+    }
+    .principal-access-input {
+      width: 100%;
+      border-radius: 0.85rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: rgba(15, 23, 42, 0.65);
+      color: #f8fafc;
+      padding: 0.65rem 0.85rem;
+      font-size: 0.88rem;
+    }
+    .principal-access-input:focus {
+      border-color: rgba(96, 165, 250, 0.8);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.25);
+    }
+    .principal-access-submit {
+      border: none;
+      border-radius: 999px;
+      padding: 0.65rem 1.1rem;
+      background: linear-gradient(135deg, #22d3ee, #60a5fa);
+      color: #020617;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .principal-access-submit:hover {
+      box-shadow: 0 18px 38px rgba(96, 165, 250, 0.35);
+    }
+    .principal-access-secondary {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      background: transparent;
+      color: #cbd5f5;
+      padding: 0.55rem 1rem;
+      font-size: 0.78rem;
+      cursor: pointer;
+    }
+    .principal-access-secondary:hover {
+      border-color: rgba(96, 165, 250, 0.65);
+      color: #f8fafc;
+    }
+    .principal-access-hint {
+      font-size: 0.72rem;
+      color: #94a3b8;
+    }
+    .principal-access-status {
+      border-radius: 0.85rem;
+      padding: 0.65rem 0.8rem;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      font-size: 0.78rem;
+      color: #bfdbfe;
+      display: none;
+    }
+    .principal-access-status.is-visible {
+      display: block;
+    }
+    .principal-access-status.is-visible {
+      display: block;
+    }
+    .principal-access-status.is-error {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(248, 113, 113, 0.5);
+      color: #fecaca;
+    }
+    .principal-access-status.is-success {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: rgba(52, 211, 153, 0.5);
+      color: #bbf7d0;
+    }
+    .principal-reset-section {
+      display: grid;
+      gap: 1.1rem;
+      border-top: 1px solid rgba(148, 163, 184, 0.25);
+      padding-top: 1rem;
+    }
+    .principal-reset-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .principal-reset-header h3 {
+      font-size: 1rem;
+      margin-bottom: 0.35rem;
+    }
+    .principal-reset-header p {
+      font-size: 0.8rem;
+      color: #cbd5f5;
+    }
+    .principal-reset-steps {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.5rem;
+      padding: 0;
+      margin: 0;
+    }
+    .principal-reset-steps li {
+      text-align: center;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.55rem 0.4rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.65);
+      color: #94a3b8;
+    }
+    .principal-reset-steps li.active {
+      border-color: rgba(96, 165, 250, 0.7);
+      background: rgba(37, 99, 235, 0.35);
+      color: #e0f2fe;
+      font-weight: 600;
+    }
+    .principal-reset-steps li.complete {
+      border-color: rgba(16, 185, 129, 0.6);
+      background: rgba(16, 185, 129, 0.25);
+      color: #bbf7d0;
+    }
+    .principal-reset-step {
+      display: grid;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+    .principal-reset-kit {
+      border: 1px dashed rgba(96, 165, 250, 0.6);
+      border-radius: 0.85rem;
+      padding: 0.75rem;
+      display: grid;
+      gap: 0.6rem;
+      background: rgba(37, 99, 235, 0.12);
+    }
+    .principal-reset-code {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-align: center;
+    }
+    .principal-reset-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: #bfdbfe;
+    }
+    .principal-reset-tip {
+      font-size: 0.72rem;
+      color: #cbd5f5;
+    }
+    .principal-reset-success {
+      border-radius: 1rem;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.15);
+      padding: 1rem;
+      display: grid;
+      gap: 0.6rem;
+      text-align: center;
+    }
+    .principal-reset-celebrate {
+      font-size: 2.4rem;
+    }
+    .principal-reset-newpass {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      justify-content: center;
+      padding: 0.6rem 0.9rem;
+      border-radius: 0.75rem;
+      background: rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 0.82rem;
+      color: #f8fafc;
+    }
+    .principal-reset-newpass code {
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 640px) {
+      .principal-access-dialog {
+        padding: 1.35rem;
+      }
+    }
     .principal-small {
       font-size: 0.75rem;
       color: #9ca3af;
@@ -2288,16 +2807,17 @@
                 </div>
               </div>
               <div class="family-info-actions">
-                <a class="family-link-btn" href="mailto:subscribe@riverbendpta.example.org?subject=Add%20me%20to%20PTA%20updates">
+                <button class="family-link-btn" type="button" id="family-request-email-btn">
                   Request weekly e-mails
-                </a>
-                <a class="family-link-btn" href="https://riverbendpta.example.org/text-alerts" target="_blank" rel="noopener">
+                </button>
+                <button class="family-link-btn" type="button" id="family-text-alert-btn">
                   Join text alerts
-                </a>
-                <a class="family-link-btn" href="https://riverbendpta.example.org/calendar.ics" target="_blank" rel="noopener">
+                </button>
+                <button class="family-link-btn" type="button" id="family-calendar-btn">
                   Download calendar (.ics)
-                </a>
+                </button>
               </div>
+              <div class="family-feedback" id="family-info-feedback" role="status" aria-live="polite" hidden></div>
               <p style="margin-top:0.8rem; font-size:0.78rem; color:#4b5563;">
                 Questions? Reply to any update or e-mail <a class="portal-inline-link" href="mailto:pta@riverbendelementary.org">pta@riverbendelementary.org</a>.
                 We can add grandparents or caregivers too.
@@ -2421,6 +2941,9 @@
           </aside>
 
           <main class="principal-main">
+            <div class="principal-locked-banner" id="principal-locked-banner" hidden>
+              Principal access required. Enter the password to unlock this view.
+            </div>
             <header class="principal-header">
               <div class="principal-title-block">
                 <div class="principal-kicker" id="principal-view-kicker">This Week · Snapshot</div>
@@ -2431,6 +2954,9 @@
                 </p>
               </div>
               <div class="principal-controls">
+                <button class="principal-btn-ghost" type="button" id="principal-manage-access">
+                  Manage access
+                </button>
                 <span class="principal-date-pill" id="principal-date-pill">Week of —</span>
                 <button class="principal-btn-outline" type="button" id="principal-filter-btn" aria-expanded="false">
                   Adjust filters
@@ -3594,36 +4120,687 @@
     </main>
   </div>
 
+  <div class="family-action-drawer" id="family-action-drawer" hidden>
+    <div class="family-action-backdrop" id="family-action-backdrop"></div>
+    <div class="family-action-panel" role="dialog" aria-modal="true" aria-labelledby="family-action-title">
+      <header class="family-action-header">
+        <div>
+          <div class="family-action-kicker">Stay in the loop</div>
+          <h2 class="family-action-title" id="family-action-title">PTA updates</h2>
+        </div>
+        <button type="button" class="family-action-close" id="family-action-close" aria-label="Close">
+          ×
+        </button>
+      </header>
+      <div class="family-action-body" id="family-action-body"></div>
+    </div>
+  </div>
+
+  <div class="principal-access-modal" id="principal-access-modal" hidden>
+    <div class="principal-access-backdrop" id="principal-access-backdrop"></div>
+    <div class="principal-access-dialog" role="dialog" aria-modal="true" aria-labelledby="principal-access-title">
+      <header class="principal-access-header">
+        <div>
+          <div class="principal-access-kicker">Principal only</div>
+          <h2 class="principal-access-title" id="principal-access-title">Unlock the dashboard</h2>
+        </div>
+        <button type="button" class="principal-access-close" id="principal-access-close" aria-label="Close">
+          ×
+        </button>
+      </header>
+      <div class="principal-access-body">
+        <form id="principal-login-form" class="principal-access-form">
+          <label class="principal-access-label" for="principal-password-input">Access password</label>
+          <input type="password" id="principal-password-input" class="principal-access-input" autocomplete="current-password"
+            required placeholder="Enter password" />
+          <button type="submit" class="principal-access-submit">Unlock dashboard</button>
+          <button type="button" class="principal-access-secondary" id="principal-open-reset">
+            Forgot or reset password
+          </button>
+          <p class="principal-access-hint">Unlocking keeps this tab active for four hours on this device.</p>
+        </form>
+        <div class="principal-access-status" id="principal-access-status" role="alert" aria-live="assertive"></div>
+
+        <section id="principal-reset-section" class="principal-reset-section" hidden aria-labelledby="principal-reset-heading">
+          <header class="principal-reset-header">
+            <div>
+              <div class="principal-reset-kicker">Secure reset</div>
+              <h3 id="principal-reset-heading">Generate a new access password</h3>
+              <p>Create a recovery kit, verify the code, then set a brand-new password.</p>
+            </div>
+            <button type="button" class="principal-access-secondary" id="principal-reset-back">
+              Back to sign-in
+            </button>
+          </header>
+          <ol class="principal-reset-steps" id="principal-reset-steps">
+            <li class="active" data-step="kit">1. Recovery kit</li>
+            <li data-step="verify">2. Verify code</li>
+            <li data-step="set">3. New password</li>
+          </ol>
+          <div class="principal-reset-flow">
+            <div class="principal-reset-step" data-step="kit" id="principal-reset-kit-step">
+              <p>
+                Generate a one-time recovery kit that you can screenshot or copy. Share it with your assistant principal so the
+                dashboard is never locked out.
+              </p>
+              <button type="button" class="principal-access-submit" id="principal-reset-generate">
+                Create recovery kit
+              </button>
+              <div class="principal-reset-kit" id="principal-reset-kit" hidden>
+                <div class="principal-reset-code" id="principal-reset-code" aria-live="polite"></div>
+                <div class="principal-reset-meta">
+                  <span id="principal-reset-countdown">Expires in 15:00</span>
+                  <button type="button" class="principal-access-secondary" id="principal-reset-copy">Copy code</button>
+                </div>
+                <p class="principal-reset-tip">We also saved this code locally so you can finish the reset without leaving the
+                  page.</p>
+              </div>
+            </div>
+            <form class="principal-reset-step" data-step="verify" id="principal-reset-verify-step" hidden>
+              <label class="principal-access-label" for="principal-reset-code-input">Enter the 6-digit recovery code</label>
+              <input type="text" inputmode="numeric" pattern="\d{6}" maxlength="6" minlength="6"
+                class="principal-access-input" id="principal-reset-code-input" placeholder="Example: 204819" required />
+              <button type="submit" class="principal-access-submit">Verify code</button>
+            </form>
+            <form class="principal-reset-step" data-step="set" id="principal-reset-set-step" hidden>
+              <label class="principal-access-label" for="principal-reset-password">New password</label>
+              <input type="password" id="principal-reset-password" class="principal-access-input" autocomplete="new-password"
+                required placeholder="Create new password" />
+              <label class="principal-access-label" for="principal-reset-confirm">Confirm new password</label>
+              <input type="password" id="principal-reset-confirm" class="principal-access-input" autocomplete="new-password"
+                required placeholder="Re-enter password" />
+              <p class="principal-access-hint">Use at least 8 characters with a mix of letters, numbers, and a symbol.</p>
+              <button type="submit" class="principal-access-submit">Save new password</button>
+            </form>
+            <div class="principal-reset-success" id="principal-reset-success" hidden>
+              <div class="principal-reset-celebrate" aria-hidden="true">🎉</div>
+              <h4>Password updated!</h4>
+              <p>Your new password is active immediately. We’ve cleared the old recovery kit for security.</p>
+              <div class="principal-reset-newpass" id="principal-reset-newpass" hidden>
+                <span>New password:</span>
+                <code id="principal-reset-newpass-text"></code>
+                <button type="button" class="principal-access-secondary" id="principal-reset-newpass-copy">Copy</button>
+              </div>
+              <button type="button" class="principal-access-submit" id="principal-reset-finish">Return to sign-in</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // --- Global view toggle ---
+    // --- Principal access + global view toggle ---
+    const bodyElement = document.body;
     const viewButtons = document.querySelectorAll(".view-toggle-btn");
     const views = document.querySelectorAll(".view");
+    let activeViewId =
+      (Array.from(views).find(view => view.classList.contains("active")) || views[0])?.id || null;
+
+    const principalView = document.getElementById("principal-view");
+    const principalLockedBanner = document.getElementById("principal-locked-banner");
+    const principalManageAccessBtn = document.getElementById("principal-manage-access");
+
+    const principalAccessModal = document.getElementById("principal-access-modal");
+    const principalAccessBackdrop = document.getElementById("principal-access-backdrop");
+    const principalAccessClose = document.getElementById("principal-access-close");
+    const principalLoginForm = document.getElementById("principal-login-form");
+    const principalPasswordInput = document.getElementById("principal-password-input");
+    const principalAccessStatus = document.getElementById("principal-access-status");
+    const principalOpenResetBtn = document.getElementById("principal-open-reset");
+    const principalResetSection = document.getElementById("principal-reset-section");
+    const principalResetBackBtn = document.getElementById("principal-reset-back");
+    const principalResetSteps = document.getElementById("principal-reset-steps");
+    const principalResetKitStep = document.getElementById("principal-reset-kit-step");
+    const principalResetGenerateBtn = document.getElementById("principal-reset-generate");
+    const principalResetKit = document.getElementById("principal-reset-kit");
+    const principalResetCodeElem = document.getElementById("principal-reset-code");
+    const principalResetCountdown = document.getElementById("principal-reset-countdown");
+    const principalResetCopyBtn = document.getElementById("principal-reset-copy");
+    const principalResetVerifyStep = document.getElementById("principal-reset-verify-step");
+    const principalResetCodeInput = document.getElementById("principal-reset-code-input");
+    const principalResetSetStep = document.getElementById("principal-reset-set-step");
+    const principalResetPasswordInput = document.getElementById("principal-reset-password");
+    const principalResetConfirmInput = document.getElementById("principal-reset-confirm");
+    const principalResetSuccess = document.getElementById("principal-reset-success");
+    const principalResetFinishBtn = document.getElementById("principal-reset-finish");
+    const principalResetNewPass = document.getElementById("principal-reset-newpass");
+    const principalResetNewPassText = document.getElementById("principal-reset-newpass-text");
+    const principalResetNewPassCopy = document.getElementById("principal-reset-newpass-copy");
+
+    const PRINCIPAL_PASSWORD_KEY = "ptaPrincipalPasswordHash";
+    const PRINCIPAL_RESET_KEY = "ptaPrincipalResetKit";
+    const PRINCIPAL_UNLOCK_KEY = "ptaPrincipalUnlockedUntil";
+    const PRINCIPAL_UNLOCK_DURATION = 4 * 60 * 60 * 1000;
+    const RESET_EXPIRATION_MS = 15 * 60 * 1000;
+    const DEFAULT_PRINCIPAL_PASSWORD = "RiverbendLead!2024";
+
+    let principalAccessGranted = false;
+    let pendingViewButton = null;
+    let principalCountdownTimer;
+    let lastSetPrincipalPassword = "";
+    const resetStepOrder = { kit: 0, verify: 1, set: 2 };
+
+    function safeGet(storage, key) {
+      try {
+        return storage.getItem(key);
+      } catch (error) {
+        console.warn("Storage get failed", error);
+        return null;
+      }
+    }
+
+    function safeSet(storage, key, value) {
+      try {
+        storage.setItem(key, value);
+      } catch (error) {
+        console.warn("Storage set failed", error);
+      }
+    }
+
+    function safeRemove(storage, key) {
+      try {
+        storage.removeItem(key);
+      } catch (error) {
+        console.warn("Storage remove failed", error);
+      }
+    }
+
+    function hashPassword(value) {
+      try {
+        return btoa(value);
+      } catch (error) {
+        return btoa(unescape(encodeURIComponent(value)));
+      }
+    }
+
+    function ensureDefaultPrincipalPassword() {
+      const stored = safeGet(localStorage, PRINCIPAL_PASSWORD_KEY);
+      if (!stored) {
+        safeSet(localStorage, PRINCIPAL_PASSWORD_KEY, hashPassword(DEFAULT_PRINCIPAL_PASSWORD));
+      }
+    }
+
+    function getStoredPrincipalPasswordHash() {
+      return safeGet(localStorage, PRINCIPAL_PASSWORD_KEY);
+    }
+
+    function setPrincipalPassword(newPassword) {
+      safeSet(localStorage, PRINCIPAL_PASSWORD_KEY, hashPassword(newPassword));
+    }
+
+    function storeResetKit(code, expiresAt) {
+      safeSet(localStorage, PRINCIPAL_RESET_KEY, JSON.stringify({ code, expiresAt }));
+    }
+
+    function loadResetKit() {
+      const raw = safeGet(localStorage, PRINCIPAL_RESET_KEY);
+      if (!raw) return null;
+      try {
+        return JSON.parse(raw);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function clearResetKit() {
+      safeRemove(localStorage, PRINCIPAL_RESET_KEY);
+    }
+
+    function markPrincipalUnlocked() {
+      safeSet(sessionStorage, PRINCIPAL_UNLOCK_KEY, String(Date.now() + PRINCIPAL_UNLOCK_DURATION));
+    }
+
+    function isPrincipalUnlocked() {
+      const raw = safeGet(sessionStorage, PRINCIPAL_UNLOCK_KEY);
+      if (!raw) return false;
+      const expires = Number(raw);
+      return Number.isFinite(expires) && expires > Date.now();
+    }
+
+    function applyViewTheme(targetId) {
+      if (targetId === "principal-view") {
+        bodyElement.style.background = "#020617";
+        bodyElement.style.color = "#e5e7eb";
+      } else if (targetId === "student-view") {
+        bodyElement.style.background =
+          "radial-gradient(circle at top, #e0f2fe 0, #f9fafb 38%, #fef3c7 100%)";
+        bodyElement.style.color = "#111827";
+      } else {
+        bodyElement.style.background = "#f3f4f6";
+        bodyElement.style.color = "#111827";
+      }
+    }
+
+    function switchView(targetId) {
+      if (!targetId || activeViewId === targetId) return;
+      viewButtons.forEach(button => {
+        const matches = button.getAttribute("data-view-target") === targetId;
+        button.classList.toggle("active", matches);
+        button.setAttribute("aria-pressed", String(matches));
+      });
+      views.forEach(view => {
+        view.classList.toggle("active", view.id === targetId);
+      });
+      activeViewId = targetId;
+      applyViewTheme(targetId);
+    }
+
+    function updatePrincipalLockState() {
+      if (!principalView) return;
+      if (principalAccessGranted) {
+        principalView.removeAttribute("data-locked");
+        if (principalLockedBanner) {
+          principalLockedBanner.hidden = true;
+        }
+      } else {
+        principalView.setAttribute("data-locked", "true");
+        if (principalLockedBanner) {
+          principalLockedBanner.hidden = false;
+        }
+      }
+    }
+
+    function setPrincipalAccessStatus(message, type = "info") {
+      if (!principalAccessStatus) return;
+      if (!message) {
+        principalAccessStatus.textContent = "";
+        principalAccessStatus.classList.remove("is-visible", "is-error", "is-success");
+        principalAccessStatus.hidden = true;
+        return;
+      }
+      principalAccessStatus.textContent = message;
+      principalAccessStatus.hidden = false;
+      principalAccessStatus.classList.add("is-visible");
+      principalAccessStatus.classList.toggle("is-error", type === "error");
+      principalAccessStatus.classList.toggle("is-success", type === "success");
+      if (type !== "error" && type !== "success") {
+        principalAccessStatus.classList.remove("is-error", "is-success");
+      }
+    }
+
+    function resetPrincipalAccessStatus() {
+      setPrincipalAccessStatus("");
+    }
+
+    function stopResetCountdown() {
+      if (principalCountdownTimer) {
+        clearInterval(principalCountdownTimer);
+        principalCountdownTimer = undefined;
+      }
+    }
+
+    function startResetCountdown(expiresAt) {
+      if (!principalResetCountdown) return;
+      stopResetCountdown();
+      function tick() {
+        const remaining = expiresAt - Date.now();
+        if (remaining <= 0) {
+          principalResetCountdown.textContent = "Expired";
+          stopResetCountdown();
+          if (principalResetKit) principalResetKit.hidden = true;
+          clearResetKit();
+          goToResetStep("kit");
+          setPrincipalAccessStatus("The recovery code expired. Generate a new kit to continue.", "error");
+          return;
+        }
+        const totalSeconds = Math.floor(remaining / 1000);
+        const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+        const seconds = String(totalSeconds % 60).padStart(2, "0");
+        principalResetCountdown.textContent = `Expires in ${minutes}:${seconds}`;
+      }
+      tick();
+      principalCountdownTimer = setInterval(tick, 1000);
+    }
+
+    function goToResetStep(step) {
+      const order = resetStepOrder[step] ?? 0;
+      if (principalResetSteps) {
+        principalResetSteps.querySelectorAll("li").forEach(item => {
+          const itemStep = item.getAttribute("data-step") || "kit";
+          const itemOrder = resetStepOrder[itemStep] ?? 0;
+          item.classList.toggle("active", itemOrder === order);
+          item.classList.toggle("complete", itemOrder < order);
+        });
+      }
+      if (principalResetVerifyStep) principalResetVerifyStep.hidden = order < resetStepOrder.verify;
+      if (principalResetSetStep) principalResetSetStep.hidden = order < resetStepOrder.set;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetKitStep) {
+        principalResetKitStep.classList.toggle("is-complete", order > resetStepOrder.kit);
+      }
+    }
+
+    function openPrincipalAccessModal() {
+      if (!principalAccessModal) return;
+      principalAccessModal.hidden = false;
+      requestAnimationFrame(() => principalAccessModal.classList.add("active"));
+      document.body.classList.add("prevent-scroll");
+      resetPrincipalAccessStatus();
+      setPrincipalAccessStatus("Enter your access password to unlock the dashboard.", "info");
+      if (principalResetSection) principalResetSection.hidden = true;
+      if (principalLoginForm) principalLoginForm.hidden = false;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      stopResetCountdown();
+      if (principalPasswordInput) {
+        principalPasswordInput.value = "";
+        setTimeout(() => principalPasswordInput.focus(), 80);
+      }
+    }
+
+    function closePrincipalAccessModal() {
+      if (!principalAccessModal) return;
+      principalAccessModal.classList.remove("active");
+      if (!(familyActionDrawer && !familyActionDrawer.hidden)) {
+        document.body.classList.remove("prevent-scroll");
+      }
+      setTimeout(() => {
+        principalAccessModal.hidden = true;
+      }, 200);
+      pendingViewButton = null;
+      stopResetCountdown();
+      if (principalResetSection) principalResetSection.hidden = true;
+      if (principalLoginForm) principalLoginForm.hidden = false;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      resetPrincipalAccessStatus();
+    }
+
+    function openResetFlow() {
+      if (!principalResetSection || !principalLoginForm) return;
+      principalLoginForm.hidden = true;
+      principalResetSection.hidden = false;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      if (principalResetCodeInput) principalResetCodeInput.value = "";
+      if (principalResetPasswordInput) principalResetPasswordInput.value = "";
+      if (principalResetConfirmInput) principalResetConfirmInput.value = "";
+      const kit = loadResetKit();
+      stopResetCountdown();
+      if (kit && kit.expiresAt > Date.now()) {
+        if (principalResetKit) principalResetKit.hidden = false;
+        if (principalResetCodeElem) principalResetCodeElem.textContent = kit.code;
+        goToResetStep("verify");
+        startResetCountdown(kit.expiresAt);
+        setPrincipalAccessStatus("Recovery kit restored. Enter the code below to continue.", "info");
+      } else {
+        clearResetKit();
+        if (principalResetKit) principalResetKit.hidden = true;
+        goToResetStep("kit");
+        setPrincipalAccessStatus("Step 1: create a recovery kit to begin the reset.", "info");
+      }
+      setTimeout(() => {
+        if (principalResetCodeInput && principalResetVerifyStep && !principalResetVerifyStep.hidden) {
+          principalResetCodeInput.focus();
+        }
+      }, 120);
+    }
+
+    function returnToLoginFromReset() {
+      stopResetCountdown();
+      if (principalResetSection) principalResetSection.hidden = true;
+      if (principalLoginForm) principalLoginForm.hidden = false;
+      if (principalResetKit) principalResetKit.hidden = true;
+      if (principalResetSuccess) principalResetSuccess.hidden = true;
+      if (principalResetNewPass) principalResetNewPass.hidden = true;
+      if (principalPasswordInput) {
+        setTimeout(() => principalPasswordInput.focus(), 80);
+      }
+      setPrincipalAccessStatus("Enter your access password to unlock the dashboard.", "info");
+    }
+
+    function generateResetKit() {
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      const expiresAt = Date.now() + RESET_EXPIRATION_MS;
+      if (principalResetCodeElem) principalResetCodeElem.textContent = code;
+      if (principalResetKit) principalResetKit.hidden = false;
+      storeResetKit(code, expiresAt);
+      goToResetStep("verify");
+      setPrincipalAccessStatus("Recovery kit generated. Enter the code to verify your identity.", "success");
+      startResetCountdown(expiresAt);
+      if (principalResetCodeInput) {
+        principalResetCodeInput.value = "";
+        setTimeout(() => principalResetCodeInput.focus(), 80);
+      }
+    }
+
+    function validatePrincipalPassword(value) {
+      const hasLength = value.length >= 8;
+      const hasLetter = /[A-Za-z]/.test(value);
+      const hasNumber = /\d/.test(value);
+      const hasSymbol = /[^A-Za-z0-9\s]/.test(value);
+      return hasLength && hasLetter && hasNumber && hasSymbol;
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(text);
+      }
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "absolute";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        const succeeded = document.execCommand("copy");
+        document.body.removeChild(textarea);
+        return succeeded ? Promise.resolve() : Promise.reject(new Error("Copy failed"));
+      } catch (error) {
+        document.body.removeChild(textarea);
+        return Promise.reject(error);
+      }
+    }
+
+    function showResetSuccess(newPassword) {
+      if (principalResetSteps) {
+        principalResetSteps.querySelectorAll("li").forEach(item => {
+          item.classList.add("complete");
+          item.classList.remove("active");
+        });
+        const finalStep = principalResetSteps.querySelector('li[data-step="set"]');
+        if (finalStep) finalStep.classList.add("active");
+      }
+      if (principalResetVerifyStep) principalResetVerifyStep.hidden = true;
+      if (principalResetSetStep) principalResetSetStep.hidden = true;
+      if (principalResetKitStep) principalResetKitStep.classList.add("is-complete");
+      if (principalResetSuccess) principalResetSuccess.hidden = false;
+      if (principalResetNewPass && principalResetNewPassText) {
+        principalResetNewPassText.textContent = newPassword;
+        principalResetNewPass.hidden = false;
+      }
+      stopResetCountdown();
+    }
+
+    function handlePrincipalLogin(event) {
+      event.preventDefault();
+      const entered = principalPasswordInput ? principalPasswordInput.value.trim() : "";
+      if (!entered) {
+        setPrincipalAccessStatus("Enter the access password to continue.", "error");
+        if (principalPasswordInput) principalPasswordInput.focus();
+        return;
+      }
+      const storedHash = getStoredPrincipalPasswordHash();
+      if (storedHash && hashPassword(entered) === storedHash) {
+        principalAccessGranted = true;
+        markPrincipalUnlocked();
+        updatePrincipalLockState();
+        closePrincipalAccessModal();
+        switchView("principal-view");
+        if (typeof setPrincipalStatus === "function") {
+          setPrincipalStatus("Principal dashboard unlocked. Session active for four hours.");
+        }
+        lastSetPrincipalPassword = entered;
+        if (principalPasswordInput) principalPasswordInput.value = "";
+      } else {
+        setPrincipalAccessStatus("Incorrect password. Try again or reset it below.", "error");
+        if (principalPasswordInput) {
+          principalPasswordInput.select();
+          principalPasswordInput.focus();
+        }
+      }
+    }
+
+    ensureDefaultPrincipalPassword();
+    principalAccessGranted = isPrincipalUnlocked();
+    updatePrincipalLockState();
+    applyViewTheme(activeViewId);
 
     viewButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         const targetId = btn.getAttribute("data-view-target");
-
-        viewButtons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-
-        views.forEach(v => {
-          v.classList.toggle("active", v.id === targetId);
-        });
-
-        if (targetId === "principal-view") {
-          document.body.style.background = "#020617";
-          document.body.style.color = "#e5e7eb";
-        } else if (targetId === "student-view") {
-          document.body.style.background =
-            "radial-gradient(circle at top, #e0f2fe 0, #f9fafb 38%, #fef3c7 100%)";
-          document.body.style.color = "#111827";
-        } else {
-          document.body.style.background = "#f3f4f6";
-          document.body.style.color = "#111827";
+        if (targetId === "principal-view" && !principalAccessGranted) {
+          pendingViewButton = btn;
+          openPrincipalAccessModal();
+          return;
         }
+        switchView(targetId);
       });
     });
 
+    if (principalManageAccessBtn) {
+      principalManageAccessBtn.addEventListener("click", () => {
+        pendingViewButton = principalManageAccessBtn;
+        openPrincipalAccessModal();
+      });
+    }
+
+    if (principalAccessClose) {
+      principalAccessClose.addEventListener("click", () => closePrincipalAccessModal());
+    }
+
+    if (principalAccessBackdrop) {
+      principalAccessBackdrop.addEventListener("click", () => closePrincipalAccessModal());
+    }
+
+    document.addEventListener("keydown", evt => {
+      if (evt.key === "Escape") {
+        if (principalAccessModal && !principalAccessModal.hidden) {
+          closePrincipalAccessModal();
+          return;
+        }
+        if (familyActionDrawer && !familyActionDrawer.hidden) {
+          closeFamilyAction();
+        }
+      }
+    });
+
+    if (principalLoginForm) {
+      principalLoginForm.addEventListener("submit", handlePrincipalLogin);
+    }
+
+    if (principalOpenResetBtn) {
+      principalOpenResetBtn.addEventListener("click", () => openResetFlow());
+    }
+
+    if (principalResetBackBtn) {
+      principalResetBackBtn.addEventListener("click", () => returnToLoginFromReset());
+    }
+
+    if (principalResetGenerateBtn) {
+      principalResetGenerateBtn.addEventListener("click", () => generateResetKit());
+    }
+
+    if (principalResetCopyBtn) {
+      principalResetCopyBtn.addEventListener("click", () => {
+        const code = principalResetCodeElem ? principalResetCodeElem.textContent.trim() : "";
+        if (!code) {
+          setPrincipalAccessStatus("Generate a recovery kit before copying.", "error");
+          return;
+        }
+        copyToClipboard(code)
+          .then(() => setPrincipalAccessStatus("Recovery code copied to your clipboard.", "success"))
+          .catch(() => setPrincipalAccessStatus("Copy failed. Use Ctrl+C or tap-and-hold to copy the code.", "error"));
+      });
+    }
+
+    if (principalResetVerifyStep) {
+      principalResetVerifyStep.addEventListener("submit", event => {
+        event.preventDefault();
+        const inputCode = principalResetCodeInput ? principalResetCodeInput.value.trim() : "";
+        const kit = loadResetKit();
+        if (!kit) {
+          setPrincipalAccessStatus("Generate a recovery kit first.", "error");
+          goToResetStep("kit");
+          if (principalResetKit) principalResetKit.hidden = true;
+          return;
+        }
+        if (kit.expiresAt <= Date.now()) {
+          setPrincipalAccessStatus("That recovery code has expired. Generate a new kit.", "error");
+          clearResetKit();
+          if (principalResetKit) principalResetKit.hidden = true;
+          goToResetStep("kit");
+          stopResetCountdown();
+          return;
+        }
+        if (kit.code !== inputCode) {
+          setPrincipalAccessStatus("That code doesn’t match the recovery kit.", "error");
+          if (principalResetCodeInput) principalResetCodeInput.focus();
+          return;
+        }
+        setPrincipalAccessStatus("Code verified. Set a new password below.", "success");
+        goToResetStep("set");
+        if (principalResetPasswordInput) {
+          setTimeout(() => principalResetPasswordInput.focus(), 80);
+        }
+      });
+    }
+
+    if (principalResetSetStep) {
+      principalResetSetStep.addEventListener("submit", event => {
+        event.preventDefault();
+        const newPassword = principalResetPasswordInput ? principalResetPasswordInput.value.trim() : "";
+        const confirmPassword = principalResetConfirmInput ? principalResetConfirmInput.value.trim() : "";
+        if (!validatePrincipalPassword(newPassword)) {
+          setPrincipalAccessStatus(
+            "Use at least 8 characters with a letter, number, and symbol for the new password.",
+            "error"
+          );
+          if (principalResetPasswordInput) principalResetPasswordInput.focus();
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          setPrincipalAccessStatus("Passwords do not match. Try again.", "error");
+          if (principalResetConfirmInput) principalResetConfirmInput.focus();
+          return;
+        }
+        setPrincipalPassword(newPassword);
+        clearResetKit();
+        lastSetPrincipalPassword = newPassword;
+        showResetSuccess(newPassword);
+        setPrincipalAccessStatus(
+          "Password updated. Return to sign-in to unlock the dashboard with your new password.",
+          "success"
+        );
+      });
+    }
+
+    if (principalResetFinishBtn) {
+      principalResetFinishBtn.addEventListener("click", () => {
+        returnToLoginFromReset();
+        if (principalPasswordInput) {
+          principalPasswordInput.value = lastSetPrincipalPassword;
+          principalPasswordInput.focus();
+        }
+        if (lastSetPrincipalPassword) {
+          setPrincipalAccessStatus(
+            "Password updated. Enter it above to unlock the dashboard.",
+            "success"
+          );
+        }
+      });
+    }
+
+    if (principalResetNewPassCopy) {
+      principalResetNewPassCopy.addEventListener("click", () => {
+        const text = principalResetNewPassText ? principalResetNewPassText.textContent : "";
+        copyToClipboard(text || "")
+          .then(() => setPrincipalAccessStatus("New password copied to clipboard.", "success"))
+          .catch(() => setPrincipalAccessStatus("Copy failed. Select the password and copy manually.", "error"));
+      });
+    }
     // --- Family view date + year ---
     const familyTodayElem = document.getElementById("family-today-date");
     const familyYearElem = document.getElementById("family-year");
@@ -3631,6 +4808,345 @@
     const dateOptions = { weekday: "long", month: "long", day: "numeric" };
     if (familyTodayElem) familyTodayElem.textContent = now.toLocaleDateString(undefined, dateOptions);
     if (familyYearElem) familyYearElem.textContent = now.getFullYear();
+
+    // --- Family actions & downloads ---
+    const familyRequestEmailBtn = document.getElementById("family-request-email-btn");
+    const familyTextAlertBtn = document.getElementById("family-text-alert-btn");
+    const familyCalendarBtn = document.getElementById("family-calendar-btn");
+    const familyInfoFeedback = document.getElementById("family-info-feedback");
+    const familyActionDrawer = document.getElementById("family-action-drawer");
+    const familyActionBody = document.getElementById("family-action-body");
+    const familyActionClose = document.getElementById("family-action-close");
+    const familyActionTitle = document.getElementById("family-action-title");
+    const familyActionBackdrop = document.getElementById("family-action-backdrop");
+
+    const FAMILY_EMAIL_ADDRESS = "subscribe@riverbendpta.example.org";
+    const TEXT_ALERT_NUMBER = "+15550123";
+    const TEXT_ALERT_DISPLAY = "(555) 012-3PTA";
+    const TEXT_ALERT_KEYWORD = "JOIN RIVERBEND";
+
+    const calendarEvents = [
+      {
+        title: "Book Fair — Family Night",
+        start: "2024-10-15T17:00",
+        end: "2024-10-15T19:30",
+        description: "Shop the fair together with literacy stations and a snack table supported by PTA volunteers.",
+        location: "Riverbend Elementary Library",
+        display: "Tue, Oct 15 · 5:00 – 7:30 PM"
+      },
+      {
+        title: "Walk & Roll to School Day",
+        start: "2024-10-16T07:10",
+        end: "2024-10-16T07:45",
+        description: "Meet at the corners around campus for the walking school bus and crosswalk cheers.",
+        location: "Neighborhood routes to Riverbend Elementary",
+        display: "Wed, Oct 16 · 7:10 – 7:45 AM"
+      },
+      {
+        title: "PTA Meeting & Budget Q&A",
+        start: "2024-10-22T19:00",
+        end: "2024-10-22T20:00",
+        description: "Hybrid meeting with finance updates, committee spotlights, and open Q&A for families.",
+        location: "Riverbend Elementary Media Center + Zoom",
+        display: "Tue, Oct 22 · 7:00 – 8:00 PM"
+      },
+      {
+        title: "STEM Night",
+        start: "2024-11-07T18:00",
+        end: "2024-11-07T20:00",
+        description: "Hands-on stations, robotics demos, and student presenters across the building.",
+        location: "Riverbend Elementary Campus",
+        display: "Thu, Nov 7 · 6:00 – 8:00 PM"
+      },
+      {
+        title: "Community Garden Clean-Up",
+        start: "2024-11-09T09:00",
+        end: "2024-11-09T11:30",
+        description: "Mulch delivery, planter refresh, and family-friendly outdoor projects.",
+        location: "Riverbend Community Garden",
+        display: "Sat, Nov 9 · 9:00 – 11:30 AM"
+      },
+      {
+        title: "Teacher Conference Meals",
+        start: "2024-11-18T08:30",
+        end: "2024-11-20T17:00",
+        description: "PTA coordinates daily meals for teachers during fall conferences; drop-off help welcome.",
+        location: "Riverbend Elementary Staff Lounge",
+        display: "Nov 18 – Nov 20"
+      }
+    ];
+
+    let familyFeedbackTimer;
+    let familyActionOrigin = null;
+
+    function setFamilyFeedback(message) {
+      if (!familyInfoFeedback) return;
+      familyInfoFeedback.textContent = message;
+      familyInfoFeedback.hidden = false;
+      familyInfoFeedback.classList.add("is-visible");
+      clearTimeout(familyFeedbackTimer);
+      familyFeedbackTimer = setTimeout(() => {
+        familyInfoFeedback.classList.remove("is-visible");
+        familyInfoFeedback.hidden = true;
+      }, 7000);
+    }
+
+    function closeFamilyAction() {
+      if (!familyActionDrawer) return;
+      familyActionDrawer.classList.remove("active");
+      setTimeout(() => {
+        familyActionDrawer.hidden = true;
+        if (familyActionBody) familyActionBody.innerHTML = "";
+      }, 220);
+      if (!(principalAccessModal && !principalAccessModal.hidden)) {
+        document.body.classList.remove("prevent-scroll");
+      }
+      if (familyActionOrigin) {
+        familyActionOrigin.focus();
+        familyActionOrigin = null;
+      }
+    }
+
+    function focusFamilyAction() {
+      if (!familyActionBody) return;
+      const first = familyActionBody.querySelector(
+        'input, button, textarea, select, a[href]'
+      );
+      if (first) first.focus();
+    }
+
+    function openFamilyAction(type, origin) {
+      if (!familyActionDrawer || !familyActionBody || !familyActionTitle) return;
+      familyActionOrigin = origin || null;
+      familyActionBody.innerHTML = "";
+      familyActionDrawer.hidden = false;
+      requestAnimationFrame(() => familyActionDrawer.classList.add("active"));
+      document.body.classList.add("prevent-scroll");
+      if (type === "email") {
+        familyActionTitle.textContent = "Request weekly e-mails";
+        renderEmailAction();
+      } else if (type === "text") {
+        familyActionTitle.textContent = "Join PTA text alerts";
+        renderTextAction();
+      } else {
+        familyActionTitle.textContent = "Download the PTA calendar";
+        renderCalendarAction();
+      }
+      setTimeout(() => focusFamilyAction(), 120);
+    }
+
+    function renderEmailAction() {
+      if (!familyActionBody) return;
+      familyActionBody.innerHTML = `
+        <p>We will pre-fill an e-mail to ${FAMILY_EMAIL_ADDRESS}. Add any notes and send it to join the weekly update list.</p>
+        <form class="family-action-form" id="family-email-form">
+          <label class="family-action-label" for="family-email-name">Your name</label>
+          <input class="family-action-input" id="family-email-name" name="family-email-name" type="text" required placeholder="Example: Jordan Lee" />
+          <label class="family-action-label" for="family-email-address">Preferred e-mail address</label>
+          <input class="family-action-input" id="family-email-address" name="family-email-address" type="email" required placeholder="you@example.com" />
+          <label class="family-action-label" for="family-email-notes">Notes (optional)</label>
+          <textarea class="family-action-textarea" id="family-email-notes" rows="3" placeholder="Add grandparents, grade-level notes, or questions."></textarea>
+          <button type="submit" class="family-action-primary">Compose request e-mail</button>
+          <p class="family-action-note">Your default mail app will open with a ready-to-send message.</p>
+        </form>
+        <button type="button" class="family-action-secondary" id="family-email-copy">Copy pre-written message</button>
+      `;
+
+      function composeEmailTemplate() {
+        const nameInput = document.getElementById("family-email-name");
+        const emailInput = document.getElementById("family-email-address");
+        const notesInput = document.getElementById("family-email-notes");
+        const name = nameInput ? nameInput.value.trim() : "Riverbend family";
+        const address = emailInput ? emailInput.value.trim() : "";
+        const notes = notesInput ? notesInput.value.trim() : "";
+        const lines = [
+          "Hello Riverbend PTA team,",
+          "",
+          `Please add ${name || "our family"} to the weekly PTA update list.`,
+          address ? `Preferred e-mail: ${address}` : "Preferred e-mail: (same as this message)"
+        ];
+        if (notes) {
+          lines.push("", notes);
+        }
+        lines.push("", "Thank you!");
+        return { name, address, notes, lines };
+      }
+
+      const emailForm = document.getElementById("family-email-form");
+      if (emailForm) {
+        emailForm.addEventListener("submit", event => {
+          event.preventDefault();
+          const template = composeEmailTemplate();
+          const subject = encodeURIComponent("Add me to PTA updates");
+          const body = encodeURIComponent(template.lines.join("\n"));
+          const mailto = `mailto:${FAMILY_EMAIL_ADDRESS}?subject=${subject}&body=${body}`;
+          window.location.href = mailto;
+          const addressSuffix = template.address ? ` for ${template.address}` : "";
+          setFamilyFeedback(`Email draft opened. Finish sending it to join the weekly PTA updates${addressSuffix}.`);
+          closeFamilyAction();
+        });
+      }
+
+      const copyBtn = document.getElementById("family-email-copy");
+      if (copyBtn) {
+        copyBtn.addEventListener("click", () => {
+          const template = composeEmailTemplate();
+          const message = `${template.lines.join("\n")}\n\nSend to: ${FAMILY_EMAIL_ADDRESS}`;
+          copyToClipboard(message)
+            .then(() => setFamilyFeedback("Copied the PTA subscription message. Paste it into any e-mail app."))
+            .catch(() => setFamilyFeedback(`Copy failed. Email ${FAMILY_EMAIL_ADDRESS} with subject “Add me to PTA updates.”`));
+        });
+      }
+    }
+
+    function renderTextAction() {
+      if (!familyActionBody) return;
+      familyActionBody.innerHTML = `
+        <p>We’ll prepare the exact opt-in message so you can start receiving PTA text alerts.</p>
+        <form class="family-action-form" id="family-text-form">
+          <label class="family-action-label" for="family-text-number">Your mobile number</label>
+          <input class="family-action-input" id="family-text-number" name="family-text-number" type="tel" required placeholder="555-123-4567" />
+          <button type="submit" class="family-action-primary">Open messaging app</button>
+          <p class="family-action-note">Standard messaging rates may apply. Reply STOP anytime to unsubscribe.</p>
+        </form>
+        <div class="family-action-steps">
+          <h3>What happens next</h3>
+          <ol class="family-action-list">
+            <li>We’ll launch your SMS app addressed to ${TEXT_ALERT_DISPLAY}.</li>
+            <li>Tap send to deliver “${TEXT_ALERT_KEYWORD}”.</li>
+            <li>Look for a confirmation reply within a minute.</li>
+          </ol>
+        </div>
+        <button type="button" class="family-action-secondary" id="family-text-copy">Copy join message</button>
+      `;
+
+      const textForm = document.getElementById("family-text-form");
+      if (textForm) {
+        textForm.addEventListener("submit", event => {
+          event.preventDefault();
+          const smsLink = `sms:${TEXT_ALERT_NUMBER}?&body=${encodeURIComponent(TEXT_ALERT_KEYWORD)}`;
+          window.location.href = smsLink;
+          setFamilyFeedback(`Opening your messaging app. Send “${TEXT_ALERT_KEYWORD}” to ${TEXT_ALERT_DISPLAY}.`);
+          closeFamilyAction();
+        });
+      }
+
+      const copyBtn = document.getElementById("family-text-copy");
+      if (copyBtn) {
+        copyBtn.addEventListener("click", () => {
+          const content = `${TEXT_ALERT_KEYWORD}\nText to: ${TEXT_ALERT_DISPLAY}`;
+          copyToClipboard(content)
+            .then(() => setFamilyFeedback(`Copied the opt-in message. Text “${TEXT_ALERT_KEYWORD}” to ${TEXT_ALERT_DISPLAY}.`))
+            .catch(() => setFamilyFeedback(`Copy failed. Manually text “${TEXT_ALERT_KEYWORD}” to ${TEXT_ALERT_DISPLAY}.`));
+        });
+      }
+    }
+
+    function formatUtc(date) {
+      return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    }
+
+    function toIcsDateTime(value) {
+      const [datePart, timePart = "00:00"] = value.split("T");
+      const date = datePart.replace(/-/g, "");
+      const time = (timePart.length === 5 ? `${timePart}:00` : timePart).replace(/:/g, "");
+      return `${date}T${time}`;
+    }
+
+    function escapeIcsText(text) {
+      return String(text)
+        .replace(/\/g, "\\")
+        .replace(/;/g, "\;")
+        .replace(/,/g, "\,")
+        .replace(/\n/g, "\n");
+    }
+
+    function buildIcsContent(events) {
+      const lines = [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//Riverbend Elementary PTA//Calendar//EN",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH"
+      ];
+      const stamp = formatUtc(new Date());
+      events.forEach(event => {
+        const uid = (window.crypto && crypto.randomUUID)
+          ? crypto.randomUUID()
+          : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+        lines.push("BEGIN:VEVENT");
+        lines.push(`UID:${uid}@riverbendpta.local`);
+        lines.push(`DTSTAMP:${stamp}`);
+        lines.push(`DTSTART;TZID=America/Chicago:${toIcsDateTime(event.start)}`);
+        lines.push(`DTEND;TZID=America/Chicago:${toIcsDateTime(event.end)}`);
+        lines.push(`SUMMARY:${escapeIcsText(event.title)}`);
+        if (event.description) lines.push(`DESCRIPTION:${escapeIcsText(event.description)}`);
+        if (event.location) lines.push(`LOCATION:${escapeIcsText(event.location)}`);
+        lines.push("END:VEVENT");
+      });
+      lines.push("END:VCALENDAR");
+      return lines.join("\r\n");
+    }
+
+    function downloadIcsFile(filename, content) {
+      const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function renderCalendarAction() {
+      if (!familyActionBody) return;
+      const eventsMarkup = calendarEvents
+        .map(event => `
+          <li class="family-action-event">
+            <strong>${event.title}</strong>
+            <span>${event.display}</span>
+            <p>${event.description}</p>
+          </li>
+        `)
+        .join("");
+      familyActionBody.innerHTML = `
+        <p>Download an .ics file that includes the latest PTA events so you can subscribe in any calendar app.</p>
+        <ul class="family-action-events">${eventsMarkup}</ul>
+        <button type="button" class="family-action-primary" id="family-calendar-download">Download .ics file</button>
+        <p class="family-action-note">Import into Google Calendar, Apple Calendar, Outlook, or any app that supports .ics files.</p>
+      `;
+      const downloadBtn = document.getElementById("family-calendar-download");
+      if (downloadBtn) {
+        downloadBtn.addEventListener("click", () => {
+          const icsContent = buildIcsContent(calendarEvents);
+          downloadIcsFile("riverbend-pta-calendar.ics", icsContent);
+          setFamilyFeedback("Downloaded the PTA calendar (.ics) with this month’s events.");
+          closeFamilyAction();
+        });
+      }
+    }
+
+    if (familyRequestEmailBtn) {
+      familyRequestEmailBtn.addEventListener("click", () => openFamilyAction("email", familyRequestEmailBtn));
+    }
+
+    if (familyTextAlertBtn) {
+      familyTextAlertBtn.addEventListener("click", () => openFamilyAction("text", familyTextAlertBtn));
+    }
+
+    if (familyCalendarBtn) {
+      familyCalendarBtn.addEventListener("click", () => openFamilyAction("calendar", familyCalendarBtn));
+    }
+
+    if (familyActionClose) {
+      familyActionClose.addEventListener("click", () => closeFamilyAction());
+    }
+
+    if (familyActionBackdrop) {
+      familyActionBackdrop.addEventListener("click", () => closeFamilyAction());
+    }
 
     // --- Principal header + panels ---
     const principalKicker = document.getElementById("principal-view-kicker");
