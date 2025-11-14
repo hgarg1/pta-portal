@@ -183,6 +183,37 @@
       transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
     }
 
+    .view-toggle-btn .view-toggle-lock {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      padding: 0.1rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(248, 250, 252, 0.16);
+      border: 1px solid rgba(248, 250, 252, 0.35);
+      color: inherit;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .view-toggle-btn[data-requires-principal="true"] {
+      position: relative;
+    }
+
+    .view-toggle-btn.requires-principal-lock {
+      background: rgba(15, 23, 42, 0.26);
+      border-color: rgba(248, 250, 252, 0.35);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.3);
+    }
+
+    .view-toggle-btn.requires-principal-lock .view-toggle-lock {
+      background: rgba(248, 250, 252, 0.28);
+      border-color: rgba(248, 250, 252, 0.55);
+      color: rgba(15, 23, 42, 0.75);
+    }
+
     .view-toggle-btn:hover,
     .view-toggle-btn:focus-visible {
       transform: translateY(-2px);
@@ -1281,9 +1312,9 @@
       inset: 0;
       z-index: 130;
       display: grid;
-      align-content: flex-start;
+      align-content: center;
       justify-items: center;
-      padding: clamp(1.5rem, 5vw, 3rem);
+      padding: clamp(1.5rem, 6vw, 4rem);
       overflow-y: auto;
       opacity: 0;
       pointer-events: none;
@@ -1303,43 +1334,138 @@
     .principal-access-backdrop {
       width: 100%;
       height: 100%;
-      background: rgba(15, 23, 42, 0.5);
+      background: radial-gradient(circle at top right, rgba(236, 72, 153, 0.25), rgba(79, 70, 229, 0.55));
       align-self: stretch;
       justify-self: stretch;
+      backdrop-filter: blur(18px);
     }
 
     .principal-access-dialog {
-      width: min(460px, 100%);
-      background: var(--bg-panel-strong);
-      border-radius: var(--radius-lg);
-      border: var(--border-soft);
-      padding: clamp(1.75rem, 3vw, 2.4rem);
-      box-shadow: var(--shadow-strong);
+      width: min(520px, 100%);
+      background: linear-gradient(160deg, rgba(248, 250, 252, 0.96), rgba(224, 231, 255, 0.92))
+          padding-box,
+        linear-gradient(140deg, rgba(79, 70, 229, 0.55), rgba(236, 72, 153, 0.35)) border-box;
+      border-radius: calc(var(--radius-lg) + 6px);
+      border: 1px solid transparent;
+      padding: clamp(2rem, 3vw, 2.75rem);
+      box-shadow: var(--shadow-strong), 0 40px 90px rgba(79, 70, 229, 0.22);
       display: grid;
-      gap: 1.25rem;
+      gap: 1.75rem;
       position: relative;
       max-height: min(90vh, 760px);
       overflow-y: auto;
-      margin-top: clamp(2rem, 8vh, 4rem);
+    }
+
+    .principal-access-dialog::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(236, 72, 153, 0.18), transparent 55%);
+      pointer-events: none;
+      mix-blend-mode: screen;
     }
 
     .principal-access-header {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.5rem;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .principal-access-hero {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 1rem;
       align-items: center;
     }
 
+    .principal-access-crest {
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      background: linear-gradient(145deg, rgba(79, 70, 229, 0.2), rgba(236, 72, 153, 0.25));
+      border: 1px solid rgba(79, 70, 229, 0.35);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35), 0 12px 30px rgba(79, 70, 229, 0.25);
+    }
+
     .principal-access-title {
-      font-size: 1.45rem;
+      font-size: clamp(1.65rem, 3vw, 1.95rem);
       font-family: var(--font-display);
+      margin: 0.35rem 0 0;
+    }
+
+    .principal-access-lede {
+      margin: 0.35rem 0 0;
+      font-size: 0.95rem;
+      color: rgba(30, 41, 59, 0.78);
+      max-width: 32ch;
     }
 
     .principal-access-close {
       border: none;
-      background: rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.1);
       border-radius: 50%;
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
+      color: rgba(15, 23, 42, 0.75);
+      display: grid;
+      place-items: center;
+      font-size: 1.5rem;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .principal-access-close:hover,
+    .principal-access-close:focus-visible {
+      background: rgba(79, 70, 229, 0.16);
+      color: rgba(79, 70, 229, 0.85);
+      transform: translateY(-1px);
+    }
+
+    .principal-access-body {
+      display: grid;
+      gap: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .principal-access-highlight {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 0.85rem;
+      align-items: start;
+      background: rgba(236, 72, 153, 0.12);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem;
+      border: 1px solid rgba(236, 72, 153, 0.25);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    }
+
+    .principal-access-highlight strong {
+      font-size: 0.95rem;
+      font-family: var(--font-display);
+    }
+
+    .principal-access-highlight p {
+      margin: 0.35rem 0 0;
+      font-size: 0.85rem;
+      color: rgba(30, 41, 59, 0.75);
+    }
+
+    .principal-access-highlight-icon {
+      font-size: 1.3rem;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      color: rgba(236, 72, 153, 0.9);
+      box-shadow: 0 10px 22px rgba(236, 72, 153, 0.25);
     }
 
     .principal-access-form,
@@ -1352,16 +1478,52 @@
     .principal-reset-kit textarea,
     .principal-reset-code input {
       border-radius: 12px;
-      border: var(--border-soft);
-      padding: 0.6rem 0.85rem;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      padding: 0.75rem 1rem;
       font: inherit;
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.05), 0 8px 18px rgba(15, 23, 42, 0.08);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .principal-access-input:focus,
+    .principal-reset-kit textarea:focus,
+    .principal-reset-code input:focus {
+      border-color: rgba(79, 70, 229, 0.55);
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.18), 0 12px 28px rgba(79, 70, 229, 0.15);
     }
 
     .principal-access-status {
       font-size: 0.85rem;
-      color: var(--brand-accent);
-      min-height: 1rem;
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 0.9rem;
+      background: rgba(79, 70, 229, 0.12);
+      color: rgba(30, 41, 59, 0.82);
+      border: 1px solid rgba(79, 70, 229, 0.25);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+      display: none;
+    }
+
+    .principal-access-status.is-visible {
+      display: block;
+    }
+
+    .principal-access-status.is-error {
+      background: rgba(248, 113, 113, 0.18);
+      color: #b91c1c;
+      border-color: rgba(248, 113, 113, 0.35);
+    }
+
+    .principal-access-status.is-success {
+      background: rgba(16, 185, 129, 0.16);
+      color: #047857;
+      border-color: rgba(45, 212, 191, 0.4);
+    }
+
+    .principal-access-hint {
+      font-size: 0.78rem;
+      color: rgba(30, 41, 59, 0.65);
+      line-height: 1.5;
     }
 
     .principal-access-submit,
@@ -1376,22 +1538,69 @@
     }
 
     .principal-access-submit {
-      background: linear-gradient(135deg, #4f46e5, #ec4899);
+      background: linear-gradient(120deg, #4f46e5, #7c3aed, #ec4899);
+      background-size: 180% 180%;
       color: white;
+      box-shadow: 0 18px 36px rgba(79, 70, 229, 0.35);
+      transition: background-position 0.35s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .principal-access-submit:hover,
+    .principal-access-submit:focus-visible {
+      background-position: 100% 0;
+      transform: translateY(-1px);
+      box-shadow: 0 22px 44px rgba(79, 70, 229, 0.38);
     }
 
     .principal-access-secondary {
-      background: rgba(148, 163, 184, 0.25);
+      background: rgba(148, 163, 184, 0.18);
       color: var(--text-primary);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .principal-access-secondary:hover,
+    .principal-access-secondary:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(79, 70, 229, 0.35);
+      box-shadow: 0 12px 24px rgba(148, 163, 184, 0.28);
     }
 
     .principal-reset-section {
-      border-radius: var(--radius-md);
-      border: var(--border-soft);
-      background: rgba(79, 70, 229, 0.08);
-      padding: 1.3rem;
+      border-radius: calc(var(--radius-md) + 4px);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      background: linear-gradient(155deg, rgba(79, 70, 229, 0.08), rgba(59, 130, 246, 0.08));
+      padding: 1.5rem;
       display: grid;
-      gap: 0.75rem;
+      gap: 1.25rem;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+    }
+
+    .principal-reset-header {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .principal-reset-header h3 {
+      margin: 0.35rem 0 0;
+      font-family: var(--font-display);
+    }
+
+    .principal-reset-header p {
+      margin: 0.3rem 0 0;
+      font-size: 0.85rem;
+      color: rgba(30, 41, 59, 0.75);
+    }
+
+    .principal-reset-kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.75rem;
+      color: rgba(99, 102, 241, 0.85);
+      font-weight: 600;
     }
 
     .principal-reset-steps {
@@ -1405,19 +1614,22 @@
 
     .principal-reset-step {
       border-radius: 999px;
-      padding: 0.35rem 0.75rem;
-      background: rgba(148, 163, 184, 0.18);
+      padding: 0.4rem 0.85rem;
+      background: rgba(148, 163, 184, 0.22);
       font-size: 0.78rem;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
     }
 
     .principal-reset-step.active {
-      background: rgba(79, 70, 229, 0.22);
+      background: rgba(79, 70, 229, 0.28);
       color: var(--brand-tertiary);
+      box-shadow: inset 0 0 0 1px rgba(79, 70, 229, 0.25);
     }
 
     .principal-reset-step.complete {
-      background: rgba(34, 197, 94, 0.2);
+      background: rgba(34, 197, 94, 0.22);
       color: #15803d;
+      box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.22);
     }
 
     .principal-reset-newpass {
@@ -1762,16 +1974,17 @@
         </div>
         <div class="portal-toggle-group">
           <span class="portal-toggle-label">View as:</span>
-          <button class="view-toggle-btn active" data-view-target="family-view">
+          <button class="view-toggle-btn active" data-view-target="family-view" aria-controls="family-view">
             <span>🌼</span> PTA Family
           </button>
-          <button class="view-toggle-btn" data-view-target="principal-view">
+          <button class="view-toggle-btn" data-view-target="principal-view" data-requires-principal="true" aria-haspopup="dialog" aria-controls="principal-access-modal" aria-label="Principal (requires password)">
             <span>🎓</span> Principal
+            <span class="view-toggle-lock" aria-hidden="true">🔒</span>
           </button>
-          <button class="view-toggle-btn" data-view-target="pta-board-view">
+          <button class="view-toggle-btn" data-view-target="pta-board-view" aria-controls="pta-board-view">
             <span>📝</span> PTA Board
           </button>
-          <button class="view-toggle-btn" data-view-target="student-view">
+          <button class="view-toggle-btn" data-view-target="student-view" aria-controls="student-view">
             <span>🎒</span> Students
           </button>
         </div>
@@ -3555,15 +3768,26 @@
     <div class="principal-access-backdrop" id="principal-access-backdrop"></div>
     <div class="principal-access-dialog" role="dialog" aria-modal="true" aria-labelledby="principal-access-title">
       <header class="principal-access-header">
-        <div>
-          <div class="principal-access-kicker">Principal only</div>
-          <h2 class="principal-access-title" id="principal-access-title">Unlock the dashboard</h2>
+        <div class="principal-access-hero">
+          <div class="principal-access-crest" aria-hidden="true">🎓</div>
+          <div>
+            <div class="principal-access-kicker">Principal only</div>
+            <h2 class="principal-access-title" id="principal-access-title">Unlock the dashboard</h2>
+            <p class="principal-access-lede">Lead with campus updates, approvals, and weekly actions curated just for Riverbend’s principal.</p>
+          </div>
         </div>
         <button type="button" class="principal-access-close" id="principal-access-close" aria-label="Close">
-          ×
+          <span aria-hidden="true">×</span>
         </button>
       </header>
       <div class="principal-access-body">
+        <div class="principal-access-highlight">
+          <span class="principal-access-highlight-icon" aria-hidden="true">✨</span>
+          <div>
+            <strong>Inside the leadership view</strong>
+            <p>See confidential PTA notes, approvals waiting on you, and a ready-to-go summary to share with staff.</p>
+          </div>
+        </div>
         <form id="principal-login-form" class="principal-access-form">
           <label class="principal-access-label" for="principal-password-input">Access password</label>
           <input type="password" id="principal-password-input" class="principal-access-input" autocomplete="current-password"
@@ -3787,18 +4011,45 @@
       }
     }
 
+    function refreshViewToggleAccessibility() {
+      viewButtons.forEach(button => {
+        const isActive = button.classList.contains("active");
+        button.setAttribute("aria-pressed", String(isActive));
+        const requiresPrincipal = button.hasAttribute("data-requires-principal");
+        const shouldLock = requiresPrincipal && !principalAccessGranted;
+        button.classList.toggle("requires-principal-lock", shouldLock);
+        if (requiresPrincipal) {
+          button.setAttribute(
+            "aria-label",
+            shouldLock ? "Principal (requires password)" : "Principal dashboard"
+          );
+          if (shouldLock) {
+            button.setAttribute("aria-haspopup", "dialog");
+            button.setAttribute("aria-controls", "principal-access-modal");
+          } else {
+            button.setAttribute("aria-haspopup", "false");
+            button.setAttribute("aria-controls", "principal-view");
+          }
+        }
+        const lockBadge = button.querySelector(".view-toggle-lock");
+        if (lockBadge) {
+          lockBadge.textContent = shouldLock ? "🔒 Locked" : "🔓 Ready";
+        }
+      });
+    }
+
     function switchView(targetId) {
       if (!targetId || activeViewId === targetId) return;
       viewButtons.forEach(button => {
         const matches = button.getAttribute("data-view-target") === targetId;
         button.classList.toggle("active", matches);
-        button.setAttribute("aria-pressed", String(matches));
       });
       views.forEach(view => {
         view.classList.toggle("active", view.id === targetId);
       });
       activeViewId = targetId;
       applyViewTheme(targetId);
+      refreshViewToggleAccessibility();
     }
 
     function updatePrincipalLockState() {
@@ -3821,6 +4072,7 @@
           principalLockedBanner.hidden = true;
         }
       }
+      refreshViewToggleAccessibility();
     }
 
     function setPrincipalAccessStatus(message, type = "info") {
@@ -4074,11 +4326,13 @@
     principalAccessGranted = isPrincipalUnlocked();
     updatePrincipalLockState();
     applyViewTheme(activeViewId);
+    refreshViewToggleAccessibility();
 
     viewButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         const targetId = btn.getAttribute("data-view-target");
-        if (targetId === "principal-view" && !principalAccessGranted) {
+        const requiresPrincipal = btn.hasAttribute("data-requires-principal");
+        if (requiresPrincipal && !principalAccessGranted) {
           pendingViewButton = btn;
           openPrincipalAccessModal();
           return;
