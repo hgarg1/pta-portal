@@ -235,13 +235,12 @@
     }
 
     .view {
-      display: none;
       width: min(1280px, 100%);
       animation: fade-in 0.4s ease forwards;
     }
 
-    .view.active {
-      display: block;
+    .view:not(.active) {
+      display: none;
     }
 
     @keyframes fade-in {
