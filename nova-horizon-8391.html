@@ -4015,7 +4015,8 @@
       viewButtons.forEach(button => {
         const isActive = button.classList.contains("active");
         button.setAttribute("aria-pressed", String(isActive));
-        const requiresPrincipal = button.hasAttribute("data-requires-principal");
+        const targetId = button.getAttribute("data-view-target");
+        const requiresPrincipal = targetId === "principal-view";
         const shouldLock = requiresPrincipal && !principalAccessGranted;
         button.classList.toggle("requires-principal-lock", shouldLock);
         if (requiresPrincipal) {
@@ -4331,7 +4332,7 @@
     viewButtons.forEach(btn => {
       btn.addEventListener("click", () => {
         const targetId = btn.getAttribute("data-view-target");
-        const requiresPrincipal = btn.hasAttribute("data-requires-principal");
+        const requiresPrincipal = targetId === "principal-view";
         if (requiresPrincipal && !principalAccessGranted) {
           pendingViewButton = btn;
           openPrincipalAccessModal();
