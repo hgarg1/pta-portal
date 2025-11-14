@@ -4329,12 +4329,15 @@
     applyViewTheme(activeViewId);
     refreshViewToggleAccessibility();
 
-    viewButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const targetId = btn.getAttribute("data-view-target");
+    viewButtons.forEach(button => {
+      button.addEventListener("click", event => {
+        event.preventDefault();
+        const targetButton = event.currentTarget;
+        if (!(targetButton instanceof HTMLElement)) return;
+        const targetId = targetButton.dataset.viewTarget || targetButton.getAttribute("data-view-target");
         const requiresPrincipal = targetId === "principal-view";
         if (requiresPrincipal && !principalAccessGranted) {
-          pendingViewButton = btn;
+          pendingViewButton = targetButton;
           openPrincipalAccessModal();
           return;
         }
