@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RPTA-CMD // Riverbend Tactical Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0F1215;
+      --bg-secondary: #181C20;
+      --border-color: #2F353B;
+      --text-primary: #E1E8ED;
+      --text-secondary: #8A9BA8;
+      --accent-blue: #2D72D2;
+      --accent-green: #3DCC91;
+      --accent-amber: #FFB366;
+      --accent-red: #FF7373;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* --- TOP HUD BAR --- */
+    .hud-bar {
+      height: 48px;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      padding: 0 1rem;
+      justify-content: space-between;
+      z-index: 100;
+    }
+    .hud-left, .hud-right { display: flex; align-items: center; gap: 20px; }
+    .system-status { font-family: var(--font-mono); font-size: 0.75rem; display: flex; align-items: center; gap: 8px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+    .brand { font-weight: 800; letter-spacing: -0.05em; font-size: 1.1rem; color: #fff; }
+    .brand span { color: var(--accent-blue); }
+
+    /* --- LAYOUT --- */
+    .app-container {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* --- SIDEBAR RAIL --- */
+    .command-rail {
+      width: 64px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+      gap: 20px;
+    }
+    .rail-btn {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .rail-btn:hover { background: var(--border-color); color: #fff; }
+    .rail-btn.active { background: rgba(45, 114, 210, 0.2); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
+
+    /* --- MAIN CONTENT AREA --- */
+    .main-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: #101214;
+      overflow-y: auto;
+      padding: 2rem;
+    }
+
+    .view-header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .view-title { font-size: 1.5rem; font-weight: 700; font-family: var(--font-mono); text-transform: uppercase; }
+    .view-subtitle { color: var(--text-secondary); font-size: 0.85rem; margin-top: 4px; }
+
+    /* --- DATA MODULES (CARDS) --- */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.2rem;
+    }
+    .module {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      padding: 1.5rem;
+      grid-column: span 4;
+      position: relative;
+    }
+    .module.wide { grid-column: span 8; }
+    .module.full { grid-column: span 12; }
+    
+    .module-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .module-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: #fff; }
+
+    /* --- DATA ELEMENTS --- */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .data-table th { text-align: left; color: var(--text-secondary); padding: 8px 0; border-bottom: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 0.7rem; }
+    .data-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    
+    .status-badge {
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+    }
+    .bg-green { background: rgba(61, 204, 145, 0.15); color: var(--accent-green); }
+    .bg-amber { background: rgba(255, 179, 102, 0.15); color: var(--accent-amber); }
+    .bg-blue  { background: rgba(45, 114, 210, 0.15);  color: var(--accent-blue); }
+    .bg-red   { background: rgba(255, 115, 113, 0.15);  color: var(--accent-red); }
+
+    /* --- TACTICAL LOG --- */
+    .log-entry {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 8px;
+      border-left: 2px solid var(--accent-blue);
+      background: rgba(45, 114, 210, 0.05);
+      margin-bottom: 8px;
+    }
+    .log-time { color: var(--text-secondary); margin-right: 10px; }
+
+    /* --- PRINCIPAL LOCK --- */
+    #vault-screen {
+      position: absolute; inset: 0;
+      background: var(--bg-primary);
+      z-index: 200;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .terminal-box {
+      width: 400px; padding: 2rem;
+      border: 1px solid var(--accent-red);
+      background: rgba(255, 115, 113, 0.05);
+    }
+    .terminal-input {
+      width: 100%; background: #000; border: 1px solid var(--border-color);
+      color: var(--accent-red); font-family: var(--font-mono); padding: 1rem;
+      margin: 1rem 0; outline: none;
+    }
+
+    /* Progress Bar */
+    .progress-track { height: 8px; background: #222; border-radius: 4px; overflow: hidden; margin: 10px 0; }
+    .progress-fill { height: 100%; transition: width 1s; }
+
+    @media (max-width: 900px) {
+      .module { grid-column: span 12 !important; }
+      .command-rail { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP HUD -->
+  <header class="hud-bar">
+    <div class="hud-left">
+      <div class="brand">RPTA<span>-CMD</span></div>
+      <div class="system-status">
+        <div class="status-dot"></div>
+        SYSTEM: OPERATIONAL // SECTOR: DMV-NORTH
+      </div>
+    </div>
+    <div class="hud-right">
+      <div class="system-status" id="clock">00:00:00</div>
+      <div class="system-status" style="color: var(--accent-amber)">ACTIVE OPS: 08</div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- SIDEBAR RAIL -->
+    <nav class="command-rail">
+      <div class="rail-btn active" onclick="switchModule('logistics', this)" title="Logistics (Family)">🛰️</div>
+      <div class="rail-btn" onclick="switchModule('intel', this)" title="Intelligence (Principal)">📊</div>
+      <div class="rail-btn" onclick="switchModule('governance', this)" title="Governance (Board)">📜</div>
+      <div class="rail-btn" onclick="switchModule('operatives', this)" title="Operatives (Students)">🎒</div>
+    </nav>
+
+    <!-- MAIN VIEW -->
+    <main class="main-view">
+      
+      <!-- MODULE 01: LOGISTICS (Family View) -->
+      <section id="module-logistics">
+        <div class="view-header">
+          <div>
+            <div class="view-title">Family Logistics // Module_01</div>
+            <div class="view-subtitle">Strategic movement and asset coordination for DMV-area households.</div>
+          </div>
+          <div class="status-badge bg-blue">READY</div>
+        </div>
+
+        <div class="module-grid">
+          <div class="module wide">
+            <div class="module-label"><span>Active Deployment</span> <span>T-MINUS 02H</span></div>
+            <h3 class="module-title">Book Fair Mission Parameters</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
+              Library sector is operational. All families must check in at the front desk before acquisition.
+            </p>
+            <table class="data-table">
+              <thead>
+                <tr><th>OP_ID</th><th>LOCATION</th><th>WINDOW</th><th>STATUS</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>BF-FAM-01</td><td>Library (Sector A)</td><td>1700 - 1930</td><td><span class="status-badge bg-green">ACTIVE</span></td></tr>
+                <tr><td>WR-MOB-02</td><td>Blue Tent (Lobby)</td><td>0710 - 0745</td><td><span class="status-badge bg-blue">STANDBY</span></td></tr>
+                <tr><td>GEN-MTG-03</td><td>Media Center</td><td>1900 - 2000</td><td><span class="status-badge bg-amber">UPCOMING</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="module">
+            <div class="module-label">DMV Sector Comms</div>
+            <h3 class="module-title">Transit Intelligence</h3>
+            <div class="log-entry">
+              <span class="log-time">08:45</span> I-495 Inner Loop: Accident at Gallows Rd. Delay: +15m.
+            </div>
+            <div class="log-entry">
+              <span class="log-time">08:12</span> I-66 HOV: Active enforcement. Sector North clear.
+            </div>
+            <div class="log-entry" style="border-left-color: var(--accent-amber);">
+              <span class="log-time">07:30</span> Metro Red Line: Single tracking at Medical Center. 
+            </div>
+          </div>
+
+          <div class="module">
+            <div class="module-label">Personnel Bounties</div>
+            <h3 class="module-title">Logistics Requisition</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div class="log-entry" style="border-color: var(--accent-red);">[URGENT] Crosswalk Guardian (Wed)</div>
+              <div class="log-entry" style="border-color: var(--accent-blue);">[REQUISITION] Snack Cart Lead (Thu)</div>
+              <div class="log-entry" style="border-color: var(--accent-green);">[OPEN] Library Shelving Unit (Fri)</div>
+            </div>
+          </div>
+
+          <div class="module wide">
+            <div class="module-label">Asset Requisition</div>
+            <h3 class="module-title">Uniforms & Equipment (Spirit Wear)</h3>
+            <table class="data-table">
+              <thead>
+                <tr><th>ASSET</th><th>AVAILABILITY</th><th>COST</th><th>ORDER</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Raptor Hoodie (Blue)</td><td>IN STOCK</td><td>$35.00</td><td><span class="status-badge bg-blue">ORDER</span></td></tr>
+                <tr><td>Field Shirt (Grey)</td><td>LOW STOCK</td><td>$18.00</td><td><span class="status-badge bg-amber">ORDER</span></td></tr>
+                <tr><td>Tactical Water Bottle</td><td>OUT OF STOCK</td><td>$12.00</td><td><span class="status-badge bg-red">WAITLIST</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 02: INTELLIGENCE (Principal View - LOCKED) -->
+      <section id="module-intel" style="display: none; position: relative; min-height: 600px;">
+        <div id="vault-screen">
+          <div class="terminal-box">
+            <div class="module-label" style="color: var(--accent-red);">Encrypted Module</div>
+            <h3 style="color: #fff;">Principal Auth Required</h3>
+            <input type="password" id="vault-pass" class="terminal-input" placeholder="ACCESS_KEY">
+            <button class="vault-btn" onclick="decryptIntel()" style="background: var(--accent-red); color: #000; border: none; padding: 10px 20px; font-weight: 800; cursor: pointer; width: 100%;">DECRYPT</button>
+            <div id="vault-error" style="color: var(--accent-red); font-size: 0.7rem; margin-top: 10px; font-family: var(--font-mono);"></div>
+          </div>
+        </div>
+
+        <div id="intel-content" style="display: none;">
+          <div class="view-header">
+            <div>
+              <div class="view-title" style="color: var(--accent-red);">Tactical Intelligence // Module_02</div>
+              <div class="view-subtitle">Real-time metrics on building health, personnel morale, and budget reserves.</div>
+            </div>
+          </div>
+
+          <div class="module-grid">
+            <div class="module">
+              <div class="module-label">Personnel Morale</div>
+              <div class="stat-large" style="color: var(--accent-green);">92%</div>
+              <div class="progress-track"><div class="progress-fill" style="width: 92%; background: var(--accent-green);"></div></div>
+              <div class="module-label">Sentiment: VERY POSITIVE</div>
+            </div>
+            <div class="module">
+              <div class="module-label">Asset Allocation</div>
+              <div class="stat-large" style="color: var(--accent-blue);">$12.4k</div>
+              <div class="progress-track"><div class="progress-fill" style="width: 83%; background: var(--accent-blue);"></div></div>
+              <div class="module-label">Goal: $15.0k Reserves</div>
+            </div>
+            <div class="module">
+              <div class="module-label">Coverage Map</div>
+              <div class="stat-large" style="color: var(--accent-amber);">65%</div>
+              <div class="progress-track"><div class="progress-fill" style="width: 65%; background: var(--accent-amber);"></div></div>
+              <div class="module-label">Alert: Fri Lunch Unstaffed</div>
+            </div>
+
+            <div class="module full">
+              <h3 class="module-title">Facility Readiness Grid</h3>
+              <table class="data-table">
+                <thead>
+                  <tr><th>SECTOR</th><th>SUBSYSTEM</th><th>STATUS</th><th>REMARKS</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>HVAC Grid</td><td>Main Boiler</td><td><span class="status-badge bg-green">OPERATIONAL</span></td><td>Next check: Dec 20</td></tr>
+                  <tr><td>Comms</td><td>Lobby PA</td><td><span class="status-badge bg-amber">DEGRADED</span></td><td>Cable replacement needed</td></tr>
+                  <tr><td>Gymnasium</td><td>Audio System</td><td><span class="status-badge bg-green">UPGRADED</span></td><td>Installation complete</td></tr>
+                  <tr><td>Security</td><td>Vault Entry</td><td><span class="status-badge bg-green">SECURE</span></td><td>Current session active</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 03: GOVERNANCE (Board View) -->
+      <section id="module-governance" style="display: none;">
+        <div class="view-header">
+          <div>
+            <div class="view-title">Legislative Governance // Module_03</div>
+            <div class="view-subtitle">Official directives, officer callsigns, and policy archives.</div>
+          </div>
+        </div>
+        <div class="module-grid">
+          <div class="module wide">
+            <h3 class="module-title">Active Referendums</h3>
+            <table class="data-table">
+              <thead>
+                <tr><th>DIRECTIVE</th><th>ALLOCATION</th><th>STATUS</th><th>VOTE</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Prop #402: Playground Shade</td><td>$4,500.00</td><td><span class="status-badge bg-amber">IN VOTING</span></td><td><span class="status-badge bg-blue">CAST</span></td></tr>
+                <tr><td>Prop #403: Teacher Coffee Grid</td><td>$1,200.00</td><td><span class="status-badge bg-green">APPROVED</span></td><td><span class="status-badge bg-green">DONE</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="module">
+            <h3 class="module-title">Officer Directory</h3>
+            <ul style="list-style: none; font-size: 0.85rem; line-height: 2;">
+              <li><strong>Pres:</strong> Alex Johnson <span style="color: var(--text-secondary);">[Strategic]</span></li>
+              <li><strong>VP:</strong> Maria Lopez <span style="color: var(--text-secondary);">[Ops]</span></li>
+              <li><strong>Treas:</strong> Jordan Kim <span style="color: var(--text-secondary);">[Finance]</span></li>
+              <li><strong>Sec:</strong> Priya Patel <span style="color: var(--text-secondary);">[Records]</span></li>
+            </ul>
+          </div>
+          <div class="module full">
+            <h3 class="module-title">Legislative Archive</h3>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+              <a href="#" class="log-entry" style="text-decoration: none;">↓ SEPT_MINUTES.TS</a>
+              <a href="#" class="log-entry" style="text-decoration: none;">↓ BUDGET_2024_FINAL.TS</a>
+              <a href="#" class="log-entry" style="text-decoration: none;">↓ BYLAWS_V4.TS</a>
+              <a href="#" class="log-entry" style="text-decoration: none;">↓ AUDIT_SUMMARY.TS</a>
+              <a href="#" class="log-entry" style="text-decoration: none;">↓ VENDOR_VETTING.TS</a>
+              <a href="#" class="log-entry" style="text-decoration: none;">↓ DMV_DISTRICT_REGS.TS</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MODULE 04: OPERATIVES (Student View) -->
+      <section id="module-operatives" style="display: none;">
+        <div class="view-header">
+          <div>
+            <div class="view-title">Operative Status // Module_04</div>
+            <div class="view-subtitle">Training schedules, equipment recovery, and spirit unit metrics.</div>
+          </div>
+          <div class="status-badge bg-green">ACTIVE</div>
+        </div>
+
+        <div class="module-grid">
+          <div class="module wide">
+            <h3 class="module-title">Specialized Unit Training (Clubs)</h3>
+            <table class="data-table">
+              <thead>
+                <tr><th>UNIT</th><th>LOCATION</th><th>RECURRENCE</th><th>STATUS</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Chess Guild</td><td>Room 101</td><td>Thu @ 1500</td><td><span class="status-badge bg-green">ACTIVE</span></td></tr>
+                <tr><td>Art Artisans</td><td>Room 204</td><td>Tue @ 1500</td><td><span class="status-badge bg-green">ACTIVE</span></td></tr>
+                <tr><td>Choir Ensemble</td><td>Stage Sector</td><td>Mon @ 1500</td><td><span class="status-badge bg-blue">STANDBY</span></td></tr>
+                <tr><td>Run Club</td><td>Track Sector</td><td>Fri @ 0715</td><td><span class="status-badge bg-green">ACTIVE</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="module">
+            <div class="module-label">Asset Recovery</div>
+            <h3 class="module-title">Lost Loot Bin</h3>
+            <div class="log-entry" style="border-color: var(--accent-red);">
+              [ITEM] Red Hoodie (M) // Location: Swings
+            </div>
+            <div class="log-entry" style="border-color: var(--accent-blue);">
+              [ITEM] Metallic Blue Flask // Location: Cafeteria
+            </div>
+            <div class="log-entry">
+              [ITEM] Dinosaur Backpack // Location: Bus Loop
+            </div>
+            <p style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 10px;">Return items to the Sector 1 Lobby Bin.</p>
+          </div>
+
+          <div class="module">
+            <div class="module-label">XP Standings</div>
+            <h3 class="module-title">Spirit Point Leaderboard</h3>
+            <ul style="list-style: none; line-height: 2.2; font-family: var(--font-mono); font-size: 0.9rem;">
+              <li>1. <span style="color: var(--accent-blue);">HOUSE BLUE</span> <span style="float: right;">1,240 XP</span></li>
+              <li>2. <span style="color: var(--accent-red);">HOUSE RED</span> <span style="float: right;">1,100 XP</span></li>
+              <li>3. <span style="color: var(--accent-green);">HOUSE GREEN</span> <span style="float: right;">980 XP</span></li>
+            </ul>
+          </div>
+
+          <div class="module wide">
+            <h3 class="module-title">Daily Briefing // Announcement Replay</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 1.5rem; color: var(--text-secondary);">
+              Missed the morning comms? Catch up on the latest school-wide directives from the Riverbend News Units.
+            </p>
+            <div class="log-entry" style="display: flex; justify-content: space-between; align-items: center;">
+              <span>RBN_BROADCAST_20241015.MP3</span>
+              <span class="status-badge bg-blue" style="cursor: pointer;">LISTEN</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    // --- HUD CLOCK ---
+    function updateClock() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      document.getElementById('clock').textContent = time;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // --- MODULE SWITCHING ---
+    function switchModule(id, btn) {
+      document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+      document.getElementById(`module-${id}`).style.display = 'block';
+      
+      document.querySelectorAll('.rail-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    // --- PRINCIPAL DECRYPTION ---
+    const PASS_KEY = "ptaTacticalKey";
+    const DEFAULT_PASS = "RiverbendLead!2024";
+    function hash(str) { return btoa(str); }
+    if (!localStorage.getItem(PASS_KEY)) localStorage.setItem(PASS_KEY, hash(DEFAULT_PASS));
+
+    function decryptIntel() {
+      const input = document.getElementById('vault-pass').value;
+      const error = document.getElementById('vault-error');
+      const screen = document.getElementById('vault-screen');
+      const content = document.getElementById('intel-content');
+
+      if (hash(input) === localStorage.getItem(PASS_KEY)) {
+        screen.style.display = 'none';
+        content.style.display = 'block';
+      } else {
+        error.textContent = "AUTH_FAILURE: ACCESS DENIED.";
+        document.getElementById('vault-pass').value = '';
+      }
+    }
+
+    document.getElementById('vault-pass').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') decryptIntel();
+    });
+  </script>
+</body>
+</html>

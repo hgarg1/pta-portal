@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Riverbend PTA · Cozy Bulletin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cork-bg: #8d5524;
+      --paper-white: #fdfbf7;
+      --tape-color: rgba(255, 255, 255, 0.3);
+      --pin-red: #ea4335;
+      --pin-blue: #4285f4;
+      --pin-yellow: #fbbc05;
+      --pin-green: #34a853;
+      --text-hand: 'Patrick Hand', cursive;
+      --text-clean: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-size: 15px; } /* Slightly smaller base font to reduce "zoomed" feel */
+
+    body {
+      background-color: var(--cork-bg);
+      background-image: radial-gradient(circle at 2px 2px, rgba(0,0,0,0.15) 1px, transparent 0);
+      background-size: 30px 30px;
+      font-family: var(--text-hand);
+      color: #332211;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* --- PANNING CONTAINER --- */
+    #board-wrapper {
+      width: 100vw;
+      height: 100vh;
+      overflow-x: auto;
+      overflow-y: auto; /* Allow vertical scroll if content is long */
+      display: flex;
+      cursor: grab;
+      scroll-behavior: smooth;
+    }
+    #board-wrapper:active { cursor: grabbing; }
+
+    #board {
+      display: flex;
+      padding: 6rem 10rem;
+      gap: 10rem;
+      min-width: max-content;
+      height: fit-content;
+      align-items: flex-start;
+    }
+
+    /* --- SECTION CLUSTERS --- */
+    .board-section {
+      display: flex;
+      flex-direction: column; /* Content stacks vertically */
+      gap: 3rem; /* Generous gap between notes */
+      width: 350px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .section-label {
+      position: sticky;
+      top: 0;
+      font-size: 2.2rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      margin-bottom: 1rem;
+      pointer-events: none;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    /* --- NOTE STYLES --- */
+    .note {
+      background: var(--paper-white);
+      padding: 1.8rem;
+      width: 100%; /* Fill the section width */
+      box-shadow: 4px 4px 12px rgba(0,0,0,0.2);
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      line-height: 1.4;
+    }
+    .note:hover { 
+      transform: scale(1.03) rotate(0deg) !important; 
+      z-index: 100; 
+      box-shadow: 8px 8px 25px rgba(0,0,0,0.3); 
+    }
+
+    /* Subtle tilts */
+    .note:nth-child(odd) { transform: rotate(-0.8deg); }
+    .note:nth-child(even) { transform: rotate(0.8deg); }
+
+    .pin {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      z-index: 5;
+    }
+
+    .tape {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 30px;
+      background: var(--tape-color);
+      backdrop-filter: blur(1px);
+      border-left: 1px dashed rgba(0,0,0,0.1);
+      border-right: 1px dashed rgba(0,0,0,0.1);
+      z-index: 5;
+    }
+
+    h2 { font-size: 1.6rem; margin-bottom: 0.8rem; color: #111; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+    p { margin-bottom: 1rem; font-size: 1.2rem; }
+    .meta { font-size: 0.9rem; color: #776655; font-style: italic; }
+    .link-btn { color: #4285f4; text-decoration: underline; cursor: pointer; font-size: 1rem; }
+
+    /* --- POLAROID --- */
+    .polaroid {
+      background: #fff;
+      padding: 10px 10px 35px 10px;
+      width: 240px;
+      box-shadow: 4px 4px 10px rgba(0,0,0,0.15);
+      text-align: center;
+      margin: 0 auto;
+    }
+    .photo-area { 
+      background: #222; 
+      height: 180px; 
+      width: 100%; 
+      margin-bottom: 10px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: #fff;
+      font-size: 2.5rem;
+    }
+
+    /* --- ENVELOPE --- */
+    .envelope {
+      width: 100%;
+      height: 240px;
+      background: #e6dcc3;
+      border: 1px solid #d4c8aa;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      width: 0; height: 0;
+      border-left: 175px solid transparent;
+      border-right: 175px solid transparent;
+      border-top: 120px solid #d4c8aa;
+      z-index: 2;
+    }
+    .seal {
+      width: 50px; height: 50px;
+      background: #b71c1c;
+      border-radius: 50%;
+      position: absolute;
+      top: 95px;
+      z-index: 3;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.5rem;
+    }
+
+    /* --- HUD --- */
+    .hud {
+      position: fixed; top: 20px; left: 20px;
+      z-index: 500;
+      background: rgba(255,255,255,0.95);
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+      display: flex; align-items: center; gap: 15px;
+      border: 1px solid #ddd;
+    }
+    .logo-badge { background: var(--pin-red); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+    /* --- PASS MODAL --- */
+    #pass-modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(5px);
+      z-index: 2000;
+      display: none; align-items: center; justify-content: center;
+    }
+    .pass-box {
+      background: var(--paper-white);
+      padding: 3rem;
+      border-radius: 12px;
+      text-align: center;
+      width: 400px;
+    }
+    .pass-input {
+      font-family: var(--text-clean);
+      font-size: 1.2rem;
+      padding: 0.8rem;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      width: 100%;
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      #board { padding: 4rem 2rem; gap: 5rem; }
+      .board-section { width: 300px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hud">
+    <div class="logo-badge">RB</div>
+    <div>
+      <div style="font-weight: bold; font-size: 1.1rem;">Riverbend PTA Community Board</div>
+      <div style="font-size: 0.85rem; color: #666; font-family: var(--text-clean);">Drag horizontally to see more zones</div>
+    </div>
+  </div>
+
+  <div id="board-wrapper">
+    <div id="board">
+      
+      <!-- START -->
+      <section class="board-section">
+        <div class="section-label">Start Here</div>
+        <div class="note">
+          <div class="pin" style="background: var(--pin-red);"></div>
+          <h2>Welcome!</h2>
+          <p>This is our digital hallway board. We've pinned all the latest updates, event flyers, and school news here for you.</p>
+          <p><strong>To navigate:</strong> Click and drag the board left or right to explore the different sections.</p>
+          <div class="meta">— The PTA Team</div>
+        </div>
+
+        <div class="polaroid" style="transform: rotate(-2deg);">
+          <div class="pin" style="background: var(--pin-yellow);"></div>
+          <div class="photo-area">🏫</div>
+          <p style="font-size: 0.9rem; margin-top: 5px;">Riverbend Main Entrance</p>
+        </div>
+      </section>
+
+      <!-- FAMILY -->
+      <section class="board-section">
+        <div class="section-label">Family Corner</div>
+        
+        <div class="note">
+          <div class="tape"></div>
+          <h2>Today's Events</h2>
+          <p><strong>📖 Book Fair:</strong> Family shopping is active! 5:00 - 7:30 PM tonight.</p>
+          <p><strong>☕ Meeting:</strong> Join us at 7:00 PM in the Media Center for the general PTA session.</p>
+        </div>
+
+        <div class="note" style="background: #fff9c4;">
+          <div class="pin" style="background: var(--pin-green);"></div>
+          <h2>Volunteers Needed</h2>
+          <p>We are still looking for 2 helpers for the <strong>Walk & Roll</strong> blue tent on Wednesday morning.</p>
+          <p class="link-btn">Sign up on the sheet →</p>
+        </div>
+
+        <div class="note">
+          <div class="tape"></div>
+          <h2>Spirit Wear</h2>
+          <p>Hoodies and t-shirts are now available for pre-order. Rep your school colors!</p>
+          <p class="link-btn">Visit the Shop →</p>
+        </div>
+
+        <div class="note" style="background: #e8f5e9;">
+          <div class="pin" style="background: var(--pin-blue);"></div>
+          <h2>Room Parents</h2>
+          <p>Join our classroom liaison network. It's a great way to stay connected with your teacher.</p>
+        </div>
+      </section>
+
+      <!-- PRINCIPAL -->
+      <section class="board-section">
+        <div class="section-label">The Desk</div>
+        
+        <div id="principal-locked">
+          <div class="envelope" onclick="openPassModal()">
+            <div class="envelope-flap"></div>
+            <div class="seal">RB</div>
+            <p style="margin-top: 80px; font-weight: bold; color: #8d7a5b;">STAFF ONLY</p>
+            <p style="font-size: 0.8rem; color: #a1927a;">Click to open folder</p>
+          </div>
+        </div>
+
+        <div id="principal-unlocked" style="display: none;">
+          <div class="note" style="border: 2px solid #d4c8aa;">
+            <div class="pin" style="background: #000;"></div>
+            <h2>Admin Dashboard</h2>
+            <p><strong>Morale:</strong> 92% Positive</p>
+            <p><strong>Staffing:</strong> 65% Coverage</p>
+            <p><strong>Goal:</strong> $12,450 / $15,000</p>
+            <hr style="margin: 10px 0;">
+            <p style="font-size: 1rem;">• HVAC Check: Scheduled<br>• Gym Audio: Approved</p>
+            <div class="link-btn" onclick="lockFolder()">Close Folder</div>
+          </div>
+        </div>
+
+        <div class="polaroid" style="transform: rotate(3deg);">
+          <div class="pin" style="background: var(--pin-red);"></div>
+          <div class="photo-area">🍎</div>
+          <p style="font-size: 0.9rem; margin-top: 5px;">Staff Spotlight: Oct</p>
+        </div>
+      </section>
+
+      <!-- BOARD -->
+      <section class="board-section">
+        <div class="section-label">Governance</div>
+        
+        <div class="note" style="background: #e3f2fd;">
+          <div class="pin" style="background: var(--pin-blue);"></div>
+          <h2>PTA Officers</h2>
+          <p>Alex Johnson (Pres)<br>Maria Lopez (VP)<br>Jordan Kim (Treas)</p>
+        </div>
+
+        <div class="note">
+          <div class="tape"></div>
+          <h2>Active Ballots</h2>
+          <p><strong>Prop #402:</strong> Playground Shade Structure. Voting ends Friday.</p>
+          <div style="display: flex; gap: 8px;">
+            <button style="background:var(--pin-green); border:none; padding:5px 10px; color:#fff; font-family:inherit; cursor:pointer;">Yea</button>
+            <button style="background:#333; border:none; padding:5px 10px; color:#fff; font-family:inherit; cursor:pointer;">Nay</button>
+          </div>
+        </div>
+
+        <div class="note">
+          <div class="pin" style="background: var(--pin-yellow);"></div>
+          <h2>Archives</h2>
+          <p><a href="#">Sept Minutes</a><br><a href="#">Budget Draft</a><br><a href="#">Bylaws 2024</a></p>
+        </div>
+      </section>
+
+      <!-- STUDENTS -->
+      <section class="board-section">
+        <div class="section-label">Student Yard</div>
+        
+        <div class="note" style="background: #f1f8e9;">
+          <div class="pin" style="background: var(--pin-green);"></div>
+          <h2>Clubs</h2>
+          <p>Chess: Thu @ 3:00<br>Art: Tue @ 3:00<br>Choir: Mon @ 3:00</p>
+        </div>
+
+        <div class="polaroid" style="transform: rotate(-1deg);">
+          <div class="pin" style="background: var(--pin-red);"></div>
+          <div class="photo-area">🧥</div>
+          <p style="font-size: 0.9rem; margin-top: 5px;">Found: Red Hoodie</p>
+        </div>
+
+        <div class="note" style="background: #fff3e0;">
+          <div class="pin" style="background: var(--pin-yellow);"></div>
+          <h2>House Points</h2>
+          <p>1. Blue: 1,240<br>2. Red: 1,100<br>3. Green: 980</p>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- PASSWORD MODAL -->
+  <div id="pass-modal">
+    <div class="pass-box">
+      <h2 style="border:none;">Access Code</h2>
+      <p style="font-family: var(--text-clean); color: #666;">Restricted access folder.</p>
+      <input type="password" id="pass-input" class="pass-input" placeholder="••••••••">
+      <div id="pass-error" style="color: red; font-size: 0.8rem; height: 1rem;"></div>
+      <div style="display: flex; gap: 10px;">
+        <button onclick="closePassModal()" style="flex: 1; padding: 10px; font-family: var(--text-clean);">Cancel</button>
+        <button onclick="checkPass()" style="flex: 1; padding: 10px; background: var(--pin-red); color: #fff; border: none; font-family: var(--text-clean); font-weight: bold; border-radius: 4px;">Unlock</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slider = document.getElementById('board-wrapper');
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDown = true;
+      startX = e.pageX - slider.offsetLeft;
+      scrollLeft = slider.scrollLeft;
+    });
+    slider.addEventListener('mouseleave', () => { isDown = false; });
+    slider.addEventListener('mouseup', () => { isDown = false; });
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 2; 
+      slider.scrollLeft = scrollLeft - walk;
+    });
+
+    // Principal Logic
+    const PASS_KEY = "ptaBulletinPassHash";
+    const DEFAULT_PASS = "RiverbendLead!2024";
+    function hash(str) { return btoa(str); }
+    if (!localStorage.getItem(PASS_KEY)) localStorage.setItem(PASS_KEY, hash(DEFAULT_PASS));
+
+    function openPassModal() {
+      document.getElementById('pass-modal').style.display = 'flex';
+      document.getElementById('pass-input').focus();
+    }
+    function closePassModal() {
+      document.getElementById('pass-modal').style.display = 'none';
+      document.getElementById('pass-input').value = "";
+      document.getElementById('pass-error').textContent = "";
+    }
+    function checkPass() {
+      const val = document.getElementById('pass-input').value;
+      const error = document.getElementById('pass-error');
+      if (hash(val) === localStorage.getItem(PASS_KEY)) {
+        document.getElementById('principal-locked').style.display = 'none';
+        document.getElementById('principal-unlocked').style.display = 'block';
+        closePassModal();
+      } else {
+        error.textContent = "Invalid code.";
+        document.getElementById('pass-input').value = "";
+      }
+    }
+    function lockFolder() {
+      document.getElementById('principal-locked').style.display = 'block';
+      document.getElementById('principal-unlocked').style.display = 'none';
+    }
+    document.getElementById('pass-input').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') checkPass();
+    });
+  </script>
+</body>
+</html>

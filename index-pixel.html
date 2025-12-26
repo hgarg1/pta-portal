@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Riverbend PTA · Pixel Campus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #1a1025;
+      --terminal-bg: #000000;
+      --neon-green: #39ff14;
+      --neon-pink: #ff00cc;
+      --neon-cyan: #00ffff;
+      --neon-yellow: #fff01f;
+      --pixel-white: #e0e0e0;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0; padding: 0;
+      background-color: var(--bg-color);
+      font-family: 'Press Start 2P', cursive;
+      color: var(--pixel-white);
+      overflow: hidden;
+      height: 100vh; width: 100vw;
+      user-select: none;
+    }
+
+    .crt-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                  linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+      background-size: 100% 2px, 3px 100%;
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* --- HUD --- */
+    .hud-bar {
+      position: fixed; top: 0; left: 0; width: 100%; height: 60px;
+      padding: 0 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 1000;
+      background: #000; border-bottom: 4px solid #333;
+    }
+    .hud-brand { display: flex; align-items: center; gap: 10px; color: var(--neon-cyan); }
+    .hud-logo { background: var(--neon-cyan); color: #000; padding: 4px; font-size: 0.8rem; }
+    .hud-title { font-size: 0.8rem; }
+    
+    .hud-back { 
+      cursor: pointer; color: var(--neon-pink); font-size: 0.8rem;
+      visibility: hidden; /* Hidden on root */
+    }
+    .hud-back:hover { text-decoration: underline; }
+
+    /* --- LAYERS SYSTEM --- */
+    .layer {
+      position: absolute; top: 60px; left: 0; width: 100%; height: calc(100% - 60px);
+      transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s;
+      overflow: hidden;
+    }
+    
+    /* Level 1: World Map */
+    #layer-1 { z-index: 10; display: flex; align-items: center; justify-content: center; }
+    
+    /* Level 2: Zone (Scene) */
+    #layer-2 { z-index: 20; background: rgba(10,10,15,0.95); transform: translateX(100%); padding: 40px; overflow-y: auto; }
+    
+    /* Level 3: Sub-Menu */
+    #layer-3 { z-index: 30; background: #050505; transform: translateX(100%); border-left: 4px solid #555; padding: 40px; overflow-y: auto; }
+    
+    /* Level 4: Item Detail */
+    #layer-4 { z-index: 40; background: #000; transform: translateX(100%); border-left: 4px solid var(--neon-pink); display: flex; align-items: center; justify-content: center; }
+
+    /* Active States */
+    .layer.active { transform: translateX(0) !important; }
+    .layer.inactive-left { transform: translateX(-30%); opacity: 0; }
+
+    /* --- MAP GRID --- */
+    .map-grid {
+      display: grid; grid-template-columns: repeat(2, 280px); gap: 40px;
+      transform-origin: center; transition: transform 0.8s;
+    }
+    .zone {
+      background: #000; border: 4px solid #555; padding: 30px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      cursor: pointer; box-shadow: 8px 8px 0px rgba(0,0,0,0.5);
+    }
+    .zone:hover { border-color: #fff !important; transform: translateY(-4px); }
+    .zone-icon { font-size: 3rem; margin-bottom: 15px; }
+    
+    /* --- LISTS & PANELS --- */
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    
+    .menu-card {
+      border: 2px solid #444; padding: 20px; cursor: pointer; background: rgba(255,255,255,0.05);
+    }
+    .menu-card:hover { background: rgba(255,255,255,0.1); border-color: var(--neon-cyan); }
+    .menu-card h3 { color: var(--neon-green); margin-bottom: 10px; font-size: 0.9rem; line-height: 1.4; }
+    
+    /* --- ITEM DETAIL --- */
+    .item-container {
+      width: 80%; max-width: 600px;
+      border: 4px double var(--neon-pink); padding: 40px;
+      background: #110011; box-shadow: 0 0 30px rgba(255,0,204,0.2);
+      text-align: center;
+    }
+    .item-icon { font-size: 4rem; margin-bottom: 20px; display: block; }
+    .item-title { font-size: 1.5rem; color: var(--neon-cyan); margin-bottom: 20px; display: block; }
+    .item-stats { text-align: left; margin: 30px 0; border: 1px dashed #555; padding: 20px; font-family: 'Courier New', monospace; font-size: 1rem; line-height: 1.6; }
+    .btn-action { background: var(--neon-pink); color: #fff; padding: 15px 30px; border: none; font-family: inherit; cursor: pointer; margin-top: 20px; }
+    .btn-action:hover { background: #fff; color: #000; }
+
+    /* --- PASSWORD MODAL --- */
+    #password-modal {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9); z-index: 9999;
+      display: none; align-items: center; justify-content: center;
+    }
+    .pass-box {
+      border: 4px solid var(--neon-pink); padding: 40px; background: #000; text-align: center;
+      box-shadow: 0 0 50px var(--neon-pink);
+    }
+    .pass-input {
+      background: transparent; border: none; border-bottom: 2px solid var(--neon-pink);
+      color: var(--neon-pink); font-family: inherit; font-size: 1.5rem; margin: 20px 0;
+      text-align: center; outline: none; width: 100%;
+    }
+
+    /* Helper Colors */
+    .c-green { color: var(--neon-green); }
+    .c-pink { color: var(--neon-pink); }
+    .c-cyan { color: var(--neon-cyan); }
+    .c-yellow { color: var(--neon-yellow); }
+
+    @media (max-width: 700px) {
+      .map-grid { grid-template-columns: 1fr; width: 90%; }
+      .layer { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="crt-overlay"></div>
+
+  <!-- HUD -->
+  <div class="hud-bar">
+    <div class="hud-brand">
+      <div class="hud-logo">RB</div>
+      <div class="hud-title">RIVERBEND PTA PORTAL</div>
+    </div>
+    <div class="hud-back" id="back-btn" onclick="goBack()">[ ESC ] BACK</div>
+  </div>
+
+  <!-- PASSWORD MODAL -->
+  <div id="password-modal">
+    <div class="pass-box">
+      <div style="font-size:3rem; margin-bottom:20px;">🔒</div>
+      <p style="color:var(--neon-pink)">ADMIN ACCESS REQUIRED</p>
+      <input type="password" id="pass-input" class="pass-input" autofocus>
+      <div id="pass-msg" style="color:red; font-size:0.7rem; min-height:1rem;"></div>
+      <p style="font-size:0.6rem; color:#666;">PRESS ENTER TO SUBMIT</p>
+      <button onclick="closePassModal()" style="margin-top:20px; background:#333; color:#fff; border:none; padding:10px; font-family:inherit; cursor:pointer;">CANCEL</button>
+    </div>
+  </div>
+
+  <!-- LAYER 1: WORLD MAP -->
+  <div id="layer-1" class="layer active">
+    <div class="map-grid" id="map-grid">
+      <div class="zone" style="border-color:var(--neon-green)" onclick="goToLevel2('family')">
+        <div class="zone-icon">📚</div>
+        <div>LIBRARY<br>[Family]</div>
+      </div>
+      <div class="zone" style="border-color:var(--neon-pink)" onclick="checkAdmin()">
+        <div class="zone-icon">🏢</div>
+        <div>ADMIN<br>[Restricted]</div>
+      </div>
+      <div class="zone" style="border-color:var(--neon-cyan)" onclick="goToLevel2('board')">
+        <div class="zone-icon">⚔️</div>
+        <div>GUILD<br>[Board]</div>
+      </div>
+      <div class="zone" style="border-color:var(--neon-yellow)" onclick="goToLevel2('student')">
+        <div class="zone-icon">🕹️</div>
+        <div>YARD<br>[Student]</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LAYER 2: ZONE MENU (Generated Dynamically) -->
+  <div id="layer-2" class="layer">
+    <h2 id="l2-title" style="margin-bottom: 30px; border-bottom: 2px solid #555; padding-bottom: 10px;">ZONE TITLE</h2>
+    <div class="menu-grid" id="l2-content"></div>
+  </div>
+
+  <!-- LAYER 3: SUB MENU (Generated Dynamically) -->
+  <div id="layer-3" class="layer">
+    <h2 id="l3-title" style="margin-bottom: 30px; color:var(--neon-cyan)">SUB TITLE</h2>
+    <div class="menu-grid" id="l3-content"></div>
+  </div>
+
+  <!-- LAYER 4: ITEM DETAIL -->
+  <div id="layer-4" class="layer">
+    <div class="item-container" id="l4-container">
+      <!-- Content injected via JS -->
+    </div>
+  </div>
+
+  <script>
+    // --- DATA STRUCTURE ---
+    const DB = {
+      family: {
+        title: "FAMILY ARCHIVES",
+        color: "var(--neon-green)",
+        items: [
+          { 
+            id: "quests", title: "Active Quests (Events)", desc: "View current missions available for your party.",
+            subItems: [
+              { id: "bookfair", title: "Book Fair", desc: "The Traveling Merchant has arrived.", meta: "Time: 5PM | Loc: Library", icon: "📖", action: "View Book List" },
+              { id: "walkroll", title: "Walk & Roll", desc: "Join the caravan to school.", meta: "Time: 7AM | Loc: Blue Tent", icon: "👟", action: "View Route Map" }
+            ]
+          },
+          { 
+            id: "bounties", title: "Support Guild (Volunteer)", desc: "Accept contracts to aid the school.",
+            subItems: [
+              { id: "snack", title: "Snack Cart", desc: "Deliver provisions to the mages (teachers).", meta: "Reward: +50 Karma", icon: "🍎", action: "Accept Contract" },
+              { id: "garden", title: "Garden Keeper", desc: "Maintain the botanical biome.", meta: "Reward: Green Thumb Badge", icon: "🌻", action: "Accept Contract" }
+            ]
+          }
+        ]
+      },
+      board: {
+        title: "GUILD HALL",
+        color: "var(--neon-cyan)",
+        items: [
+          {
+            id: "officers", title: "Officer Roster", desc: "View high-ranking guild members.",
+            subItems: [
+              { id: "pres", title: "Alex Johnson", desc: "Guild Master (President)", meta: "Level: 50 | Class: Paladin", icon: "👑", action: "Send Owl (Email)" },
+              { id: "vp", title: "Maria Lopez", desc: "Second in Command", meta: "Level: 48 | Class: Bard", icon: "🛡️", action: "Send Owl (Email)" }
+            ]
+          },
+          {
+            id: "votes", title: "Voting Booth", desc: "Cast your stone for active proposals.",
+            subItems: [
+              { id: "prop402", title: "Prop #402: Shade", desc: "Construct a shield against the sun star.", meta: "Cost: 500 Gold", icon: "⛱️", action: "VOTE [YEA]" },
+              { id: "prop403", title: "Prop #403: Coffee", desc: "Infinite stamina potions for staff.", meta: "Cost: 100 Gold", icon: "☕", action: "VOTE [YEA]" }
+            ]
+          }
+        ]
+      },
+      student: {
+        title: "THE YARD",
+        color: "var(--neon-yellow)",
+        items: [
+          {
+            id: "clubs", title: "Clubs & Guilds", desc: "Join a faction.",
+            subItems: [
+              { id: "chess", title: "Chess Guild", desc: "Tactical warfare simulation.", meta: "Thu 3:00PM | Room 101", icon: "♟️", action: "Join Guild" },
+              { id: "art", title: "Art Artisans", desc: "Crafting and painting.", meta: "Tue 3:00PM | Room 204", icon: "🎨", action: "Join Guild" }
+            ]
+          },
+          {
+            id: "loot", title: "Lost Loot", desc: "Recover missing equipment.",
+            subItems: [
+              { id: "hoodie", title: "Red Hoodie", desc: "Level 2 Armor. Found near swings.", meta: "Condition: Dusty", icon: "🧥", action: "Claim Item" }
+            ]
+          }
+        ]
+      },
+      principal: {
+        title: "ADMIN TOWER",
+        color: "var(--neon-pink)",
+        items: [
+          {
+            id: "intel", title: "Intel Reports", desc: "Classified school metrics.",
+            subItems: [
+              { id: "morale", title: "Morale Report", desc: "Teacher happiness index.", meta: "Status: 92% (High)", icon: "📊", action: "Print Report" },
+              { id: "budget", title: "Gold Reserves", desc: "Current treasury status.", meta: "Status: Healthy", icon: "💰", action: "Audit" }
+            ]
+          },
+          {
+            id: "ops", title: "Ops Center", desc: "Facility management.",
+            subItems: [
+              { id: "hvac", title: "HVAC System", desc: "Climate control grid.", meta: "Status: Online", icon: "❄️", action: "Diagnostics" }
+            ]
+          }
+        ]
+      }
+    };
+
+    // --- STATE MANAGEMENT ---
+    const stack = ['layer-1'];
+    let currentData = null;
+
+    function updateHUD() {
+      const back = document.getElementById('back-btn');
+      back.style.visibility = stack.length > 1 ? 'visible' : 'hidden';
+    }
+
+    function pushLayer(layerId) {
+      const currentId = stack[stack.length - 1];
+      document.getElementById(currentId).classList.add('inactive-left');
+      document.getElementById(currentId).classList.remove('active');
+      
+      document.getElementById(layerId).classList.add('active');
+      stack.push(layerId);
+      updateHUD();
+    }
+
+    function goBack() {
+      if (stack.length <= 1) return;
+      
+      const currentId = stack.pop();
+      const prevId = stack[stack.length - 1];
+      
+      const currEl = document.getElementById(currentId);
+      currEl.classList.remove('active');
+      
+      // Force reflow for animation if needed, but CSS handles it
+      
+      const prevEl = document.getElementById(prevId);
+      prevEl.classList.remove('inactive-left');
+      prevEl.classList.add('active');
+      
+      updateHUD();
+    }
+
+    // --- NAVIGATION ---
+
+    function goToLevel2(key) {
+      const data = DB[key];
+      currentData = data;
+      
+      document.getElementById('l2-title').textContent = data.title;
+      document.getElementById('l2-title').style.color = data.color;
+      
+      const grid = document.getElementById('l2-content');
+      grid.innerHTML = '';
+      
+      data.items.forEach((cat, index) => {
+        const card = document.createElement('div');
+        card.className = 'menu-card';
+        card.style.borderColor = data.color;
+        card.innerHTML = `<h3>${cat.title}</h3><p style="font-size:0.7rem; color:#aaa;">${cat.desc}</p>`;
+        card.onclick = () => goToLevel3(index);
+        grid.appendChild(card);
+      });
+
+      pushLayer('layer-2');
+    }
+
+    function goToLevel3(catIndex) {
+      const category = currentData.items[catIndex];
+      document.getElementById('l3-title').textContent = category.title;
+      document.getElementById('l3-title').style.color = currentData.color;
+      
+      const grid = document.getElementById('l3-content');
+      grid.innerHTML = '';
+      
+      category.subItems.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'menu-card';
+        card.style.borderColor = currentData.color;
+        card.innerHTML = `
+          <div style="font-size:2rem; margin-bottom:10px;">${item.icon}</div>
+          <h3>${item.title}</h3>
+          <p style="font-size:0.7rem; color:#aaa;">${item.desc}</p>
+        `;
+        card.onclick = () => goToLevel4(item);
+        grid.appendChild(card);
+      });
+
+      pushLayer('layer-3');
+    }
+
+    function goToLevel4(item) {
+      const container = document.getElementById('l4-container');
+      container.style.borderColor = currentData.color;
+      container.style.boxShadow = `0 0 30px ${currentData.color}`;
+      
+      container.innerHTML = `
+        <span class="item-icon">${item.icon}</span>
+        <span class="item-title" style="color:${currentData.color}">${item.title}</span>
+        <div class="item-stats">
+          DESCRIPTION: ${item.desc}<br><br>
+          DATA: ${item.meta}
+        </div>
+        <button class="btn-action" style="background:${currentData.color}; color:#000" onclick="alert('ACTION EXECUTED: ${item.action}')">${item.action}</button>
+      `;
+
+      pushLayer('layer-4');
+    }
+
+    // --- PASSWORD SYSTEM ---
+    function checkAdmin() {
+      const modal = document.getElementById('password-modal');
+      modal.style.display = 'flex';
+      const input = document.getElementById('pass-input');
+      input.value = "";
+      input.focus();
+    }
+
+    function closePassModal() {
+      document.getElementById('password-modal').style.display = 'none';
+    }
+
+    document.getElementById('pass-input').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        const input = document.getElementById('pass-input');
+        const msg = document.getElementById('pass-msg');
+        // Check hash of 'RiverbendLead!2024'
+        if (btoa(input.value) === "Uml2ZXJiZW5kTGVhZCEyMDI0") {
+          closePassModal();
+          goToLevel2('principal');
+        } else {
+          msg.textContent = "ACCESS DENIED";
+          input.value = "";
+        }
+      }
+    });
+
+  </script>
+</body>
+</html>

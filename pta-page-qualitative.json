@@ -1,0 +1,912 @@
+
+{
+  "generated_at": "2026-01-01",
+  "project": "pta-portal",
+  "enums": {
+    "premium_measure": [
+      { "id": "premium_low", "label": "low" },
+      { "id": "premium_med", "label": "med" },
+      { "id": "premium_high", "label": "high" }
+    ],
+    "appropriate_school": [
+      { "id": "school_elementary", "label": "elementary" },
+      { "id": "school_middle", "label": "middle" },
+      { "id": "school_high", "label": "high school" }
+    ],
+    "cost_positioning": [
+      { "id": "cost_budget", "label": "budget" },
+      { "id": "cost_standard", "label": "standard" },
+      { "id": "cost_premium", "label": "premium" }
+    ],
+    "content_density": [
+      { "id": "density_low", "label": "low" },
+      { "id": "density_med", "label": "medium" },
+      { "id": "density_high", "label": "high" }
+    ],
+    "volunteer_bandwidth": [
+      { "id": "volunteer_low", "label": "low" },
+      { "id": "volunteer_med", "label": "medium" },
+      { "id": "volunteer_high", "label": "high" }
+    ],
+    "tech_expectation": [
+      { "id": "tech_low", "label": "low" },
+      { "id": "tech_mod", "label": "moderate" },
+      { "id": "tech_high", "label": "high" }
+    ],
+    "geographic_fit": [
+      { "id": "geo_midwest_suburban", "label": "Midwest suburban" },
+      { "id": "geo_coastal_southeast", "label": "Coastal Southeast" },
+      { "id": "geo_west_coast_metro", "label": "West Coast metro" },
+      { "id": "geo_mid_atlantic", "label": "Mid-Atlantic" },
+      { "id": "geo_mountain_west_smalltown", "label": "Mountain West small town" },
+      { "id": "geo_great_lakes_suburban", "label": "Great Lakes suburban" },
+      { "id": "geo_sunbelt_suburbs", "label": "Sunbelt suburbs" },
+      { "id": "geo_west_coast_suburban", "label": "West Coast suburban" },
+      { "id": "geo_northeast_metro", "label": "Northeast metro" },
+      { "id": "geo_pacific_northwest", "label": "Pacific Northwest" },
+      { "id": "geo_upper_midwest", "label": "Upper Midwest" },
+      { "id": "geo_texas_plains", "label": "Texas Plains" },
+      { "id": "geo_pacific_coast_urban", "label": "Pacific Coast urban" },
+      { "id": "geo_northeast_urban", "label": "Northeast urban" }
+    ],
+    "visual_tone": [
+      { "id": "tone_balanced_community", "label": "balanced, community-forward" },
+      { "id": "tone_warm_welcoming", "label": "warm, welcoming" },
+      { "id": "tone_futuristic_ambitious", "label": "futuristic, ambitious" },
+      { "id": "tone_traditional_civic", "label": "traditional, civic-minded" },
+      { "id": "tone_rustic_neighborly", "label": "rustic, neighborly" },
+      { "id": "tone_cozy_handmade", "label": "cozy, handmade" },
+      { "id": "tone_playful_colorful", "label": "playful, colorful" },
+      { "id": "tone_clean_professional", "label": "clean, professional" },
+      { "id": "tone_minimal_upscale", "label": "minimal, upscale" },
+      { "id": "tone_outdoorsy_educational", "label": "outdoorsy, educational" },
+      { "id": "tone_retro_spirited", "label": "retro, spirited" },
+      { "id": "tone_bold_operational", "label": "bold, operational" },
+      { "id": "tone_artsy_editorial", "label": "artsy, editorial" },
+      { "id": "tone_sleek_data", "label": "sleek, data-driven" }
+    ],
+    "fundraising_fit": [
+      { "id": "fundraising_hybrid", "label": "hybrid events + online" },
+      { "id": "fundraising_seasonal", "label": "seasonal drives" },
+      { "id": "fundraising_digital", "label": "digital campaigns" },
+      { "id": "fundraising_sponsorship_packages", "label": "sponsorship packages" },
+      { "id": "fundraising_raffles", "label": "community raffles" },
+      { "id": "fundraising_bake_sales", "label": "bake sales" },
+      { "id": "fundraising_quick_hit", "label": "quick-hit drives" },
+      { "id": "fundraising_online_giving", "label": "online giving" },
+      { "id": "fundraising_annual_giving", "label": "annual giving" },
+      { "id": "fundraising_eco_partnerships", "label": "eco-partnerships" },
+      { "id": "fundraising_gaming_nights", "label": "gaming nights" },
+      { "id": "fundraising_sponsorship_tiers", "label": "sponsorship tiers" },
+      { "id": "fundraising_creative_sponsorships", "label": "creative sponsorships" },
+      { "id": "fundraising_major_donors", "label": "major donor focus" }
+    ],
+    "sponsor_fit": [
+      { "id": "sponsor_local_businesses", "label": "local businesses" },
+      { "id": "sponsor_neighborhood_services", "label": "neighborhood services" },
+      { "id": "sponsor_tech_university", "label": "tech and university partners" },
+      { "id": "sponsor_regional_employers", "label": "regional employers" },
+      { "id": "sponsor_local_trades", "label": "local trades" },
+      { "id": "sponsor_small_shops", "label": "small shops" },
+      { "id": "sponsor_family_services", "label": "family services" },
+      { "id": "sponsor_regional_chains", "label": "regional chains" },
+      { "id": "sponsor_professional_services", "label": "professional services" },
+      { "id": "sponsor_outdoor_brands", "label": "outdoor brands" },
+      { "id": "sponsor_local_cafes", "label": "local cafes" },
+      { "id": "sponsor_civic_groups", "label": "civic groups" },
+      { "id": "sponsor_arts_media", "label": "arts and media" },
+      { "id": "sponsor_corporate_partners", "label": "corporate partners" }
+    ],
+    "event_style": [
+      { "id": "event_family_fairs", "label": "family nights, school fairs" },
+      { "id": "event_outdoor_art", "label": "outdoor socials, art nights" },
+      { "id": "event_speakers_careers", "label": "speaker series, career nights" },
+      { "id": "event_recognition_banquets", "label": "recognition banquets" },
+      { "id": "event_barn_harvest", "label": "barn socials, harvest fairs" },
+      { "id": "event_classroom_showcases", "label": "classroom showcases" },
+      { "id": "event_spirit_days", "label": "spirit days" },
+      { "id": "event_info_sessions", "label": "info sessions" },
+      { "id": "event_ticketed_events", "label": "ticketed events" },
+      { "id": "event_field_days", "label": "field days" },
+      { "id": "event_family_tournaments", "label": "family tournaments" },
+      { "id": "event_leadership_programs", "label": "leadership programs" },
+      { "id": "event_showcases", "label": "showcases" },
+      { "id": "event_galas_alumni", "label": "galas, alumni mixers" }
+    ],
+    "ui_typography": [
+      { "id": "type_humanist_serif_sans", "label": "humanist serif + neutral sans" },
+      { "id": "type_soft_sans_round", "label": "soft rounded sans" },
+      { "id": "type_geo_sans_display", "label": "geometric sans + display" },
+      { "id": "type_transitional_serif", "label": "transitional serif + sturdy sans" },
+      { "id": "type_slab_sans", "label": "slab serif + compact sans" },
+      { "id": "type_handwritten_sans", "label": "handwritten accents + clean sans" },
+      { "id": "type_playful_sans", "label": "playful rounded sans" },
+      { "id": "type_corporate_sans", "label": "corporate sans" },
+      { "id": "type_minimal_sans", "label": "minimal sans" },
+      { "id": "type_outdoor_sans", "label": "outdoor grotesk + serif" },
+      { "id": "type_retro_pixel", "label": "retro pixel + mono" },
+      { "id": "type_technical_mono", "label": "technical mono + bold sans" },
+      { "id": "type_editorial_serif", "label": "editorial serif + narrow sans" },
+      { "id": "type_luxury_serif", "label": "luxury serif + high-contrast sans" }
+    ],
+    "ui_layout": [
+      { "id": "layout_community_portal", "label": "community portal" },
+      { "id": "layout_story_blocks", "label": "story blocks" },
+      { "id": "layout_dashboard", "label": "dashboard" },
+      { "id": "layout_civic_columns", "label": "civic columns" },
+      { "id": "layout_simple_cards", "label": "simple cards" },
+      { "id": "layout_bulletin_board", "label": "bulletin board" },
+      { "id": "layout_playful_tiles", "label": "playful tiles" },
+      { "id": "layout_pro_grid", "label": "pro grid" },
+      { "id": "layout_minimal_gallery", "label": "minimal gallery" },
+      { "id": "layout_field_guide", "label": "field guide" },
+      { "id": "layout_pixel_panels", "label": "pixel panels" },
+      { "id": "layout_command_console", "label": "command console" },
+      { "id": "layout_zine_editorial", "label": "zine editorial" },
+      { "id": "layout_luxe_panels", "label": "luxe panels" }
+    ],
+    "ui_motion": [
+      { "id": "motion_gentle", "label": "gentle" },
+      { "id": "motion_soft_bounce", "label": "soft bounce" },
+      { "id": "motion_crisp", "label": "crisp" },
+      { "id": "motion_static", "label": "static" },
+      { "id": "motion_punchy", "label": "punchy" }
+    ],
+    "ui_contrast": [
+      { "id": "contrast_low", "label": "low" },
+      { "id": "contrast_med", "label": "medium" },
+      { "id": "contrast_high", "label": "high" }
+    ],
+    "ui_shape": [
+      { "id": "shape_rounded", "label": "rounded" },
+      { "id": "shape_soft", "label": "soft" },
+      { "id": "shape_sharp", "label": "sharp" }
+    ],
+    "ui_icon": [
+      { "id": "icon_outline", "label": "outline" },
+      { "id": "icon_filled", "label": "filled" },
+      { "id": "icon_mono", "label": "mono" }
+    ],
+    "ui_imagery": [
+      { "id": "imagery_photographic_warm", "label": "photographic warm" },
+      { "id": "imagery_photographic_cool", "label": "photographic cool" },
+      { "id": "imagery_illustrated", "label": "illustrated" },
+      { "id": "imagery_textural", "label": "textural" }
+    ],
+    "ui_spacing": [
+      { "id": "spacing_compact", "label": "compact" },
+      { "id": "spacing_comfortable", "label": "comfortable" },
+      { "id": "spacing_spacious", "label": "spacious" }
+    ],
+    "ui_grid": [
+      { "id": "grid_12_standard", "label": "12-col standard" },
+      { "id": "grid_8_modular", "label": "8-col modular" },
+      { "id": "grid_6_dense", "label": "6-col dense" }
+    ]
+  },
+  "palettes": [
+    {
+      "id": "palette_riverbend_classic",
+      "name": "Riverbend Classic",
+      "hues_deg": { "primary": 210, "accent": 28 },
+      "neutral_temperature": "cool",
+      "contrast": "med",
+      "colors": {
+        "bg": "#F7F4EF",
+        "surface": "#FFFFFF",
+        "text": "#1E2A32",
+        "primary": "#1D4E89",
+        "secondary": "#A1B5C6",
+        "accent": "#E08E45",
+        "muted": "#6B7C88"
+      }
+    },
+    {
+      "id": "palette_saffron_coast",
+      "name": "Saffron Coast",
+      "hues_deg": { "primary": 34, "accent": 168 },
+      "neutral_temperature": "warm",
+      "contrast": "med",
+      "colors": {
+        "bg": "#FFF6ED",
+        "surface": "#FFFFFF",
+        "text": "#2F2A24",
+        "primary": "#E18A3B",
+        "secondary": "#F2C097",
+        "accent": "#2E8A7D",
+        "muted": "#8F7E6B"
+      }
+    },
+    {
+      "id": "palette_nova_horizon",
+      "name": "Nova Horizon",
+      "hues_deg": { "primary": 222, "accent": 310 },
+      "neutral_temperature": "cool",
+      "contrast": "high",
+      "colors": {
+        "bg": "#0D1320",
+        "surface": "#151C2F",
+        "text": "#F3F6FA",
+        "primary": "#4D7CFF",
+        "secondary": "#8FA8FF",
+        "accent": "#FF4FD8",
+        "muted": "#7A8599"
+      }
+    },
+    {
+      "id": "palette_liberty_dawn",
+      "name": "Liberty Dawn",
+      "hues_deg": { "primary": 206, "accent": 6 },
+      "neutral_temperature": "neutral",
+      "contrast": "med",
+      "colors": {
+        "bg": "#F4F6F8",
+        "surface": "#FFFFFF",
+        "text": "#1E242B",
+        "primary": "#2C5D8A",
+        "secondary": "#B5C7D6",
+        "accent": "#C6493A",
+        "muted": "#6B7A86"
+      }
+    },
+    {
+      "id": "palette_dusty_ridge",
+      "name": "Dusty Ridge",
+      "hues_deg": { "primary": 22, "accent": 120 },
+      "neutral_temperature": "warm",
+      "contrast": "low",
+      "colors": {
+        "bg": "#F8F1E8",
+        "surface": "#FFF9F2",
+        "text": "#3A2E25",
+        "primary": "#B56A3C",
+        "secondary": "#D9B08C",
+        "accent": "#4C7A56",
+        "muted": "#8B6F5C"
+      }
+    },
+    {
+      "id": "palette_ember_zenith",
+      "name": "Ember Zenith",
+      "hues_deg": { "primary": 190, "accent": 12 },
+      "neutral_temperature": "cool",
+      "contrast": "high",
+      "colors": {
+        "bg": "#0E1418",
+        "surface": "#141C22",
+        "text": "#E7EEF4",
+        "primary": "#2B9CB3",
+        "secondary": "#8AC7D2",
+        "accent": "#E25D4A",
+        "muted": "#6C7A86"
+      }
+    },
+    {
+      "id": "palette_cozy_bulletin",
+      "name": "Cozy Bulletin",
+      "hues_deg": { "primary": 40, "accent": 210 },
+      "neutral_temperature": "warm",
+      "contrast": "low",
+      "colors": {
+        "bg": "#FFF8E6",
+        "surface": "#FFFDF7",
+        "text": "#3A2F1F",
+        "primary": "#E1A947",
+        "secondary": "#F0D7A3",
+        "accent": "#5A7FA8",
+        "muted": "#8C7A63"
+      }
+    },
+    {
+      "id": "palette_emoji_explorer",
+      "name": "Emoji Explorer",
+      "hues_deg": { "primary": 300, "accent": 60 },
+      "neutral_temperature": "neutral",
+      "contrast": "med",
+      "colors": {
+        "bg": "#FFF6FB",
+        "surface": "#FFFFFF",
+        "text": "#2A2230",
+        "primary": "#E45FB7",
+        "secondary": "#F2A9D6",
+        "accent": "#F2C94C",
+        "muted": "#7D6D7B"
+      }
+    },
+    {
+      "id": "palette_pro_portal",
+      "name": "Pro Portal",
+      "hues_deg": { "primary": 210, "accent": 140 },
+      "neutral_temperature": "cool",
+      "contrast": "med",
+      "colors": {
+        "bg": "#F5F8FB",
+        "surface": "#FFFFFF",
+        "text": "#1E2732",
+        "primary": "#2B5F93",
+        "secondary": "#B6C6D8",
+        "accent": "#3A8F64",
+        "muted": "#6B7C8D"
+      }
+    },
+    {
+      "id": "palette_monochrome_luxe",
+      "name": "Monochrome Luxe",
+      "hues_deg": { "primary": 0, "accent": 25 },
+      "neutral_temperature": "neutral",
+      "contrast": "high",
+      "colors": {
+        "bg": "#F1F1F1",
+        "surface": "#FFFFFF",
+        "text": "#101010",
+        "primary": "#1B1B1B",
+        "secondary": "#B8B8B8",
+        "accent": "#C98B4B",
+        "muted": "#6A6A6A"
+      }
+    },
+    {
+      "id": "palette_field_guide",
+      "name": "Field Guide",
+      "hues_deg": { "primary": 140, "accent": 32 },
+      "neutral_temperature": "warm",
+      "contrast": "med",
+      "colors": {
+        "bg": "#F4F6EE",
+        "surface": "#FFFFFF",
+        "text": "#20291F",
+        "primary": "#3E7C4B",
+        "secondary": "#A5C0A0",
+        "accent": "#C47B3C",
+        "muted": "#6D7B68"
+      }
+    },
+    {
+      "id": "palette_pixel_campus",
+      "name": "Pixel Campus",
+      "hues_deg": { "primary": 190, "accent": 310 },
+      "neutral_temperature": "cool",
+      "contrast": "med",
+      "colors": {
+        "bg": "#EEF6FF",
+        "surface": "#FFFFFF",
+        "text": "#1D2430",
+        "primary": "#2D8DD9",
+        "secondary": "#8BB9E8",
+        "accent": "#E24FA3",
+        "muted": "#6A7A8C"
+      }
+    },
+    {
+      "id": "palette_tactical",
+      "name": "Tactical",
+      "hues_deg": { "primary": 120, "accent": 48 },
+      "neutral_temperature": "neutral",
+      "contrast": "high",
+      "colors": {
+        "bg": "#0F1411",
+        "surface": "#151C18",
+        "text": "#E6EFEA",
+        "primary": "#3E7A4E",
+        "secondary": "#7FA089",
+        "accent": "#D6A23A",
+        "muted": "#708377"
+      }
+    },
+    {
+      "id": "palette_zine_editorial",
+      "name": "Zine Editorial",
+      "hues_deg": { "primary": 18, "accent": 205 },
+      "neutral_temperature": "warm",
+      "contrast": "med",
+      "colors": {
+        "bg": "#FFF4F0",
+        "surface": "#FFFFFF",
+        "text": "#2C201C",
+        "primary": "#C8563D",
+        "secondary": "#E2A08F",
+        "accent": "#3E7FA6",
+        "muted": "#7D6C64"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "id": "page_riverbend_core",
+      "file": "index.html",
+      "title": "Riverbend PTA Portal - Family - Principal - Board - Students",
+      "premium_measure_id": "premium_med",
+      "appropriate_school_id": "school_middle",
+      "geographic_fit_id": "geo_midwest_suburban",
+      "cost_positioning_id": "cost_standard",
+      "visual_tone_id": "tone_balanced_community",
+      "content_density_id": "density_med",
+      "fundraising_fit_id": "fundraising_hybrid",
+      "volunteer_bandwidth_id": "volunteer_med",
+      "tech_expectation_id": "tech_mod",
+      "sponsor_fit_id": "sponsor_local_businesses",
+      "event_style_id": "event_family_fairs",
+      "ui": {
+        "palette_id": "palette_riverbend_classic",
+        "typography_id": "type_humanist_serif_sans",
+        "layout_id": "layout_community_portal",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_comfortable",
+        "contrast_id": "contrast_med",
+        "shape_id": "shape_rounded",
+        "icon_id": "icon_outline",
+        "imagery_id": "imagery_photographic_warm",
+        "motion_id": "motion_gentle",
+        "collision_guard": {
+          "primary_hue_deg": 210,
+          "accent_hue_deg": 28,
+          "avoid_palette_ids": [
+            "palette_pro_portal",
+            "palette_field_guide"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_saffron_reef",
+      "file": "saffron-reef-9382.html",
+      "title": "Riverbend PTA Portal - Family - Principal - Board - Students",
+      "premium_measure_id": "premium_med",
+      "appropriate_school_id": "school_elementary",
+      "geographic_fit_id": "geo_coastal_southeast",
+      "cost_positioning_id": "cost_standard",
+      "visual_tone_id": "tone_warm_welcoming",
+      "content_density_id": "density_med",
+      "fundraising_fit_id": "fundraising_seasonal",
+      "volunteer_bandwidth_id": "volunteer_med",
+      "tech_expectation_id": "tech_low",
+      "sponsor_fit_id": "sponsor_neighborhood_services",
+      "event_style_id": "event_outdoor_art",
+      "ui": {
+        "palette_id": "palette_saffron_coast",
+        "typography_id": "type_soft_sans_round",
+        "layout_id": "layout_story_blocks",
+        "grid_id": "grid_8_modular",
+        "spacing_id": "spacing_comfortable",
+        "contrast_id": "contrast_med",
+        "shape_id": "shape_soft",
+        "icon_id": "icon_filled",
+        "imagery_id": "imagery_photographic_warm",
+        "motion_id": "motion_soft_bounce",
+        "collision_guard": {
+          "primary_hue_deg": 34,
+          "accent_hue_deg": 168,
+          "avoid_palette_ids": [
+            "palette_cozy_bulletin",
+            "palette_dusty_ridge"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_nova_horizon",
+      "file": "nova-horizon-8391.html",
+      "title": "Riverbend PTA Portal - Family - Principal - Board - Students",
+      "premium_measure_id": "premium_high",
+      "appropriate_school_id": "school_high",
+      "geographic_fit_id": "geo_west_coast_metro",
+      "cost_positioning_id": "cost_premium",
+      "visual_tone_id": "tone_futuristic_ambitious",
+      "content_density_id": "density_high",
+      "fundraising_fit_id": "fundraising_digital",
+      "volunteer_bandwidth_id": "volunteer_low",
+      "tech_expectation_id": "tech_high",
+      "sponsor_fit_id": "sponsor_tech_university",
+      "event_style_id": "event_speakers_careers",
+      "ui": {
+        "palette_id": "palette_nova_horizon",
+        "typography_id": "type_geo_sans_display",
+        "layout_id": "layout_dashboard",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_compact",
+        "contrast_id": "contrast_high",
+        "shape_id": "shape_sharp",
+        "icon_id": "icon_mono",
+        "imagery_id": "imagery_photographic_cool",
+        "motion_id": "motion_crisp",
+        "collision_guard": {
+          "primary_hue_deg": 222,
+          "accent_hue_deg": 310,
+          "avoid_palette_ids": [
+            "palette_pixel_campus"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_liberty_dawn",
+      "file": "liberty-dawn-2746.html",
+      "title": "Riverbend PTA Portal - Family - Principal - Board - Students",
+      "premium_measure_id": "premium_med",
+      "appropriate_school_id": "school_high",
+      "geographic_fit_id": "geo_mid_atlantic",
+      "cost_positioning_id": "cost_standard",
+      "visual_tone_id": "tone_traditional_civic",
+      "content_density_id": "density_med",
+      "fundraising_fit_id": "fundraising_sponsorship_packages",
+      "volunteer_bandwidth_id": "volunteer_med",
+      "tech_expectation_id": "tech_mod",
+      "sponsor_fit_id": "sponsor_regional_employers",
+      "event_style_id": "event_recognition_banquets",
+      "ui": {
+        "palette_id": "palette_liberty_dawn",
+        "typography_id": "type_transitional_serif",
+        "layout_id": "layout_civic_columns",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_comfortable",
+        "contrast_id": "contrast_med",
+        "shape_id": "shape_rounded",
+        "icon_id": "icon_outline",
+        "imagery_id": "imagery_photographic_warm",
+        "motion_id": "motion_gentle",
+        "collision_guard": {
+          "primary_hue_deg": 206,
+          "accent_hue_deg": 6,
+          "avoid_palette_ids": [
+            "palette_riverbend_classic",
+            "palette_pro_portal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_dusty_ridge",
+      "file": "dusty-ridge-7410.html",
+      "title": "Riverbend PTA Portal - Family - Principal - Board - Students",
+      "premium_measure_id": "premium_low",
+      "appropriate_school_id": "school_elementary",
+      "geographic_fit_id": "geo_mountain_west_smalltown",
+      "cost_positioning_id": "cost_budget",
+      "visual_tone_id": "tone_rustic_neighborly",
+      "content_density_id": "density_low",
+      "fundraising_fit_id": "fundraising_raffles",
+      "volunteer_bandwidth_id": "volunteer_high",
+      "tech_expectation_id": "tech_low",
+      "sponsor_fit_id": "sponsor_local_trades",
+      "event_style_id": "event_barn_harvest",
+      "ui": {
+        "palette_id": "palette_dusty_ridge",
+        "typography_id": "type_slab_sans",
+        "layout_id": "layout_simple_cards",
+        "grid_id": "grid_8_modular",
+        "spacing_id": "spacing_spacious",
+        "contrast_id": "contrast_low",
+        "shape_id": "shape_soft",
+        "icon_id": "icon_outline",
+        "imagery_id": "imagery_textural",
+        "motion_id": "motion_static",
+        "collision_guard": {
+          "primary_hue_deg": 22,
+          "accent_hue_deg": 120,
+          "avoid_palette_ids": [
+            "palette_saffron_coast",
+            "palette_cozy_bulletin"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_ember_zenith",
+      "file": "ember-zenith-5645.html",
+      "title": "Riverbend PTA Portal - Immersive Dashboard",
+      "premium_measure_id": "premium_high",
+      "appropriate_school_id": "school_high",
+      "geographic_fit_id": "geo_northeast_urban",
+      "cost_positioning_id": "cost_premium",
+      "visual_tone_id": "tone_sleek_data",
+      "content_density_id": "density_high",
+      "fundraising_fit_id": "fundraising_major_donors",
+      "volunteer_bandwidth_id": "volunteer_low",
+      "tech_expectation_id": "tech_high",
+      "sponsor_fit_id": "sponsor_corporate_partners",
+      "event_style_id": "event_galas_alumni",
+      "ui": {
+        "palette_id": "palette_ember_zenith",
+        "typography_id": "type_geo_sans_display",
+        "layout_id": "layout_dashboard",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_compact",
+        "contrast_id": "contrast_high",
+        "shape_id": "shape_sharp",
+        "icon_id": "icon_mono",
+        "imagery_id": "imagery_photographic_cool",
+        "motion_id": "motion_crisp",
+        "collision_guard": {
+          "primary_hue_deg": 190,
+          "accent_hue_deg": 12,
+          "avoid_palette_ids": [
+            "palette_tactical",
+            "palette_nova_horizon"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_cozy_bulletin",
+      "file": "index-bulletin.html",
+      "title": "Riverbend PTA - Cozy Bulletin",
+      "premium_measure_id": "premium_low",
+      "appropriate_school_id": "school_elementary",
+      "geographic_fit_id": "geo_great_lakes_suburban",
+      "cost_positioning_id": "cost_budget",
+      "visual_tone_id": "tone_cozy_handmade",
+      "content_density_id": "density_low",
+      "fundraising_fit_id": "fundraising_bake_sales",
+      "volunteer_bandwidth_id": "volunteer_high",
+      "tech_expectation_id": "tech_low",
+      "sponsor_fit_id": "sponsor_small_shops",
+      "event_style_id": "event_classroom_showcases",
+      "ui": {
+        "palette_id": "palette_cozy_bulletin",
+        "typography_id": "type_handwritten_sans",
+        "layout_id": "layout_bulletin_board",
+        "grid_id": "grid_6_dense",
+        "spacing_id": "spacing_spacious",
+        "contrast_id": "contrast_low",
+        "shape_id": "shape_soft",
+        "icon_id": "icon_outline",
+        "imagery_id": "imagery_textural",
+        "motion_id": "motion_static",
+        "collision_guard": {
+          "primary_hue_deg": 40,
+          "accent_hue_deg": 210,
+          "avoid_palette_ids": [
+            "palette_saffron_coast",
+            "palette_dusty_ridge"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_emoji_explorer",
+      "file": "index-emoji.html",
+      "title": "Riverbend PTA - Emoji Explorer",
+      "premium_measure_id": "premium_low",
+      "appropriate_school_id": "school_elementary",
+      "geographic_fit_id": "geo_sunbelt_suburbs",
+      "cost_positioning_id": "cost_budget",
+      "visual_tone_id": "tone_playful_colorful",
+      "content_density_id": "density_low",
+      "fundraising_fit_id": "fundraising_quick_hit",
+      "volunteer_bandwidth_id": "volunteer_med",
+      "tech_expectation_id": "tech_low",
+      "sponsor_fit_id": "sponsor_family_services",
+      "event_style_id": "event_spirit_days",
+      "ui": {
+        "palette_id": "palette_emoji_explorer",
+        "typography_id": "type_playful_sans",
+        "layout_id": "layout_playful_tiles",
+        "grid_id": "grid_8_modular",
+        "spacing_id": "spacing_comfortable",
+        "contrast_id": "contrast_med",
+        "shape_id": "shape_rounded",
+        "icon_id": "icon_filled",
+        "imagery_id": "imagery_illustrated",
+        "motion_id": "motion_soft_bounce",
+        "collision_guard": {
+          "primary_hue_deg": 300,
+          "accent_hue_deg": 60,
+          "avoid_palette_ids": [
+            "palette_zine_editorial"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_pro_portal",
+      "file": "index-google.html",
+      "title": "Riverbend PTA - Pro Portal",
+      "premium_measure_id": "premium_med",
+      "appropriate_school_id": "school_middle",
+      "geographic_fit_id": "geo_west_coast_suburban",
+      "cost_positioning_id": "cost_standard",
+      "visual_tone_id": "tone_clean_professional",
+      "content_density_id": "density_med",
+      "fundraising_fit_id": "fundraising_online_giving",
+      "volunteer_bandwidth_id": "volunteer_med",
+      "tech_expectation_id": "tech_mod",
+      "sponsor_fit_id": "sponsor_regional_chains",
+      "event_style_id": "event_info_sessions",
+      "ui": {
+        "palette_id": "palette_pro_portal",
+        "typography_id": "type_corporate_sans",
+        "layout_id": "layout_pro_grid",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_comfortable",
+        "contrast_id": "contrast_med",
+        "shape_id": "shape_rounded",
+        "icon_id": "icon_outline",
+        "imagery_id": "imagery_photographic_cool",
+        "motion_id": "motion_gentle",
+        "collision_guard": {
+          "primary_hue_deg": 210,
+          "accent_hue_deg": 140,
+          "avoid_palette_ids": [
+            "palette_riverbend_classic",
+            "palette_liberty_dawn"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_monochrome_luxe",
+      "file": "index-monochrome-luxe.html",
+      "title": "Riverbend PTA Portal - Monochrome Luxe",
+      "premium_measure_id": "premium_high",
+      "appropriate_school_id": "school_high",
+      "geographic_fit_id": "geo_northeast_metro",
+      "cost_positioning_id": "cost_premium",
+      "visual_tone_id": "tone_minimal_upscale",
+      "content_density_id": "density_med",
+      "fundraising_fit_id": "fundraising_annual_giving",
+      "volunteer_bandwidth_id": "volunteer_low",
+      "tech_expectation_id": "tech_mod",
+      "sponsor_fit_id": "sponsor_professional_services",
+      "event_style_id": "event_ticketed_events",
+      "ui": {
+        "palette_id": "palette_monochrome_luxe",
+        "typography_id": "type_luxury_serif",
+        "layout_id": "layout_luxe_panels",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_spacious",
+        "contrast_id": "contrast_high",
+        "shape_id": "shape_sharp",
+        "icon_id": "icon_mono",
+        "imagery_id": "imagery_photographic_cool",
+        "motion_id": "motion_static",
+        "collision_guard": {
+          "primary_hue_deg": 0,
+          "accent_hue_deg": 25,
+          "avoid_palette_ids": [
+            "palette_liberty_dawn"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_field_guide",
+      "file": "index-nature-field-guide.html",
+      "title": "Riverbend PTA Portal - Amazon Rainforest",
+      "premium_measure_id": "premium_med",
+      "appropriate_school_id": "school_middle",
+      "geographic_fit_id": "geo_pacific_northwest",
+      "cost_positioning_id": "cost_standard",
+      "visual_tone_id": "tone_outdoorsy_educational",
+      "content_density_id": "density_med",
+      "fundraising_fit_id": "fundraising_eco_partnerships",
+      "volunteer_bandwidth_id": "volunteer_med",
+      "tech_expectation_id": "tech_mod",
+      "sponsor_fit_id": "sponsor_outdoor_brands",
+      "event_style_id": "event_field_days",
+      "ui": {
+        "palette_id": "palette_field_guide",
+        "typography_id": "type_outdoor_sans",
+        "layout_id": "layout_field_guide",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_comfortable",
+        "contrast_id": "contrast_med",
+        "shape_id": "shape_rounded",
+        "icon_id": "icon_outline",
+        "imagery_id": "imagery_photographic_warm",
+        "motion_id": "motion_gentle",
+        "collision_guard": {
+          "primary_hue_deg": 140,
+          "accent_hue_deg": 32,
+          "avoid_palette_ids": [
+            "palette_dusty_ridge"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_pixel_campus",
+      "file": "index-pixel.html",
+      "title": "Riverbend PTA - Pixel Campus",
+      "premium_measure_id": "premium_med",
+      "appropriate_school_id": "school_middle",
+      "geographic_fit_id": "geo_upper_midwest",
+      "cost_positioning_id": "cost_standard",
+      "visual_tone_id": "tone_retro_spirited",
+      "content_density_id": "density_med",
+      "fundraising_fit_id": "fundraising_gaming_nights",
+      "volunteer_bandwidth_id": "volunteer_med",
+      "tech_expectation_id": "tech_mod",
+      "sponsor_fit_id": "sponsor_local_cafes",
+      "event_style_id": "event_family_tournaments",
+      "ui": {
+        "palette_id": "palette_pixel_campus",
+        "typography_id": "type_retro_pixel",
+        "layout_id": "layout_pixel_panels",
+        "grid_id": "grid_8_modular",
+        "spacing_id": "spacing_compact",
+        "contrast_id": "contrast_med",
+        "shape_id": "shape_sharp",
+        "icon_id": "icon_mono",
+        "imagery_id": "imagery_illustrated",
+        "motion_id": "motion_punchy",
+        "collision_guard": {
+          "primary_hue_deg": 190,
+          "accent_hue_deg": 310,
+          "avoid_palette_ids": [
+            "palette_nova_horizon"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_tactical",
+      "file": "index-tactical.html",
+      "title": "RPTA-CMD - Riverbend Tactical Portal",
+      "premium_measure_id": "premium_med",
+      "appropriate_school_id": "school_high",
+      "geographic_fit_id": "geo_texas_plains",
+      "cost_positioning_id": "cost_standard",
+      "visual_tone_id": "tone_bold_operational",
+      "content_density_id": "density_high",
+      "fundraising_fit_id": "fundraising_sponsorship_tiers",
+      "volunteer_bandwidth_id": "volunteer_low",
+      "tech_expectation_id": "tech_high",
+      "sponsor_fit_id": "sponsor_civic_groups",
+      "event_style_id": "event_leadership_programs",
+      "ui": {
+        "palette_id": "palette_tactical",
+        "typography_id": "type_technical_mono",
+        "layout_id": "layout_command_console",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_compact",
+        "contrast_id": "contrast_high",
+        "shape_id": "shape_sharp",
+        "icon_id": "icon_mono",
+        "imagery_id": "imagery_textural",
+        "motion_id": "motion_crisp",
+        "collision_guard": {
+          "primary_hue_deg": 120,
+          "accent_hue_deg": 48,
+          "avoid_palette_ids": [
+            "palette_ember_zenith"
+          ]
+        }
+      }
+    },
+    {
+      "id": "page_zine_editorial",
+      "file": "index-zine.html",
+      "title": "The Riverbend Zine - Expanded Edition",
+      "premium_measure_id": "premium_med",
+      "appropriate_school_id": "school_high",
+      "geographic_fit_id": "geo_pacific_coast_urban",
+      "cost_positioning_id": "cost_standard",
+      "visual_tone_id": "tone_artsy_editorial",
+      "content_density_id": "density_high",
+      "fundraising_fit_id": "fundraising_creative_sponsorships",
+      "volunteer_bandwidth_id": "volunteer_med",
+      "tech_expectation_id": "tech_mod",
+      "sponsor_fit_id": "sponsor_arts_media",
+      "event_style_id": "event_showcases",
+      "ui": {
+        "palette_id": "palette_zine_editorial",
+        "typography_id": "type_editorial_serif",
+        "layout_id": "layout_zine_editorial",
+        "grid_id": "grid_12_standard",
+        "spacing_id": "spacing_spacious",
+        "contrast_id": "contrast_med",
+        "shape_id": "shape_rounded",
+        "icon_id": "icon_outline",
+        "imagery_id": "imagery_illustrated",
+        "motion_id": "motion_gentle",
+        "collision_guard": {
+          "primary_hue_deg": 18,
+          "accent_hue_deg": 205,
+          "avoid_palette_ids": [
+            "palette_emoji_explorer"
+          ]
+        }
+      }
+    }
+  ]
+}
