@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Riverbend PTA · Emoji Explorer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-orange: #FF9F1C;
+      --bg-blue: #2EC4B6;
+      --bg-red: #E71D36;
+      --bg-purple: #9D4EDD;
+      --bg-green: #34A853;
+      --glass: rgba(255, 255, 255, 0.8);
+      --glass-border: rgba(255, 255, 255, 0.4);
+      --text-dark: #011627;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Fredoka', sans-serif;
+      color: var(--text-dark);
+      background: #000;
+      overflow-x: hidden;
+    }
+
+    /* --- STICKY SECTIONS (Dynamic Height) --- */
+    .section-container { position: relative; width: 100%; }
+
+    .sticky-section {
+      position: sticky;
+      top: 0;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6rem 2rem 10rem;
+      box-shadow: 0 -30px 100px rgba(0,0,0,0.3);
+    }
+
+    #hero      { background: linear-gradient(135deg, #FF9F1C, #FFBF69); z-index: 1; }
+    #family    { background: linear-gradient(135deg, #2EC4B6, #CBF3F0); z-index: 2; }
+    #principal { background: linear-gradient(135deg, #FF595E, #FF924C); z-index: 3; }
+    #board     { background: linear-gradient(135deg, #9D4EDD, #C77DFF); z-index: 4; }
+    #student   { background: linear-gradient(135deg, #FFD60A, #FFF000); z-index: 5; }
+
+    /* --- CONTENT CARDS --- */
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2px solid var(--glass-border);
+      border-radius: 40px;
+      padding: 3rem;
+      max-width: 1100px;
+      width: 100%;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+
+    .section-header {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+      justify-content: center;
+    }
+
+    /* --- REVEAL GRID --- */
+    .reveal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .reveal-item.active { opacity: 1; transform: translateY(0); }
+
+    .emoji-bullet {
+      background: #fff;
+      border-radius: 24px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      height: 100%;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+    .emoji-bullet:hover { transform: translateY(-5px); }
+    .emoji-icon { font-size: 3rem; flex-shrink: 0; }
+    .emoji-text h3 { font-size: 1.3rem; margin-bottom: 8px; }
+    .emoji-text p { font-size: 1rem; color: #444; line-height: 1.5; }
+    .emoji-text strong { color: var(--bg-red); }
+
+    /* --- VAULT --- */
+    .vault-lock { text-align: center; padding: 4rem; }
+    .vault-emoji { font-size: 6rem; animation: bounce 2s infinite; cursor: pointer; }
+    @keyframes bounce { 0%, 100% {transform: scale(1);} 50% {transform: scale(1.1);} }
+    .vault-input {
+      width: 100%; max-width: 350px; padding: 1.2rem; border-radius: 99px;
+      border: 4px solid #eee; font-family: inherit; font-size: 1.5rem;
+      text-align: center; margin: 2rem 0; outline: none;
+    }
+    .btn-fun {
+      background: var(--text-dark); color: #fff; padding: 1.2rem 3rem;
+      border-radius: 99px; font-weight: 700; border: none; cursor: pointer; font-size: 1.2rem;
+    }
+
+    /* --- NAV DOTS --- */
+    .nav-dots { position: fixed; left: 30px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 20px; z-index: 1000; }
+    .dot { width: 14px; height: 14px; background: rgba(255,255,255,0.4); border-radius: 50%; cursor: pointer; transition: 0.3s; }
+    .dot.active { transform: scale(1.8); background: #fff; box-shadow: 0 0 15px #fff; }
+
+    @media (max-width: 800px) {
+      .section-header { font-size: 2.5rem; }
+      .glass-card { padding: 1.5rem; border-radius: 25px; }
+      .nav-dots { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="nav-dots">
+    <div class="dot active" data-target="hero"></div>
+    <div class="dot" data-target="family"></div>
+    <div class="dot" data-target="principal"></div>
+    <div class="dot" data-target="board"></div>
+    <div class="dot" data-target="student"></div>
+  </div>
+
+  <div class="section-container">
+    
+    <!-- 🎈 HERO SECTION -->
+    <section id="hero" class="sticky-section">
+      <div class="glass-card" style="text-align: center;">
+        <div style="font-size: 8rem; margin-bottom: 1rem;">🏫</div>
+        <h1 class="section-header">Riverbend Portal</h1>
+        <p style="font-size: 1.8rem; color: #444; max-width: 700px; margin: 0 auto;">Everything you need to stay connected, organized, and informed. <br>Scroll down to enter 🌈</p>
+      </div>
+    </section>
+
+    <!-- 🌼 FAMILY SECTION -->
+    <section id="family" class="sticky-section">
+      <div class="glass-card">
+        <h2 class="section-header">🌼 Family Connect</h2>
+        
+        <div class="reveal-grid">
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">📖</div>
+            <div class="emoji-text"><h3>Book Fair Night</h3><p>Today @ 5:00 PM in the Library. Over 400 titles! 📚</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🍕</div>
+            <div class="emoji-text"><h3>PTA General Meeting</h3><p>Today @ 7:00 PM. Budget Q&A and community pizza night.</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">👟</div>
+            <div class="emoji-text"><h3>Walk & Roll</h3><p>Wed @ 7:10 AM. Join the caravan for stickers and cocoa.</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🍎</div>
+            <div class="emoji-text"><h3>Teacher Snack Cart</h3><p>Thu @ 8:30 AM. Donate gluten-free treats at the loop.</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">♟️</div>
+            <div class="emoji-text"><h3>Chess Club</h3><p>Thu @ 3:00 PM. Tournament practice for 3rd-5th graders.</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🤝</div>
+            <div class="emoji-text"><h3>Lunch Buddies</h3><p>Fri @ 11:15 AM. <strong>Background check required.</strong></p></div>
+          </div></div>
+        </div>
+
+        <h2 class="section-header" style="margin-top: 4rem;">🛍️ Spirit Wear & Links</h2>
+        <div class="reveal-grid">
+          <div class="reveal-item"><div class="emoji-bullet" style="background: #fff9c4;">
+            <div class="emoji-icon">🧥</div>
+            <div class="emoji-text"><h3>Hoodie Shop</h3><p>The "Raptor" Blue hoodies are back in stock! <br><strong>$35.00</strong></p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🚌</div>
+            <div class="emoji-text"><h3>Bus Intelligence</h3><p>Check DMV-North sector bus delays and route changes.</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🤒</div>
+            <div class="emoji-text"><h3>Sick Day Portal</h3><p>Quickly report an absence directly to the front office.</p></div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 🎓 PRINCIPAL SECTION -->
+    <section id="principal" class="sticky-section">
+      <div class="glass-card">
+        <h2 class="section-header">🎓 Principal's Desk</h2>
+        
+        <div id="vault-locked" class="vault-lock">
+          <div class="vault-emoji">🔐</div>
+          <p style="margin-bottom: 1.5rem; font-weight: 600;">Authorized Admin Personnel Only</p>
+          <input type="password" id="vault-pass" class="vault-input" placeholder="ACCESS CODE">
+          <br>
+          <button class="btn-fun" onclick="unlockVault()">Unlock Reports</button>
+          <p id="vault-error" style="color:var(--bg-red); margin-top: 1rem;"></p>
+        </div>
+
+        <div id="vault-unlocked" style="display: none;">
+          <h3 style="margin-bottom: 2rem; color: #fff; background: #000; padding: 10px; border-radius: 10px; display: inline-block;">STATISTICAL OVERVIEW</h3>
+          <div class="reveal-grid">
+            <div class="reveal-item active"><div class="emoji-bullet">
+              <div class="emoji-icon">📈</div>
+              <div class="emoji-text"><h3>School Morale</h3><p>Currently at <strong>92%</strong>. Teachers loving the new snack cart!</p></div>
+            </div></div>
+            <div class="reveal-item active"><div class="emoji-bullet">
+              <div class="emoji-icon">💰</div>
+              <div class="emoji-text"><h3>Budget Goal</h3><p>$12,450 / $15,000 (83%) <br><strong>Book Fair is moving the needle!</strong></p></div>
+            </div></div>
+            <div class="reveal-item active"><div class="emoji-bullet">
+              <div class="emoji-icon">🏥</div>
+              <div class="emoji-text"><h3>Facility Check</h3><p>HVAC: Operational ✅ | Gym Audio: Upgraded ✅</p></div>
+            </div></div>
+          </div>
+
+          <h3 style="margin: 3rem 0 2rem; color: #fff; background: #000; padding: 10px; border-radius: 10px; display: inline-block;">STAFFING & ALERTS</h3>
+          <div class="reveal-grid">
+            <div class="reveal-item active"><div class="emoji-bullet" style="border: 2px solid var(--bg-red);">
+              <div class="emoji-icon">🚨</div>
+              <div class="emoji-text"><h3>Personnel Gap</h3><p>Fri Lunch (Sectors A & B) needs 2 more adults.</p></div>
+            </div></div>
+            <div class="reveal-item active"><div class="emoji-bullet">
+              <div class="emoji-icon">⭐</div>
+              <div class="emoji-text"><h3>Staff Spotlight</h3><p>Mr. Henderson (3rd Grade) for STEM lead work!</p></div>
+            </div></div>
+          </div>
+          <br>
+          <button class="btn-fun" onclick="lockVault()" style="background: #444; font-size: 0.8rem;">Re-Lock Terminal</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 📝 BOARD SECTION -->
+    <section id="board" class="sticky-section">
+      <div class="glass-card">
+        <h2 class="section-header">📝 Governance</h2>
+        
+        <div class="reveal-grid">
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">👑</div>
+            <div class="emoji-text"><h3>The Officers</h3><p>Alex (Pres), Maria (VP), Jordan (Treas), Priya (Sec)</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">📜</div>
+            <div class="emoji-text"><h3>Archive Vault</h3><p><a href="#">Sept Minutes</a> | <a href="#">Budget 2024</a> | <a href="#">Bylaws</a></p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet" style="background: #e1f5fe;">
+            <div class="emoji-icon">🗳️</div>
+            <div class="emoji-text"><h3>Active Proposal #402</h3><p>New Playground Shade Structure ($4,500). <br><strong>Vote by Friday!</strong></p></div>
+          </div></div>
+        </div>
+
+        <h2 class="section-header" style="margin-top: 4rem;">🛠️ Committees</h2>
+        <div class="reveal-grid">
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🍿</div>
+            <div class="emoji-text"><h3>Hospitality</h3><p>Lead: Jane D. (Events & Treats)</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">📸</div>
+            <div class="emoji-text"><h3>Yearbook</h3><p>Lead: Mike R. (Photos & Layout)</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🌻</div>
+            <div class="emoji-text"><h3>Garden Guild</h3><p>Lead: Tom B. (Botanical Logistics)</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">👕</div>
+            <div class="emoji-text"><h3>Spirit Wear</h3><p>Lead: Open Position (Join us!)</p></div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 🎒 STUDENT SECTION -->
+    <section id="student" class="sticky-section">
+      <div class="glass-card">
+        <h2 class="section-header">🎒 The Yard</h2>
+        
+        <div class="reveal-grid">
+          <div class="reveal-item"><div class="emoji-bullet" style="background: #f3e5f5;">
+            <div class="emoji-icon">🎨</div>
+            <div class="emoji-text"><h3>Art Artisans</h3><p>Tuesdays @ 3:00 PM. Room 204.</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet" style="background: #e8f5e9;">
+            <div class="emoji-icon">🏁</div>
+            <div class="emoji-text"><h3>Run Club</h3><p>Fridays @ 7:15 AM. Outdoor Track.</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet" style="background: #fff3e0;">
+            <div class="emoji-icon">🎵</div>
+            <div class="emoji-text"><h3>Choir Ensemble</h3><p>Mondays @ 3:00 PM. Main Stage.</p></div>
+          </div></div>
+        </div>
+
+        <h2 class="section-header" style="margin-top: 4rem;">🏆 Leaderboard</h2>
+        <div class="reveal-grid">
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🧿</div>
+            <div class="emoji-text"><h3>House Blue</h3><p>1,240 Spirit Points</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🧧</div>
+            <div class="emoji-text"><h3>House Red</h3><p>1,100 Spirit Points</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🌿</div>
+            <div class="emoji-text"><h3>House Green</h3><p>980 Spirit Points</p></div>
+          </div></div>
+        </div>
+
+        <h2 class="section-header" style="margin-top: 4rem;">🧥 Found Loot</h2>
+        <div class="reveal-grid">
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🧐</div>
+            <div class="emoji-text"><h3>Red Hoodie (M)</h3><p>Detected near the swings. Check the blue bin!</p></div>
+          </div></div>
+          <div class="reveal-item"><div class="emoji-bullet">
+            <div class="emoji-icon">🧢</div>
+            <div class="emoji-text"><h3>Raptors Cap</h3><p>Left in the Cafeteria sector.</p></div>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // --- STICKY STACK LOGIC ---
+    function updateStickyOffsets() {
+      const viewportHeight = window.innerHeight;
+      document.querySelectorAll('.sticky-section').forEach(section => {
+        const height = section.scrollHeight;
+        if (height > viewportHeight) {
+          section.style.top = `${viewportHeight - height - 100}px`;
+        } else {
+          section.style.top = '0px';
+        }
+      });
+    }
+
+    const resizeObserver = new ResizeObserver(() => updateStickyOffsets());
+    document.querySelectorAll('.sticky-section').forEach(s => resizeObserver.observe(s));
+    window.addEventListener('resize', updateStickyOffsets);
+    updateStickyOffsets();
+
+    // --- SCROLL REVEAL ---
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.querySelectorAll('.reveal-item').forEach((item, i) => {
+            setTimeout(() => item.classList.add('active'), i * 100);
+          });
+          document.querySelectorAll('.dot').forEach(dot => {
+            dot.classList.toggle('active', dot.dataset.target === entry.target.id);
+          });
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.sticky-section').forEach(s => revealObserver.observe(s));
+
+    // --- DOT NAV ---
+    document.querySelectorAll('.dot').forEach(dot => {
+      dot.addEventListener('click', () => {
+        document.getElementById(dot.dataset.target).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // --- VAULT ---
+    const PASS_KEY = "ptaEmojiVaultKey";
+    const DEFAULT_PASS = "RiverbendLead!2024";
+    function hash(str) { return btoa(str); }
+    if (!localStorage.getItem(PASS_KEY)) localStorage.setItem(PASS_KEY, hash(DEFAULT_PASS));
+
+    function unlockVault() {
+      const val = document.getElementById('vault-pass').value;
+      if (hash(val) === localStorage.getItem(PASS_KEY)) {
+        document.getElementById('vault-locked').style.display = 'none';
+        document.getElementById('vault-unlocked').style.display = 'block';
+        updateStickyOffsets();
+      } else {
+        const lock = document.getElementById('vault-locked');
+        lock.animate([{transform:'translateX(0)'},{transform:'translateX(-10px)'},{transform:'translateX(10px)'},{transform:'translateX(0)'}], {duration:300});
+        document.getElementById('vault-pass').value = "";
+      }
+    }
+    function lockVault() {
+      document.getElementById('vault-locked').style.display = 'block';
+      document.getElementById('vault-unlocked').style.display = 'none';
+      updateStickyOffsets();
+    }
+    document.getElementById('vault-pass').addEventListener('keypress', (e) => { if(e.key==='Enter') unlockVault(); });
+  </script>
+</body>
+</html>

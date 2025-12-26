@@ -1,0 +1,910 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Riverbend PTA Portal - Monochrome Luxe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Work+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f6f2ec;
+      --ink: #111111;
+      --ink-soft: #2f2f2f;
+      --line: rgba(17, 17, 17, 0.16);
+      --gold: #b79b5b;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Work Sans", sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(183, 155, 91, 0.16), transparent 45%),
+        radial-gradient(circle at 80% 0%, rgba(0, 0, 0, 0.08), transparent 40%),
+        var(--paper);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      min-height: 100vh;
+    }
+
+    .masthead {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 5vw;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.05em;
+    }
+
+    .top-nav {
+      display: flex;
+      gap: 1.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.75rem;
+    }
+
+    .issue-tag {
+      justify-self: end;
+      padding: 0.4rem 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+      gap: 2.5rem;
+      padding: 3.5rem 5vw 4rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero h1 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--ink-soft);
+      max-width: 36rem;
+    }
+
+    .hero-meta {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    .hero-meta span {
+      border: 1px solid var(--line);
+      padding: 0.3rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .hero-right {
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .contents-card,
+    .seal {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .contents-card h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .contents-card ol {
+      padding-left: 1.2rem;
+      display: grid;
+      gap: 0.4rem;
+      color: var(--ink-soft);
+    }
+
+    .seal {
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-size: 0.75rem;
+      color: var(--gold);
+    }
+
+    main {
+      padding: 3.5rem 5vw 5rem;
+      display: grid;
+      gap: 4rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .section-header h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+    }
+
+    .section-kicker {
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      font-size: 0.75rem;
+      color: var(--gold);
+    }
+
+    .section-sub {
+      max-width: 34rem;
+      color: var(--ink-soft);
+    }
+
+    .luxe-grid {
+      display: grid;
+      gap: 1.4rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1.4rem;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger > * {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .stagger.is-visible > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger.is-visible > *:nth-child(1) { transition-delay: 0.05s; }
+    .stagger.is-visible > *:nth-child(2) { transition-delay: 0.1s; }
+    .stagger.is-visible > *:nth-child(3) { transition-delay: 0.15s; }
+    .stagger.is-visible > *:nth-child(4) { transition-delay: 0.2s; }
+    .stagger.is-visible > *:nth-child(5) { transition-delay: 0.25s; }
+    .stagger.is-visible > *:nth-child(6) { transition-delay: 0.3s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal,
+      .stagger > * {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    .panel h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .ledger {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .ledger th,
+    .ledger td {
+      text-align: left;
+      padding: 0.6rem 0.4rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .ledger th {
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.7rem;
+      color: var(--ink-soft);
+    }
+
+    .pill {
+      display: inline-flex;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-right: 0.4rem;
+    }
+
+    .list {
+      list-style: none;
+      display: grid;
+      gap: 0.6rem;
+      color: var(--ink-soft);
+    }
+
+    .principal-shell {
+      position: relative;
+    }
+
+    .principal-lock {
+      position: absolute;
+      inset: 0;
+      background: rgba(246, 242, 236, 0.9);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      text-align: center;
+      z-index: 3;
+    }
+
+    .principal-lock h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 2rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .principal-lock input {
+      width: min(320px, 100%);
+      padding: 0.8rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    .principal-lock button {
+      margin-top: 0.8rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid var(--ink);
+      background: transparent;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .principal-lock .error {
+      margin-top: 0.6rem;
+      color: #7a1b1b;
+      font-size: 0.85rem;
+      min-height: 1.1rem;
+    }
+
+    .principal-content {
+      filter: blur(6px);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .principal-shell.unlocked .principal-content {
+      filter: none;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .principal-shell.unlocked .principal-lock {
+      display: none;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2.5rem 5vw 3rem;
+      font-size: 0.85rem;
+      color: var(--ink-soft);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .masthead {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .issue-tag {
+        justify-self: center;
+      }
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <div class="brand">Riverbend PTA</div>
+      <nav class="top-nav">
+        <a href="#family">Family</a>
+        <a href="#principal">Principal</a>
+        <a href="#board">Board</a>
+        <a href="#students">Students</a>
+      </nav>
+      <div class="issue-tag">Fall 2024</div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <div class="section-kicker">Monochrome Luxe</div>
+        <h1>Riverbend PTA Portal</h1>
+        <p>Family events, principal insights, board governance, and student highlights - arranged as a refined weekly ledger.</p>
+        <div class="hero-meta">
+          <span>Family</span>
+          <span>Principal</span>
+          <span>Board</span>
+          <span>Students</span>
+        </div>
+      </div>
+      <aside class="hero-right">
+        <div class="contents-card">
+          <h2>Contents</h2>
+          <ol>
+            <li>Family calendar and volunteer notes</li>
+            <li>Principal briefings and coverage</li>
+            <li>Board roster and documents</li>
+            <li>Student highlights and reminders</li>
+          </ol>
+        </div>
+        <div class="seal">Transparent and organized</div>
+      </aside>
+    </section>
+
+    <main>
+      <section id="family" class="reveal">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Family Ledger</div>
+            <h2>One place for every school event.</h2>
+          </div>
+          <p class="section-sub">See what is happening this week, what is coming up, and where you can jump in to help.</p>
+        </div>
+
+        <div class="luxe-grid stagger">
+          <div class="panel">
+            <h3>Today at a glance</h3>
+            <ul class="list">
+              <li><strong>Book Fair - Family Shopping Night</strong><br />5:00 - 7:30 PM - School Library</li>
+              <li><strong>PTA General Meeting (Hybrid)</strong><br />7:00 - 8:00 PM - Media Center and Zoom</li>
+              <li><strong>Walk and Roll to School Day meetup</strong><br />7:10 - 7:45 AM - Front parking lot check-in tent</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Quick meanings</h3>
+            <ul class="list">
+              <li><strong>Green labels:</strong> Happening this week</li>
+              <li><strong>Blue labels:</strong> Plan-ahead dates</li>
+              <li><strong>Volunteer hub:</strong> Sign-ups and background checks</li>
+              <li><strong>Stay informed:</strong> Email, text alerts, shared calendar</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel reveal" style="margin-top:1.6rem;">
+          <h3>This week's event roster</h3>
+          <table class="ledger">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>When</th>
+                <th>Location</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Book Fair - Family Shopping Night</td>
+                <td>Tue, 5:00 - 7:30 PM</td>
+                <td>School Library</td>
+                <td>Teacher wish-lists posted by grade level. Cash, card, e-wallet accepted.</td>
+              </tr>
+              <tr>
+                <td>Walk and Roll to School Day</td>
+                <td>Wed, 7:10 - 7:45 AM</td>
+                <td>Front parking lot</td>
+                <td>Meet at the blue PTA tent for stickers and hot cocoa.</td>
+              </tr>
+              <tr>
+                <td>Teacher Appreciation Snack Cart</td>
+                <td>Thu, 8:30 - 11:30 AM</td>
+                <td>Staff lounge</td>
+                <td>Donations welcome. Gluten-free and caffeine-free options appreciated.</td>
+              </tr>
+              <tr>
+                <td>PTA Meeting and Budget Q&amp;A</td>
+                <td>Tue, 7:00 - 8:00 PM</td>
+                <td>Media Center and Zoom</td>
+                <td>Hybrid meeting with treasurer Q&amp;A and recording within 24 hours.</td>
+              </tr>
+              <tr>
+                <td>Chess Club Tournament Practice</td>
+                <td>Thu, 3:00 - 4:15 PM</td>
+                <td>Innovation Lab</td>
+                <td>Open to 3rd-5th graders. Parents pick up at the car-rider loop at 4:20 PM.</td>
+              </tr>
+              <tr>
+                <td>Lunchroom Buddy Express Shift</td>
+                <td>Fri, 11:15 AM - 12:45 PM</td>
+                <td>Cafeteria</td>
+                <td>Background check on file required. Complete it online if you have not yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="luxe-grid stagger" style="margin-top:1.6rem;">
+          <article class="panel">
+            <span class="pill">Upcoming</span>
+            <h3>Fall Family Movie Night</h3>
+            <p>Friday, 6:30 - 8:30 PM - Gymnasium</p>
+            <p>Bring blankets and lawn chairs. Concessions available (cash and card). Children must be accompanied by an adult.</p>
+          </article>
+          <article class="panel">
+            <span class="pill">Upcoming</span>
+            <h3>STEM Night and Classroom Showcase</h3>
+            <p>Thursday, 6:00 - 7:30 PM - Classrooms and Cafeteria</p>
+            <p>Hands-on science and technology stations around the building. Meet other families and see classroom projects.</p>
+          </article>
+          <article class="panel">
+            <span class="pill">Upcoming</span>
+            <h3>Winter Concert and Art Walk</h3>
+            <p>Date TBA (evening) - Auditorium and Hallways</p>
+            <p>Student performances followed by an art walk featuring work from all grade levels.</p>
+          </article>
+          <article class="panel">
+            <span class="pill">Upcoming</span>
+            <h3>Holiday Giving Tree Kickoff</h3>
+            <p>Monday, Nov 4 - Friday, Nov 15 - Front office lobby</p>
+            <p>Pick an ornament with a requested item for a Riverbend family. Gifts returned unwrapped by Nov 15.</p>
+          </article>
+          <article class="panel">
+            <span class="pill">Upcoming</span>
+            <h3>Community Garden Clean-Up Day</h3>
+            <p>Saturday, Nov 9 - 9:00 - 11:30 AM - School garden</p>
+            <p>Bring garden gloves and water bottles. PTA provides tools and snacks.</p>
+          </article>
+        </div>
+
+        <div class="luxe-grid stagger" style="margin-top:1.6rem;">
+          <div class="panel">
+            <h3>This week's needs</h3>
+            <ul class="list">
+              <li>Book Fair: 30-minute check-out helpers (evening slots).</li>
+              <li>Walk and Roll Day: 3 adults to help at crosswalks from 7:10-7:40 AM.</li>
+              <li>Snack Cart: bottled water, granola bars, single-serve tea/coffee pods.</li>
+            </ul>
+            <p style="margin-top:0.7rem;">To sign up, use the PTA e-mail below or the sign-up links shared in the weekly newsletter.</p>
+          </div>
+          <div class="panel">
+            <h3>Low-pressure ways to support</h3>
+            <ul class="list">
+              <li>Share PTA events in your classroom chats or carpool groups.</li>
+              <li>Ask your workplace about matching gifts for school fundraisers.</li>
+              <li>Drop a thank-you note in the office for a favorite staff member.</li>
+              <li>Attend one PTA meeting this semester to stay in the loop.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Recurring opportunities</h3>
+            <ul class="list">
+              <li>Lunchroom Buddy rotation - 45-minute shifts assisting grades K-2.</li>
+              <li>Library shelving crew - help Mrs. Owens re-shelve books on Fridays.</li>
+              <li>Garden keepers - adopt a planter box for monthly watering and weeding.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="panel reveal" style="margin-top:1.6rem;">
+          <h3>Stay informed</h3>
+          <div class="luxe-grid" style="margin-top:1rem;">
+            <div class="panel">
+              <strong>Weekly PTA e-mail</strong>
+              <p>Sent on Sunday evenings with highlights for the coming week and direct links to sign-ups.</p>
+            </div>
+            <div class="panel">
+              <strong>Text alerts</strong>
+              <p>Same-day nudges such as "Movie Night tonight at 6:30 PM." Opt out anytime by replying STOP.</p>
+            </div>
+            <div class="panel">
+              <strong>Shared calendar</strong>
+              <p>Subscribe once and every PTA event appears on your phone and computer calendars automatically.</p>
+            </div>
+          </div>
+          <p style="margin-top:1rem;">Questions? Reply to any update or e-mail pta@riverbendelementary.org.</p>
+        </div>
+      </section>
+      <section id="principal" class="reveal">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Principal Brief</div>
+            <h2>PTA events and building impact.</h2>
+          </div>
+          <p class="section-sub">Current week overview. Green means comfortably covered, orange needs a second look, red means something may need to move or get extra support.</p>
+        </div>
+
+        <div class="panel principal-shell" id="principal-shell">
+          <div class="principal-lock" id="principal-lock">
+            <div>
+              <h3>Principal access required</h3>
+              <p>Enter the password to unlock the dashboard.</p>
+              <input type="password" id="principal-pass" placeholder="Enter password" autocomplete="current-password" />
+              <button type="button" id="principal-unlock">Unlock</button>
+              <div class="error" id="principal-error"></div>
+            </div>
+          </div>
+          <div class="principal-content" id="principal-content">
+            <div class="luxe-grid stagger">
+              <div class="panel">
+                <h3>Total events (Sun-Sat)</h3>
+                <p>5 events - 2 student-facing and 3 family/teacher.</p>
+              </div>
+              <div class="panel">
+                <h3>Evening events</h3>
+                <p>3 within typical range.</p>
+              </div>
+              <div class="panel">
+                <h3>Volunteer coverage</h3>
+                <p>~65% with 2 events under 50% staffed.</p>
+              </div>
+              <div class="panel">
+                <h3>Building load</h3>
+                <p>Moderate. No back-to-back late nights.</p>
+              </div>
+            </div>
+
+            <div class="panel reveal" style="margin-top:1.6rem;">
+              <h3>This week's event roster</h3>
+              <table class="ledger">
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>When</th>
+                    <th>Focus</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Book Fair - Family Night</td>
+                    <td>Tue - 5:00 - 7:30 PM</td>
+                    <td>Family - Fundraiser</td>
+                    <td>Coverage comfortable - confirm cash box pickup at 4:30 PM.</td>
+                  </tr>
+                  <tr>
+                    <td>Walk and Roll to School Day</td>
+                    <td>Wed - 7:10 - 7:45 AM</td>
+                    <td>Student-facing</td>
+                    <td>Needs two additional crosswalk adults.</td>
+                  </tr>
+                  <tr>
+                    <td>Teacher Snack Cart</td>
+                    <td>Thu - 8:30 - 11:30 AM</td>
+                    <td>Staff support</td>
+                    <td>Check storage space for extra donations arriving Wednesday.</td>
+                  </tr>
+                  <tr>
+                    <td>Chess Club Tournament Practice</td>
+                    <td>Thu - 3:00 - 4:15 PM</td>
+                    <td>Student enrichment</td>
+                    <td>Confirm dismissal coverage for car-rider loop at 4:20 PM.</td>
+                  </tr>
+                  <tr>
+                    <td>PTA Meeting and Budget Q&amp;A</td>
+                    <td>Tue - 7:00 - 8:00 PM</td>
+                    <td>Family - Governance</td>
+                    <td>Hybrid option open; watch for Zoom chat questions during finance report.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="luxe-grid stagger" style="margin-top:1.6rem;">
+              <div class="panel">
+                <h3>Next 30-day highlights</h3>
+                <ul class="list">
+                  <li><strong>Total PTA touchpoints:</strong> 18 (7 evening commitments)</li>
+                  <li><strong>High-demand nights:</strong> 4 (watch Oct 17 - Nov 1)</li>
+                  <li><strong>Volunteer commitments:</strong> 82 (goal 95 pledged)</li>
+                  <li><strong>Budget impact:</strong> $6.4K (Book Fair + Giving Tree)</li>
+                </ul>
+              </div>
+              <div class="panel">
+                <h3>Upcoming approvals and deadlines</h3>
+                <ul class="list">
+                  <li>Approve STEM Night vendor list (electric + robotics) by Oct 18.</li>
+                  <li>Confirm gym access for the Nov 9 Garden Clean-Up rain plan.</li>
+                  <li>Sign updated facilities agreement for Winter Concert stage lighting by Oct 30.</li>
+                  <li>Review PTA reimbursement batch scheduled for Nov 12 (Book Fair expenses).</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="panel reveal" style="margin-top:1.6rem;">
+              <h3>Next 30-day calendar highlights</h3>
+              <table class="ledger">
+                <thead>
+                  <tr>
+                    <th>Event</th>
+                    <th>Date and time</th>
+                    <th>Focus</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>STEM Night</td>
+                    <td>Thu, Nov 7 - 6:00 - 8:00 PM</td>
+                    <td>Family - STEM</td>
+                    <td>Finalize custodial overtime request by Oct 28.</td>
+                  </tr>
+                  <tr>
+                    <td>Community Garden Clean-Up</td>
+                    <td>Sat, Nov 9 - 9:00 - 11:30 AM</td>
+                    <td>Community</td>
+                    <td>Order mulch delivery for Nov 8 (PTA covers cost).</td>
+                  </tr>
+                  <tr>
+                    <td>Holiday Giving Tree Kickoff</td>
+                    <td>Nov 4 - Nov 15</td>
+                    <td>Community care</td>
+                    <td>Counselors confirming 12 families receiving support.</td>
+                  </tr>
+                  <tr>
+                    <td>Teacher Conference Meals</td>
+                    <td>Nov 18 - Nov 20</td>
+                    <td>Staff support</td>
+                    <td>Catering deposit due Nov 8; confirm dietary list.</td>
+                  </tr>
+                  <tr>
+                    <td>Winter Concert Support</td>
+                    <td>Tue, Dec 3 - 5:30 - 8:30 PM</td>
+                    <td>Students and families</td>
+                    <td>Need ushers and sound volunteer assigned by Nov 20.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="board" class="reveal">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">PTA Board</div>
+            <h2>Board, meetings, and key documents.</h2>
+          </div>
+          <p class="section-sub">A clear overview of who is serving this year, when the board meets, and where to find bylaws and minutes.</p>
+        </div>
+
+        <div class="luxe-grid stagger">
+          <div class="panel">
+            <h3>2024-2025 PTA Board</h3>
+            <ul class="list">
+              <li><strong>President:</strong> Alex Johnson - president.riverbendpta@example.org</li>
+              <li><strong>Vice President:</strong> Maria Lopez - vp.riverbendpta@example.org</li>
+              <li><strong>Treasurer:</strong> Jordan Kim - treasurer.riverbendpta@example.org</li>
+              <li><strong>Secretary:</strong> Priya Patel - secretary.riverbendpta@example.org</li>
+              <li><strong>Volunteer Chair:</strong> Taylor Brooks - volunteers.riverbendpta@example.org</li>
+              <li><strong>Teacher Liaison:</strong> Ms. Lacey Reed - lacey.reed@riverbendpta.example.org</li>
+              <li><strong>Fundraising Chair:</strong> Chris Alvarez - fundraising.riverbendpta@example.org</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Board meetings</h3>
+            <ul class="list">
+              <li><strong>Schedule:</strong> 1st Tuesday of each month, 6:30-8:00 PM</li>
+              <li><strong>Location:</strong> Media Center (hybrid option via Zoom when noted)</li>
+              <li><strong>Who may attend:</strong> All interested parents, guardians, staff, and community members.</li>
+            </ul>
+            <p style="margin-top:0.7rem;">Time is reserved at the start of each meeting for questions and ideas from families.</p>
+          </div>
+        </div>
+
+        <div class="panel reveal" style="margin-top:1.6rem;">
+          <h3>Bylaws and key documents</h3>
+          <table class="ledger">
+            <thead>
+              <tr>
+                <th>Document</th>
+                <th>Last updated</th>
+                <th>Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>PTA Bylaws (current)</td>
+                <td>August 2024</td>
+                <td>Bylaws</td>
+              </tr>
+              <tr>
+                <td>2024-2025 Budget Overview</td>
+                <td>September 2024</td>
+                <td>Finance</td>
+              </tr>
+              <tr>
+                <td>September Meeting Minutes</td>
+                <td>September 10, 2024</td>
+                <td>Minutes</td>
+              </tr>
+              <tr>
+                <td>October Meeting Minutes</td>
+                <td>October 8, 2024</td>
+                <td>Minutes</td>
+              </tr>
+              <tr>
+                <td>Annual Financial Review Summary</td>
+                <td>July 2024</td>
+                <td>Finance</td>
+              </tr>
+              <tr>
+                <td>Volunteer Handbook</td>
+                <td>October 2024</td>
+                <td>Reference</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="students" class="reveal">
+        <div class="section-header">
+          <div>
+            <div class="section-kicker">Student Notes</div>
+            <h2>What is happening at our school this week?</h2>
+          </div>
+          <p class="section-sub">This page is just for you. See the fun stuff that is coming up and how you can join in.</p>
+        </div>
+
+        <div class="luxe-grid stagger">
+          <div class="panel">
+            <h3>This week's fun things</h3>
+            <ul class="list">
+              <li><strong>Book Fair Night</strong> - Come to the library with your grown-ups to look at books.</li>
+              <li><strong>Walk and Roll to School</strong> - Meet other students and walk in together from the front parking lot.</li>
+              <li><strong>Teacher Snack Cart</strong> - The PTA is surprising teachers with snacks.</li>
+              <li><strong>Chess Club Practice</strong> - Meet in the Innovation Lab on Thursday.</li>
+              <li><strong>Spirit Wear Friday</strong> - Wear your Riverbend colors or favorite school shirt.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Coming up soon</h3>
+            <ul class="list">
+              <li><strong>Family Movie Night</strong> - Wear comfy clothes, bring a blanket, and watch a movie in the gym.</li>
+              <li><strong>STEM Night</strong> - Try science and tech stations around the school.</li>
+              <li><strong>Winter Concert and Art Walk</strong> - Sing, play instruments, or show your artwork.</li>
+              <li><strong>Holiday Giving Tree</strong> - Choose an ornament with a wish list item to help a Riverbend family.</li>
+              <li><strong>Garden Clean-Up Day</strong> - Help plant bulbs and pull weeds with your family.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Before you go</h3>
+            <ul class="list">
+              <li>Ask a grown-up who is picking you up after the event and where to meet them.</li>
+              <li>Pack a labeled water bottle and jacket in case the gym or playground feels chilly.</li>
+              <li>Charge your Chromebook if you need it for STEM Night stations or homework afterward.</li>
+            </ul>
+            <p style="margin-top:0.6rem;">Need help? Use the student help form and a counselor or PTA volunteer will follow up.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>Riverbend Elementary PTA</span>
+      <span>Monochrome Luxe theme</span>
+    </footer>
+  </div>
+
+  <script>
+    const PRINCIPAL_KEY = "ptaMonochromePrincipalHash";
+    const DEFAULT_PRINCIPAL_PASSWORD = "RiverbendLead!2024";
+
+    function hash(value) {
+      return btoa(value);
+    }
+
+    if (!localStorage.getItem(PRINCIPAL_KEY)) {
+      localStorage.setItem(PRINCIPAL_KEY, hash(DEFAULT_PRINCIPAL_PASSWORD));
+    }
+
+    const principalShell = document.getElementById("principal-shell");
+    const principalPass = document.getElementById("principal-pass");
+    const principalBtn = document.getElementById("principal-unlock");
+    const principalError = document.getElementById("principal-error");
+
+    function unlockPrincipal() {
+      if (!principalPass || !principalShell) return;
+      if (hash(principalPass.value) === localStorage.getItem(PRINCIPAL_KEY)) {
+        principalShell.classList.add("unlocked");
+        if (principalError) principalError.textContent = "";
+      } else if (principalError) {
+        principalError.textContent = "Incorrect password. Please try again.";
+        principalPass.value = "";
+      }
+    }
+
+    if (principalBtn) principalBtn.addEventListener("click", unlockPrincipal);
+    if (principalPass) {
+      principalPass.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") unlockPrincipal();
+      });
+    }
+
+    const revealElements = document.querySelectorAll(".reveal, .stagger");
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    revealElements.forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>

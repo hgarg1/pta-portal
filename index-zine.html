@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>The Riverbend Zine · Expanded Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f4f4f0;
+      --text-color: #111;
+      --accent-yellow: #eaff00;
+      --accent-blue: #2b00ff;
+      --accent-red: #ff3c00;
+      --accent-green: #00ff6a;
+      --line-color: #000;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+    
+    /* --- TYPOGRAPHY --- */
+    h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+    
+    .super-title {
+      font-size: clamp(4rem, 15vw, 12rem);
+      line-height: 0.8;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .issue-meta {
+      font-family: 'Inter', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-top: 2px solid #000;
+      border-bottom: 2px solid #000;
+      padding: 1rem 0;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+    }
+
+    /* --- LAYOUT GRID --- */
+    .zine-grid {
+      display: grid;
+      grid-template-columns: 1fr 2.5fr;
+      min-height: 100vh;
+      border-bottom: 2px solid #000;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 4rem;
+      border-right: 2px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: var(--bg-color);
+      z-index: 10;
+    }
+
+    .content-flow {
+      padding: 0;
+    }
+
+    /* --- SECTIONS --- */
+    .article-block {
+      min-height: 60vh;
+      padding: 6rem 4rem;
+      border-bottom: 1px solid #ccc;
+      position: relative;
+    }
+    .article-block:last-child { border-bottom: none; }
+
+    .article-header {
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      color: var(--accent-blue);
+      letter-spacing: 0.1em;
+    }
+
+    .article-headline {
+      font-size: 4.5rem;
+      line-height: 0.95;
+      margin-bottom: 2.5rem;
+      max-width: 95%;
+      letter-spacing: -0.02em;
+    }
+
+    .article-body {
+      font-size: 1.25rem;
+      line-height: 1.7;
+      max-width: 65ch;
+      margin-bottom: 2.5rem;
+      color: #333;
+    }
+
+    .pull-quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 3rem;
+      line-height: 1.1;
+      padding: 3rem 0;
+      border-top: 6px solid var(--accent-yellow);
+      border-bottom: 6px solid var(--accent-yellow);
+      margin: 4rem 0;
+    }
+
+    /* --- SPECIFIC MODULES --- */
+    .event-poster {
+      background: #000;
+      color: #fff;
+      padding: 4rem;
+      margin-top: 3rem;
+      transform: rotate(-0.5deg);
+      transition: all 0.4s ease;
+    }
+    .event-poster:hover { transform: rotate(0deg) scale(1.01); }
+    
+    .event-date {
+      font-size: 6rem;
+      font-weight: 900;
+      color: var(--accent-yellow);
+      line-height: 0.85;
+      margin-bottom: 1rem;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+    .stat-box {
+      border: 3px solid #000;
+      padding: 2rem;
+    }
+    .stat-num { font-size: 4rem; font-weight: 900; line-height: 1; margin-bottom: 0.5rem; }
+
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 2rem;
+    }
+    .tag {
+      background: #000;
+      color: #fff;
+      padding: 5px 15px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    /* --- NAV OVERLAY --- */
+    #nav-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: var(--accent-red);
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      transform: translateY(-100%);
+      transition: transform 0.6s cubic-bezier(0.8,0,0.2,1);
+    }
+    #nav-overlay.active { transform: translateY(0); }
+    
+    .nav-list { list-style: none; text-align: center; }
+    .nav-list li { margin: 1.5rem 0; }
+    .nav-list a { 
+      font-family: 'Playfair Display'; 
+      font-size: 5rem; 
+      color: #fff; 
+      border: none;
+      transition: all 0.3s;
+    }
+    .nav-list a:hover { color: #000; font-style: italic; padding-left: 20px; }
+
+    /* --- PRINCIPAL LOCK --- */
+    .lock-input {
+      background: transparent; border: none; border-bottom: 4px solid #fff;
+      color: #fff; font-family: 'Playfair Display'; font-size: 3rem;
+      text-align: center; margin-top: 3rem; outline: none; width: 80%;
+      max-width: 500px;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 1024px) {
+      .zine-grid { grid-template-columns: 1fr; }
+      .sidebar { height: auto; position: relative; padding: 2rem; border-right: none; border-bottom: 4px solid #000; }
+      .article-headline { font-size: 3.5rem; }
+      .super-title { font-size: 6rem; }
+      .event-date { font-size: 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV OVERLAY -->
+  <div id="nav-overlay">
+    <ul class="nav-list">
+      <li><a href="#cover" onclick="toggleNav()">00. Cover</a></li>
+      <li><a href="#family" onclick="toggleNav()">01. Family Life</a></li>
+      <li><a href="#principal" onclick="toggleNav()">02. From the Desk</a></li>
+      <li><a href="#board" onclick="toggleNav()">03. Governance</a></li>
+      <li><a href="#student" onclick="toggleNav()">04. Student Body</a></li>
+    </ul>
+  </div>
+
+  <!-- MENU BUTTON -->
+  <header style="position:fixed; top:0; right:0; padding:2rem; z-index:600;">
+    <button onclick="toggleNav()" style="background:var(--text-color); color:var(--bg-color); border:none; padding:1.2rem 2.5rem; font-weight:900; cursor:pointer; text-transform:uppercase; letter-spacing:0.2em; font-size:0.8rem; box-shadow: 10px 10px 0 #000;">
+      Menu
+    </button>
+  </header>
+
+  <!-- COVER SECTION -->
+  <section id="cover" style="padding: 4rem; min-height: 100vh; display:flex; flex-direction:column; justify-content:center; background: var(--accent-yellow);">
+    <div class="issue-meta" style="border-color:#000">
+      <span>Issue No. 04</span>
+      <span>Riverbend Elementary PTA</span>
+      <span>October 2024 Edition</span>
+    </div>
+    <h1 class="super-title">The<br>Community<br><span style="color:var(--accent-blue)">Manifesto</span></h1>
+    <p style="font-size: 2rem; max-width: 35ch; margin-top: 3rem; font-weight: 800; line-height: 1.1;">
+      Reimagining the school experience through radical transparency, high-octane events, and pure pixel-perfect connection.
+    </p>
+    <div style="margin-top: 4rem; font-family: monospace; text-transform: uppercase; font-weight: bold;">
+      [ Scroll to enter the fold ]
+    </div>
+  </section>
+
+  <!-- 01. FAMILY SECTION -->
+  <div class="zine-grid" id="family">
+    <aside class="sidebar">
+      <h2 style="font-size: 4rem; line-height: 0.8; letter-spacing: -0.05em;">Family<br>Life</h2>
+      <div style="margin-top: 3rem;">
+        <p style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase;">In this section:</p>
+        <ul style="list-style: none; margin-top: 1rem; font-size: 0.8rem; line-height: 2;">
+          <li>→ The Book Fair Epic</li>
+          <li>→ Walk & Roll Analytics</li>
+          <li>→ The Volunteer Manifesto</li>
+          <li>→ Sustainability Corner</li>
+        </ul>
+      </div>
+      <div style="font-size: 8rem; color: #eee; font-weight: 900; line-height: 1;">01</div>
+    </aside>
+    
+    <main class="content-flow">
+      <article class="article-block">
+        <div class="article-header">Feature Story</div>
+        <h3 class="article-headline">A Library Transformed: The Book Fair</h3>
+        <p class="article-body">
+          It’s more than just a fundraiser; it’s a cultural touchstone. For three days, the Riverbend Library ceases to be a quiet study hall and becomes a vibrant arena of discovery. 
+        </p>
+        <p class="article-body">
+          <strong>Tonight at 5:00 PM</strong>, we open the doors for the Family Shopping Night. With over 400 titles in stock, from graphic novels to historical non-fiction, there is a "quest" for every level of reader.
+        </p>
+        <div class="event-poster">
+          <div class="article-header" style="color:var(--accent-yellow)">Exclusive Event</div>
+          <div class="event-date">OCT 15</div>
+          <h3 style="font-size: 3.5rem; line-height: 1; margin-top: 1rem;">Family Night</h3>
+          <p style="margin-top: 1.5rem; font-size: 1.2rem; line-height: 1.4;">
+            Library Doors Open: 5:00 PM<br>
+            PTA Reading Guides On-site<br>
+            Digital Wallet Accepted
+          </p>
+        </div>
+      </article>
+
+      <article class="article-block" style="background: var(--accent-blue); color: #fff;">
+        <div class="article-header" style="color:var(--accent-yellow)">The Manifesto</div>
+        <h3 class="article-headline" style="color:#fff">Why We Volunteer</h3>
+        <p class="article-body" style="color:#eee">
+          Time is the most valuable currency in our district. When you sign up for a snack cart shift or a crosswalk duty, you aren't just performing a task—you are building the infrastructure of safety and support that allows our teachers to focus on what they do best: teaching.
+        </p>
+        <div class="pull-quote" style="border-color:#fff">
+          "One hour of your week can change the entire momentum of a classroom."
+        </div>
+        <a href="#" class="btn-action" style="display:inline-block; background:#fff; color:var(--accent-blue); padding: 1.5rem 3rem; font-weight:900; border:none;">JOIN THE GUILD</a>
+      </article>
+
+      <article class="article-block">
+        <div class="article-header">Lore & Legend</div>
+        <h3 class="article-headline">Sustainability Corner</h3>
+        <p class="article-body">
+          The Garden Club is officially entering "Phase 2" of the botanical refresh. We've secured 200lbs of organic mulch and a new batch of winter-hardy perennials. 
+        </p>
+        <p class="article-body">
+          Join the <strong>Garden Quest on Nov 9</strong>. We need 12 families to help prep the biome for the winter freeze. Reward: Pure satisfaction and a limited edition Garden Sticker.
+        </p>
+        <div class="tag-cloud">
+          <span class="tag">Eco-Friendly</span>
+          <span class="tag">Student Led</span>
+          <span class="tag">Outdoor Quest</span>
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <!-- 02. PRINCIPAL SECTION -->
+  <div class="zine-grid" id="principal">
+    <aside class="sidebar" style="background: #000; color: #fff; border-right:none;">
+      <h2 style="font-size: 4rem; line-height: 0.8; color: var(--accent-red);">The<br>Desk</h2>
+      <div style="margin-top: 3rem;">
+        <p style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; color: #666;">Classification:</p>
+        <p style="font-size: 1.2rem; font-weight: 900; color: var(--accent-red);">TOP SECRET</p>
+      </div>
+      <div style="font-size: 8rem; color: #1a1a1a; font-weight: 900; line-height: 1;">02</div>
+    </aside>
+    
+    <main class="content-flow" id="principal-content">
+      <!-- LOCKED STATE -->
+      <div id="lock-screen" class="article-block" style="min-height: 100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; background: #000;">
+        <div style="font-size:5rem; margin-bottom: 2rem;">🔒</div>
+        <h3 class="serif" style="font-size: 4rem; color: #fff;">Access Denied</h3>
+        <p style="margin-top: 1rem; color: #888; font-weight: bold;">CRITICAL DATA ENCRYPTED. ENTER KEY:</p>
+        <input type="password" id="admin-pass" class="lock-input" placeholder="••••••••" onkeypress="checkPass(event)">
+        <p id="lock-msg" style="color: var(--accent-red); margin-top: 2rem; font-weight: bold;"></p>
+      </div>
+
+      <!-- UNLOCKED STATE -->
+      <div id="dashboard" style="display:none; background: #fff;">
+        <article class="article-block">
+          <div class="article-header">Executive Summary</div>
+          <h3 class="article-headline">Building Health & Logistics</h3>
+          <p class="article-body">
+            Current campus morale is at an all-time high (92%). The integration of the new cafeteria recycling program has reduced waste output by 34%.
+          </p>
+          <div class="stat-grid">
+            <div class="stat-box">
+              <div class="article-header">Active Quests</div>
+              <div class="stat-num">05</div>
+            </div>
+            <div class="stat-box">
+              <div class="article-header">Staff Morale</div>
+              <div class="stat-num" style="color:var(--accent-green)">92%</div>
+            </div>
+            <div class="stat-box" style="background: #000; color: #fff;">
+              <div class="article-header" style="color:#aaa">Staffing Gap</div>
+              <div class="stat-num" style="color:var(--accent-red)">-02</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="article-block">
+          <div class="article-header">Strategic Roadmap</div>
+          <h3 class="article-headline">Phase 3: The Gym Refresh</h3>
+          <p class="article-body">
+            We have officially approved the budget for the new gym sound system. Installation is scheduled for the winter break. This will support all fine arts performances starting Jan 2025.
+          </p>
+          <ul style="list-style: none; font-family: monospace; font-size: 1.1rem; line-height: 2;">
+            <li>[✓] Soundboard Upgrade</li>
+            <li>[✓] Lighting Grid Calibration</li>
+            <li>[ ] Acoustic Panel Install</li>
+          </ul>
+        </article>
+
+        <article class="article-block" style="background: #f0f0f0;">
+          <div class="article-header">Human Resources</div>
+          <h3 class="article-headline">Staff Spotlight</h3>
+          <p class="article-body">
+            Shout out to <strong>Mr. Henderson (3rd Grade)</strong> for his work on the STEM Night robotics demos. His classroom has logged over 40 hours of extracurricular lab time this month.
+          </p>
+        </article>
+      </div>
+    </main>
+  </div>
+
+  <!-- 03. GOVERNANCE SECTION -->
+  <div class="zine-grid" id="board">
+    <aside class="sidebar">
+      <h2 style="font-size: 4rem; line-height: 0.8;">The<br>Guild</h2>
+      <div style="margin-top: 3rem;">
+        <p style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase;">Bureaucracy:</p>
+        <p style="font-size: 1rem; color: #666;">Bylaws & Ballots</p>
+      </div>
+      <div style="font-size: 8rem; color: #eee; font-weight: 900; line-height: 1;">03</div>
+    </aside>
+    
+    <main class="content-flow">
+      <article class="article-block">
+        <h3 class="article-headline">The Roster</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 3rem; margin-top: 3rem;">
+          <div>
+            <div class="article-header">President</div>
+            <div style="font-size: 2rem; font-weight: 900;">Alex Johnson</div>
+            <p style="color:#666">Class: Paladin (Lvl 50)</p>
+          </div>
+          <div>
+            <div class="article-header">Vice President</div>
+            <div style="font-size: 2rem; font-weight: 900;">Maria Lopez</div>
+            <p style="color:#666">Class: Bard (Lvl 48)</p>
+          </div>
+          <div>
+            <div class="article-header">Treasurer</div>
+            <div style="font-size: 2rem; font-weight: 900;">Jordan Kim</div>
+            <p style="color:#666">Class: Alchemist</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-block">
+        <div class="article-header">Legislative Archive</div>
+        <h3 class="serif" style="font-size: 3rem; margin-bottom: 2rem;">The Scrolls</h3>
+        <ul style="list-style: none; font-size: 1.4rem; line-height: 2.5;">
+          <li><a href="#">↓ SEPT_MINUTES.PDF</a></li>
+          <li><a href="#">↓ BUDGET_2024_FINAL.XLS</a></li>
+          <li><a href="#">↓ BYLAWS_REVISION_V4.DOC</a></li>
+          <li><a href="#">↓ ANNUAL_AUDIT_SUMMARY.PDF</a></li>
+        </ul>
+      </article>
+
+      <article class="article-block" style="border: 10px solid #000; margin: 4rem;">
+        <div class="article-header">Active Referendum</div>
+        <h3 class="serif" style="font-size: 2.5rem; margin-bottom: 1.5rem;">Proposal #402: Playground Shade</h3>
+        <p class="article-body">
+          Shall the PTA allocate $4,500 from the general reserve to construct a solar-shielding structure over the primary jungle gym?
+        </p>
+        <div style="display:flex; gap: 20px;">
+          <button style="flex:1; background:var(--accent-green); color:#000; padding: 2rem; font-family:inherit; font-weight:900; border:none; cursor:pointer;">VOTE [YEA]</button>
+          <button style="flex:1; background:#000; color:#fff; padding: 2rem; font-family:inherit; font-weight:900; border:none; cursor:pointer;">VOTE [NAY]</button>
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <!-- 04. STUDENT SECTION -->
+  <div class="zine-grid" id="student">
+    <aside class="sidebar" style="background: var(--accent-blue); color: #fff; border-right:none;">
+      <h2 style="font-size: 4rem; line-height: 0.8; color: var(--accent-yellow);">The<br>Yard</h2>
+      <div style="margin-top: 3rem;">
+        <p style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase;">Focus:</p>
+        <p style="font-size: 1rem; color: #fff;">Extra-Curriculars</p>
+      </div>
+      <div style="font-size: 8rem; color: rgba(255,255,255,0.1); font-weight: 900; line-height: 1;">04</div>
+    </aside>
+    
+    <main class="content-flow">
+      <article class="article-block">
+        <div class="article-header" style="color:var(--accent-red)">Club Directory</div>
+        <h3 class="article-headline">Faction Recruitment</h3>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          <div class="stat-box">
+            <h4 class="serif" style="font-size: 1.5rem;">Chess Guild</h4>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Tactical warfare. Thu 3:00 PM.</p>
+          </div>
+          <div class="stat-box">
+            <h4 class="serif" style="font-size: 1.5rem;">Art Artisans</h4>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Creative crafting. Tue 3:00 PM.</p>
+          </div>
+          <div class="stat-box">
+            <h4 class="serif" style="font-size: 1.5rem;">Run Club</h4>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Speed training. Fri 7:15 AM.</p>
+          </div>
+          <div class="stat-box">
+            <h4 class="serif" style="font-size: 1.5rem;">Choir</h4>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Vocal harmony. Mon 3:00 PM.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="article-block">
+        <div class="article-header">Lost Loot</div>
+        <h3 class="article-headline">Items Awaiting Recovery</h3>
+        <p class="article-body">
+          Detected: One (1) Red Hoodie, size Medium. Left near the swing set coordinates. One (1) Hydroflask, metallic blue. 
+        </p>
+        <div style="height: 200px; background: #ddd; display:grid; place-items:center; border: 4px dashed #999;">
+          <span style="font-size: 4rem;">🧥 🥤 🧢</span>
+        </div>
+      </article>
+
+      <article class="article-block">
+        <div class="article-header">Hall of Fame</div>
+        <div class="pull-quote" style="border-color:var(--accent-red)">
+          "Creativity is intelligence having fun." — Albert Einstein
+        </div>
+        <h3 class="article-headline">Spirit Points Leaderboard</h3>
+        <ul style="list-style: none; font-size: 1.5rem; font-weight: 900;">
+          <li style="display:flex; justify-content:space-between; border-bottom: 2px solid #000; padding: 1rem 0;">
+            <span>1. HOUSE BLUE</span> <span>1,240 XP</span>
+          </li>
+          <li style="display:flex; justify-content:space-between; border-bottom: 2px solid #000; padding: 1rem 0;">
+            <span>2. HOUSE RED</span> <span>1,100 XP</span>
+          </li>
+          <li style="display:flex; justify-content:space-between; border-bottom: 2px solid #000; padding: 1rem 0;">
+            <span>3. HOUSE GREEN</span> <span>980 XP</span>
+          </li>
+        </ul>
+      </article>
+    </main>
+  </div>
+
+  <footer style="padding: 6rem 4rem; background: #000; color: #fff; text-align: center;">
+    <h2 class="serif" style="font-size: 3rem; margin-bottom: 1rem;">Riverbend PTA</h2>
+    <p style="color: #666; font-family: monospace;">ALL RIGHTS RESERVED © 2024</p>
+  </footer>
+
+  <script>
+    // --- NAV TOGGLE ---
+    function toggleNav() {
+      document.getElementById('nav-overlay').classList.toggle('active');
+    }
+
+    // --- PRINCIPAL LOGIC ---
+    const PASS_KEY = "ptaZinePassHash";
+    const DEFAULT_PASS = "RiverbendLead!2024";
+    function hash(str) { return btoa(str); }
+    if (!localStorage.getItem(PASS_KEY)) localStorage.setItem(PASS_KEY, hash(DEFAULT_PASS));
+
+    function checkPass(e) {
+      if(e.key === 'Enter') {
+        const input = document.getElementById('admin-pass');
+        const msg = document.getElementById('lock-msg');
+        
+        if (hash(input.value) === localStorage.getItem(PASS_KEY)) {
+          document.getElementById('lock-screen').style.display = 'none';
+          document.getElementById('dashboard').style.display = 'block';
+        } else {
+          msg.textContent = "ACCESS DENIED. INVALID CREDENTIAL.";
+          input.value = "";
+          
+          // Shake effect
+          const box = document.getElementById('lock-screen');
+          box.animate([
+            { transform: 'translateX(0)' },
+            { transform: 'translateX(-10px)' },
+            { transform: 'translateX(10px)' },
+            { transform: 'translateX(0)' }
+          ], { duration: 300 });
+        }
+      }
+    }
+  </script>
+</body>
+</html>
